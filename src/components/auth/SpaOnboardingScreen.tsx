@@ -126,6 +126,58 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
       return;
     }
   const handleInputChange = (field: string, value: string) => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        
+        try {
+          // Update form data with coordinates
+          setFormData(prev => ({
+            ...prev,
+            latitude,
+            longitude
+          }));
+          
+          setLocationState({
+            isLoading: false,
+            isSuccess: true,
+            error: null
+          });
+        } catch (error) {
+          setLocationState({
+            isLoading: false,
+            isSuccess: false,
+            error: 'Failed to get location details'
+          });
+        }
+      },
+      (error) => {
+        let errorMessage = 'Failed to get location';
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Location access denied by user';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Location information unavailable';
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Location request timed out';
+            break;
+        }
+        setLocationState({
+          isLoading: false,
+          isSuccess: false,
+          error: errorMessage
+        });
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000
+      }
+    );
+  };
+
     setFormData(prev => ({ ...prev, [field]: value }));
     if (formErrors[field]) {
       setFormErrors((prev: any) => ({ ...prev, [field]: '' }));
@@ -444,6 +496,60 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
 
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Photo Upload</h3>
+                  
+                  {/* Location Tagging */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-medium text-gray-900">Location Tagging</h4>
+                      <Button
+                        onClick={handleGetLiveLocation}
+                        variant="outline"
+                        size="sm"
+                        loading={locationState.isLoading}
+                      >
+                        {locationState.isSuccess ? (
+                          <>
+                            <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
+                            Location Tagged
+                          </>
+                        ) : (
+                          <>
+                            <Navigation className="w-4 h-4 mr-2" />
+                            Get Live Location
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                    
+                    {locationState.error && (
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-3">
+                        <div className="flex items-center space-x-2">
+                          <AlertCircle className="w-4 h-4 text-red-600" />
+                          <p className="text-red-800 text-sm">{locationState.error}</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {locationState.isSuccess && formData.latitude && formData.longitude && (
+                      <div className="bg-green-50 border border-green-200 rounded-xl p-3 mb-3">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <p className="text-green-800 font-medium">Location Successfully Tagged</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div>
+                            <span className="text-green-600">Latitude:</span>
+                            <span className="font-mono ml-1 text-green-800">{formData.latitude.toFixed(6)}</span>
+                          </div>
+                          <div>
+                            <span className="text-green-600">Longitude:</span>
+                            <span className="font-mono ml-1 text-green-800">{formData.longitude.toFixed(6)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
                     <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600 mb-2">Upload spa photos</p>
@@ -634,5 +740,4 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
       </div>
     </div>
   );
- };
 };
