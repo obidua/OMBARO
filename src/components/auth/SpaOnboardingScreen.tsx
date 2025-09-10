@@ -272,7 +272,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Basic Information</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Basic Information</h2>
               <div className="space-y-4">
                 <Input
                   label="Spa Name *"
@@ -356,7 +356,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Operating Details</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Operating Details</h2>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
@@ -400,7 +400,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Social Media Links</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Social Media Links</h3>
                   <div className="space-y-3">
                     <Input
                       label="Instagram"
@@ -434,11 +434,11 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Amenities & Specialties</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Amenities & Specialties</h2>
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Amenities</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Available Amenities</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {availableAmenities.map((amenity) => (
                       <button
@@ -465,7 +465,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900">Specialties</h3>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">Specialties</h3>
                     <Button onClick={addSpecialty} size="sm" variant="outline">
                       <Plus className="w-4 h-4 mr-1" />
                       Add
@@ -495,7 +495,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Photo Upload</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Photo Upload</h3>
                   
                   {/* Location Tagging */}
                   <div className="mb-6">
@@ -568,7 +568,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Select Services from Catalog</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Select Services from Catalog</h2>
               
               <div className="mb-6">
                 <p className="text-gray-600 mb-4">
@@ -586,7 +586,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
               {/* Custom Services Section */}
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900">Custom Services (Optional)</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">Custom Services (Optional)</h3>
                   <Button onClick={addService} size="sm" variant="outline">
                     <Plus className="w-4 h-4 mr-1" />
                     Add Custom Service
@@ -595,7 +595,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
                 
                 <div className="space-y-6">
                   {formData.services.map((service, index) => (
-                    <div key={index} className="border border-gray-200 rounded-xl p-6">
+                    <div key={index} className="border border-gray-200 rounded-xl p-4 sm:p-6">
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-medium text-gray-900">Custom Service {index + 1}</h4>
                         {formData.services.length > 1 && (
@@ -677,6 +677,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
           <h1 className="text-lg font-semibold text-gray-900">Onboard New Spa</h1>
+          <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Onboard New Spa</h1>
           <div className="w-10" />
         </div>
 
@@ -708,7 +709,9 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
       </div>
 
       <div className="p-4 max-w-4xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl p-6 shadow-sm">
+        <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm">
           {renderStepContent()}
 
           {/* Navigation Buttons */}
@@ -716,18 +719,20 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
             <Button
               onClick={prevStep}
               variant="outline"
+              size="md"
               disabled={currentStep === 1}
             >
               Previous
             </Button>
             
             {currentStep < 4 ? (
-              <Button onClick={nextStep}>
+              <Button onClick={nextStep} size="md">
                 Next Step
               </Button>
             ) : (
               <Button
                 onClick={handleSubmit}
+                size="md"
                 loading={isLoading}
                 disabled={selectedServices.length === 0 && formData.services.every(s => !s.name)}
               >
