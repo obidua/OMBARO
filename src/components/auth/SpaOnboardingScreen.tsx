@@ -699,10 +699,10 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
             ))}
           </div>
           <div className="flex justify-between mt-2 text-xs text-gray-600">
-            <span>Basic Information</span>
-            <span>Operating Details</span>
-            <span>Amenities & Specialties</span>
-            <span>Services</span>
+            <span className="flex-1 text-center">Basic Information</span>
+            <span className="flex-1 text-center">Operating Details</span>
+            <span className="flex-1 text-center">Amenities & Specialties</span>
+            <span className="flex-1 text-center">Services</span>
           </div>
         </div>
       </div>
