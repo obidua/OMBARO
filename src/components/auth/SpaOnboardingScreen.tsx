@@ -676,7 +676,6 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
-          <h1 className="text-lg font-semibold text-gray-900">Onboard New Spa</h1>
           <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Onboard New Spa</h1>
           <div className="w-10" />
         </div>
@@ -708,9 +707,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
         </div>
       </div>
 
-      <div className="p-4 max-w-4xl mx-auto">
       <div className="p-4 sm:p-6 max-w-4xl mx-auto">
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
         <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm">
           {renderStepContent()}
 
