@@ -1,0 +1,494 @@
+import React from 'react';
+import { ArrowLeft } from 'lucide-react';
+import { useAuth } from './hooks/useAuth';
+import { FixedHeader } from './components/layout/FixedHeader';
+import { FixedFooter } from './components/layout/FixedFooter';
+import { WelcomeScreen } from './components/auth/WelcomeScreen';
+import { AuthLoginScreen } from './components/auth/AuthLoginScreen';
+import { EmployeeDashboardScreen } from './components/auth/EmployeeDashboardScreen';
+import { SpaOnboardingScreen } from './components/auth/SpaOnboardingScreen';
+import { VendorDashboardScreen } from './components/auth/VendorDashboardScreen';
+import { AdminDashboardScreen } from './components/auth/AdminDashboardScreen';
+import { MobileInputScreen } from './components/auth/MobileInputScreen';
+import { OTPScreen } from './components/auth/OTPScreen';
+import { ProfileSetupScreen } from './components/auth/ProfileSetupScreen';
+import { CompletionScreen } from './components/auth/CompletionScreen';
+import { HomeScreen } from './components/screens/HomeScreen';
+import { SalonDetailScreen } from './components/screens/SalonDetailScreen';
+import { MapViewScreen } from './components/screens/MapViewScreen';
+import { BookingScreen } from './components/screens/BookingScreen';
+import { PaymentScreen } from './components/screens/PaymentScreen';
+import { OrderTrackingScreen } from './components/screens/OrderTrackingScreen';
+import { BookingHistoryScreen } from './components/screens/BookingHistoryScreen';
+import { ProfileScreen } from './components/screens/ProfileScreen';
+import { RescheduleBookingScreen } from './components/screens/RescheduleBookingScreen';
+import { ChatScreen } from './components/screens/ChatScreen';
+import { Button } from './components/ui/Button';
+
+function App() {
+  const { authState, setCurrentStep, setSelectedEntity, loginUser, logout, sendOTP, verifyOTP, completeProfile } = useAuth();
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const handleSearch = () => {
+    console.log('Search query:', searchQuery);
+    // Navigate to search results or filter current view
+  };
+
+  const mainScreens = ['home', 'mapView', 'bookings', 'booking', 'payment', 'orderTracking', 'profile'];
+  const showFixedHeader = mainScreens.includes(authState.currentStep);
+  const showFixedFooter = mainScreens.includes(authState.currentStep);
+
+  const handleWelcomeNavigation = (userType?: string) => {
+    if (userType === 'employeeLogin') {
+      setCurrentStep('employeeLogin');
+    } else if (userType === 'vendorLogin') {
+      setCurrentStep('vendorLogin');
+    } else if (userType === 'adminLogin') {
+      setCurrentStep('adminLogin');
+    } else {
+      setCurrentStep('mobile');
+    }
+  };
+
+  const handleSpaOnboardingSubmit = (spaData: any) => {
+    console.log('Spa onboarding data:', spaData);
+    // In real app, this would call an API to save the spa data
+    alert('Spa onboarded successfully!');
+    setCurrentStep('employeeDashboard');
+  };
+
+  const renderCurrentScreen = () => {
+    switch (authState.currentStep) {
+      case 'welcome':
+        return (
+          <WelcomeScreen 
+            onGetStarted={handleWelcomeNavigation}
+          />
+        );
+      
+      case 'employeeLogin':
+        return (
+          <AuthLoginScreen
+            userType="Employee"
+            onBack={() => setCurrentStep('welcome')}
+            onLogin={loginUser}
+            isLoading={authState.isLoading}
+            error={authState.error}
+          />
+        );
+      
+      case 'vendorLogin':
+        return (
+          <AuthLoginScreen
+            userType="Vendor"
+            onBack={() => setCurrentStep('welcome')}
+            onLogin={loginUser}
+            isLoading={authState.isLoading}
+            error={authState.error}
+          />
+        );
+      
+      case 'adminLogin':
+        return (
+          <AuthLoginScreen
+            userType="Admin"
+            onBack={() => setCurrentStep('welcome')}
+            onLogin={loginUser}
+            isLoading={authState.isLoading}
+            error={authState.error}
+          />
+        );
+      
+      case 'employeeDashboard':
+        return (
+          <EmployeeDashboardScreen
+            onLogout={logout}
+            onNavigate={setCurrentStep}
+            user={authState.user}
+          />
+        );
+      
+      case 'spaOnboarding':
+        return (
+          <SpaOnboardingScreen
+            onBack={() => setCurrentStep('employeeDashboard')}
+            onSubmit={handleSpaOnboardingSubmit}
+          />
+        );
+      
+      case 'vendorDashboard':
+        return (
+          <VendorDashboardScreen
+            onLogout={logout}
+            user={authState.user}
+          />
+        );
+      
+      case 'adminDashboard':
+        return (
+          <AdminDashboardScreen
+            onLogout={logout}
+            user={authState.user}
+          />
+        );
+      
+      case 'mobile':
+        return (
+          <MobileInputScreen
+            onBack={() => setCurrentStep('welcome')}
+            onSendOTP={sendOTP}
+            isLoading={authState.isLoading}
+            error={authState.error}
+          />
+        );
+      
+      case 'otp':
+        return (
+          <OTPScreen
+            onBack={() => setCurrentStep('mobile')}
+            onVerifyOTP={verifyOTP}
+            onResendOTP={() => sendOTP(authState.user.mobile || '')}
+            mobile={authState.user.mobile || ''}
+            isLoading={authState.isLoading}
+            error={authState.error}
+          />
+        );
+      
+      case 'profile':
+        return (
+          <ProfileSetupScreen
+            onBack={() => setCurrentStep('otp')}
+            onCompleteProfile={completeProfile}
+            isLoading={authState.isLoading}
+            error={authState.error}
+          />
+        );
+      
+      case 'complete':
+        return (
+          <CompletionScreen
+            user={authState.user}
+            onContinue={() => setCurrentStep('home')}
+          />
+        );
+      
+      case 'home':
+        return (
+          <HomeScreen
+            user={authState.user}
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'salonDetail' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('salonDetail' as any);
+              } else if (screen === 'mapView') {
+                if (data?.initialSelectedProviderId) {
+                  setSelectedEntity(data);
+                }
+                setCurrentStep('mapView' as any);
+              } else if (screen === 'bookings') {
+                setCurrentStep('bookings' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'mapView':
+        return (
+          <MapViewScreen
+            initialSelectedProviderId={authState.selectedEntity?.initialSelectedProviderId}
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'booking' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('booking' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'bookings':
+        return (
+          <BookingHistoryScreen
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'mapView') {
+                setCurrentStep('mapView' as any);
+              } else if (screen === 'rescheduleBooking' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('rescheduleBooking' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'rescheduleBooking':
+        return (
+          <RescheduleBookingScreen
+            bookingData={authState.selectedEntity}
+            onConfirm={(newDate: string, newTime: string) => {
+              // In a real app, this would call an API to update the booking
+              console.log('Reschedule confirmed:', { newDate, newTime });
+              alert(`Booking rescheduled successfully!\nNew date: ${newDate}\nNew time: ${newTime}`);
+              setCurrentStep('bookings' as any);
+            }}
+            onCancel={() => setCurrentStep('bookings' as any)}
+          />
+        );
+      
+      case 'booking':
+        return (
+          <BookingScreen
+            cartItems={authState.selectedEntity?.cartItems || []}
+            onBack={() => {
+              // Navigate back to the previous screen (could be mapView or salonDetail)
+              setCurrentStep('mapView' as any);
+            }}
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'payment' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('payment' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'payment':
+        return (
+          <PaymentScreen
+            bookingData={authState.selectedEntity}
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'orderTracking' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('orderTracking' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'orderTracking':
+        return (
+          <OrderTrackingScreen
+            orderData={authState.selectedEntity}
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'home') {
+                setCurrentStep('home');
+              } else if (screen === 'chat' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('chat' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'salonDetail':
+        return (
+          <SalonDetailScreen
+            salon={authState.selectedEntity}
+            onBack={() => setCurrentStep('home')}
+            onNavigate={(screen, data?) => {
+              console.log('Navigate to:', screen, data);
+              if (screen === 'booking' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('booking' as any);
+              } else if (screen === 'mapView') {
+                setCurrentStep('mapView' as any);
+              }
+            }}
+          />
+        );
+      
+      case 'categoryServices':
+        return (
+          <div className="min-h-screen bg-gray-50 pt-[70px] pb-[70px]">
+            {/* Header with Back Button */}
+            <div className="bg-white shadow-sm border-b border-gray-100">
+              <div className="flex items-center justify-between p-4">
+                <button
+                  onClick={() => setCurrentStep('home')}
+                  aria-label="Go back to home screen"
+                  className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <h1 className="text-lg font-semibold text-gray-900">Category Services</h1>
+                <div className="w-10" />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center flex-1 p-6">
+              <div className="text-center">
+                <p className="text-gray-600 mb-6">
+                  {authState.selectedEntity?.name ? 
+                    `Showing services for ${authState.selectedEntity.name}` : 
+                    'Browse all service categories'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'offerDetail':
+        return (
+          <div className="min-h-screen bg-gray-50 pt-[70px] pb-[70px]">
+            {/* Header with Back Button */}
+            <div className="bg-white shadow-sm border-b border-gray-100">
+              <div className="flex items-center justify-between p-4">
+                <button
+                  onClick={() => setCurrentStep('home')}
+                  aria-label="Go back to home screen"
+                  className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <h1 className="text-lg font-semibold text-gray-900">Special Offer</h1>
+                <div className="w-10" />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center flex-1 p-6">
+              <div className="text-center max-w-md mx-auto">
+                {authState.selectedEntity && (
+                  <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
+                    <h2 className="text-xl font-semibold text-purple-600 mb-2">
+                      {authState.selectedEntity.discount}% OFF
+                    </h2>
+                    <p className="text-gray-900 font-medium mb-2">{authState.selectedEntity.title}</p>
+                    <p className="text-gray-600 mb-4">{authState.selectedEntity.description}</p>
+                    <p className="text-sm text-gray-500">Valid until: {authState.selectedEntity.validUntil}</p>
+                  </div>
+                )}
+                <div className="space-y-3">
+                  <Button onClick={() => setCurrentStep('mapView')} className="w-full">
+                    Find Spas Near You
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'reviewScreen':
+        return (
+          <div className="min-h-screen bg-gray-50 pt-[70px] pb-[70px]">
+            {/* Header with Back Button */}
+            <div className="bg-white shadow-sm border-b border-gray-100">
+              <div className="flex items-center justify-between p-4">
+                <button
+                  onClick={() => setCurrentStep('bookings')}
+                  aria-label="Go back to bookings"
+                  className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <h1 className="text-lg font-semibold text-gray-900">Rate Your Experience</h1>
+                <div className="w-10" />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center flex-1 p-6">
+              <div className="text-center max-w-md mx-auto">
+                {authState.selectedEntity && (
+                  <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                      {authState.selectedEntity.serviceName}
+                    </h2>
+                    <p className="text-gray-600 mb-4">{authState.selectedEntity.salonName}</p>
+                    <p className="text-sm text-gray-500">
+                      {authState.selectedEntity.date} at {authState.selectedEntity.time}
+                    </p>
+                  </div>
+                )}
+                <div className="space-y-3">
+                  <Button onClick={() => setCurrentStep('bookings')} className="w-full">
+                    Submit Review
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'profile':
+        return (
+          <ProfileScreen
+            user={authState.user}
+            onLogout={logout}
+            onNavigate={setCurrentStep}
+          />
+        );
+      
+      case 'chat':
+        return (
+          <ChatScreen
+            therapistInfo={authState.selectedEntity?.therapistInfo || {
+              id: 'therapist1',
+              name: 'Therapist',
+              photo: 'https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=150',
+              isOnline: true,
+              specialties: ['Massage Therapy']
+            }}
+            onBack={() => {
+              // Go back to the previous screen based on context
+              if (authState.currentStep === 'chat') {
+                setCurrentStep('orderTracking');
+              }
+            }}
+            onCall={() => {
+              console.log('Starting voice call with therapist');
+              // In real app, this would initiate a voice call
+            }}
+            onVideoCall={() => {
+              console.log('Starting video call with therapist');
+              // In real app, this would initiate a video call
+            }}
+          />
+        );
+      
+      default:
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 flex items-center justify-center">
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="font-sans antialiased">
+      {showFixedHeader && (
+        <FixedHeader
+          user={authState.user}
+          onLogout={logout}
+          onSearch={(query) => {
+            console.log('Search from header:', query);
+            // Handle search functionality here
+          }}
+        />
+      )}
+      {renderCurrentScreen()}
+      {showFixedFooter && (
+        <FixedFooter
+          onNavigate={(screen, data?) => {
+            if (screen === 'bookings') {
+              setCurrentStep('bookings' as any);
+            } else if (screen === 'home') {
+              setCurrentStep('home');
+            } else if (screen === 'mapView') {
+              setCurrentStep('mapView' as any);
+            } else {
+              setCurrentStep('profile' as any);
+              setCurrentStep(screen as any);
+            }
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+export default App;
