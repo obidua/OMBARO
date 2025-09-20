@@ -1,0 +1,165 @@
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+export interface User {
+  id?: string;
+  name?: string;
+  email?: string;
+  mobile?: string;
+  gender?: 'male' | 'female' | 'other';
+  dateOfBirth?: string;
+  isVerified?: boolean;
+}
+
+export interface AuthState {
+  user: Partial<User>;
+  userType?: 'customer' | 'employee' | 'vendor' | 'admin';
+  isLoading: boolean;
+  error: string | null;
+  selectedEntity?: any;
+}
+
+interface AuthContextType {
+  authState: AuthState;
+  setUser: (userData: Partial<User>) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  setSelectedEntity: (entity: any) => void;
+  loginUser: (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => Promise<void>;
+  logout: () => void;
+  sendOTP: (mobile: string) => Promise<void>;
+  verifyOTP: (otp: string) => Promise<void>;
+  completeProfile: (profileData: Partial<User>) => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [authState, setAuthState] = useState<AuthState>({
+    user: {},
+    isLoading: false,
+    error: null,
+  });
+
+  const setUser = (userData: Partial<User>) => {
+    setAuthState(prev => ({
+      ...prev,
+      user: { ...prev.user, ...userData }
+    }));
+  };
+
+  const setLoading = (loading: boolean) => {
+    setAuthState(prev => ({ ...prev, isLoading: loading }));
+  };
+
+  const setError = (error: string | null) => {
+    setAuthState(prev => ({ ...prev, error }));
+  };
+
+  const setSelectedEntity = (entity: any) => {
+    setAuthState(prev => ({ ...prev, selectedEntity: entity }));
+  };
+
+  const loginUser = async (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (password === '1234') {
+        setUser({ mobile, isVerified: true });
+        setAuthState(prev => ({ ...prev, userType }));
+      } else {
+        setError('Invalid password. Please try again.');
+      }
+    } catch (error) {
+      setError('Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = () => {
+    setAuthState({
+      user: {},
+      userType: undefined,
+      isLoading: false,
+      error: null,
+    });
+  };
+
+  const sendOTP = async (mobile: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Sending OTP to:', mobile);
+      setUser({ mobile });
+    } catch (error) {
+      setError('Failed to send OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOTP = async (otp: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (otp === '1234') {
+        setUser({ isVerified: true });
+      } else {
+        setError('Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      setError('Failed to verify OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const completeProfile = async (profileData: Partial<User>) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Saving profile:', profileData);
+      setUser(profileData);
+    } catch (error) {
+      setError('Failed to save profile. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{
+      authState,
+      setUser,
+      setLoading,
+      setError,
+      setSelectedEntity,
+      loginUser,
+      logout,
+      sendOTP,
+      verifyOTP,
+      completeProfile,
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
