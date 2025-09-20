@@ -4,19 +4,19 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  Dimensions,
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../components/ui/Button';
+import { colors, spacing, typography, borderRadius, shadows } from '../constants/theme';
 
 type WelcomeScreenNavigationProp = StackNavigationProp<any, 'Welcome'>;
 
 interface Props {
   navigation: WelcomeScreenNavigationProp;
 }
-
-const { width, height } = Dimensions.get('window');
 
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const handleGetStarted = (userType?: string) => {
@@ -32,114 +32,106 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient
-      colors={['#F3E8FF', '#FCE7F3', '#EEF2FF']}
-      style={styles.container}
-    >
+    <LinearGradient colors={[colors.primary[50], colors.secondary[50], '#EEF2FF']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.content}>
-          {/* Logo Section */}
-          <View style={styles.logoSection}>
-            <View style={styles.logoContainer}>
-              <LinearGradient
-                colors={['#8B5CF6', '#EC4899']}
-                style={styles.logo}
-              >
-                <Text style={styles.logoIcon}>✨</Text>
-              </LinearGradient>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            {/* Logo Section */}
+            <View style={styles.logoSection}>
+              <View style={styles.logoContainer}>
+                <LinearGradient
+                  colors={[colors.primary[600], colors.secondary[500]]}
+                  style={styles.logo}
+                >
+                  <Text style={styles.logoIcon}>✨</Text>
+                </LinearGradient>
+              </View>
+              <Text style={styles.appName}>ZexDream</Text>
+              <Text style={styles.tagline}>Beauty & Wellness Hub</Text>
             </View>
-            <Text style={styles.appName}>ZexDream</Text>
-            <Text style={styles.tagline}>Beauty & Wellness Hub</Text>
+
+            {/* Welcome Message */}
+            <View style={styles.messageSection}>
+              <Text style={styles.welcomeTitle}>
+                Welcome to Your Beauty Journey
+              </Text>
+              <Text style={styles.welcomeDescription}>
+                Discover and book premium spa, salon, and wellness services near you. 
+                Experience luxury at your fingertips.
+              </Text>
+            </View>
+
+            {/* Features */}
+            <View style={styles.featuresSection}>
+              <View style={styles.featureItem}>
+                <View style={[styles.featureIcon, { backgroundColor: colors.primary[100] }]}>
+                  <Text style={styles.featureIconText}>📍</Text>
+                </View>
+                <View style={styles.featureText}>
+                  <Text style={styles.featureTitle}>Find Nearby</Text>
+                  <Text style={styles.featureDescription}>Discover salons & spas around you</Text>
+                </View>
+              </View>
+
+              <View style={styles.featureItem}>
+                <View style={[styles.featureIcon, { backgroundColor: colors.secondary[100] }]}>
+                  <Text style={styles.featureIconText}>⏰</Text>
+                </View>
+                <View style={styles.featureText}>
+                  <Text style={styles.featureTitle}>Easy Booking</Text>
+                  <Text style={styles.featureDescription}>Book appointments in seconds</Text>
+                </View>
+              </View>
+
+              <View style={styles.featureItem}>
+                <View style={[styles.featureIcon, { backgroundColor: '#EEF2FF' }]}>
+                  <Text style={styles.featureIconText}>⭐</Text>
+                </View>
+                <View style={styles.featureText}>
+                  <Text style={styles.featureTitle}>Premium Quality</Text>
+                  <Text style={styles.featureDescription}>Verified professionals only</Text>
+                </View>
+              </View>
+            </View>
           </View>
-
-          {/* Welcome Message */}
-          <View style={styles.messageSection}>
-            <Text style={styles.welcomeTitle}>
-              Welcome to Your Beauty Journey
-            </Text>
-            <Text style={styles.welcomeDescription}>
-              Discover and book premium spa, salon, and wellness services near you. 
-              Experience luxury at your fingertips.
-            </Text>
-          </View>
-
-          {/* Features */}
-          <View style={styles.featuresSection}>
-            <View style={styles.featureItem}>
-              <View style={[styles.featureIcon, { backgroundColor: '#F3E8FF' }]}>
-                <Text style={styles.featureIconText}>📍</Text>
-              </View>
-              <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Find Nearby</Text>
-                <Text style={styles.featureDescription}>Discover salons & spas around you</Text>
-              </View>
-            </View>
-
-            <View style={styles.featureItem}>
-              <View style={[styles.featureIcon, { backgroundColor: '#FCE7F3' }]}>
-                <Text style={styles.featureIconText}>⏰</Text>
-              </View>
-              <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Easy Booking</Text>
-                <Text style={styles.featureDescription}>Book appointments in seconds</Text>
-              </View>
-            </View>
-
-            <View style={styles.featureItem}>
-              <View style={[styles.featureIcon, { backgroundColor: '#EEF2FF' }]}>
-                <Text style={styles.featureIconText}>⭐</Text>
-              </View>
-              <View style={styles.featureText}>
-                <Text style={styles.featureTitle}>Premium Quality</Text>
-                <Text style={styles.featureDescription}>Verified professionals only</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        </ScrollView>
 
         {/* Bottom CTA */}
         <View style={styles.bottomSection}>
-          <Button
-            title="Sign Up"
-            onPress={() => handleGetStarted()}
-            size="lg"
-            style={styles.primaryButton}
-          />
-          <Button
-            title="Login"
-            onPress={() => handleGetStarted()}
-            variant="outline"
-            size="lg"
-            style={styles.secondaryButton}
-          />
-          
-          {/* Portal Access */}
-          <View style={styles.portalAccess}>
-            <Text
-              style={styles.portalLink}
-              onPress={() => handleGetStarted('employeeLogin')}
-            >
-              Employee
-            </Text>
-            <Text style={styles.portalSeparator}>•</Text>
-            <Text
-              style={styles.portalLink}
-              onPress={() => handleGetStarted('vendorLogin')}
-            >
-              Vendor
-            </Text>
-            <Text style={styles.portalSeparator}>•</Text>
-            <Text
-              style={styles.portalLink}
-              onPress={() => handleGetStarted('adminLogin')}
-            >
-              Admin
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Sign Up"
+              onPress={() => handleGetStarted()}
+              size="lg"
+              style={styles.primaryButton}
+            />
+            <Button
+              title="Login"
+              onPress={() => handleGetStarted()}
+              variant="outline"
+              size="lg"
+              style={styles.secondaryButton}
+            />
+            
+            {/* Portal Access */}
+            <View style={styles.portalAccess}>
+              <TouchableOpacity onPress={() => handleGetStarted('employeeLogin')}>
+                <Text style={styles.portalLink}>Employee</Text>
+              </TouchableOpacity>
+              <Text style={styles.portalSeparator}>•</Text>
+              <TouchableOpacity onPress={() => handleGetStarted('vendorLogin')}>
+                <Text style={styles.portalLink}>Vendor</Text>
+              </TouchableOpacity>
+              <Text style={styles.portalSeparator}>•</Text>
+              <TouchableOpacity onPress={() => handleGetStarted('adminLogin')}>
+                <Text style={styles.portalLink}>Admin</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <Text style={styles.disclaimer}>
+              By continuing, you agree to our Terms & Privacy Policy
             </Text>
           </View>
-          
-          <Text style={styles.disclaimer}>
-            By continuing, you agree to our Terms & Privacy Policy
-          </Text>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -153,129 +145,127 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  content: {
+  scrollView: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 48,
+  },
+  content: {
+    paddingHorizontal: spacing['2xl'],
+    paddingTop: spacing['4xl'],
+    paddingBottom: spacing['2xl'],
   },
   logoSection: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: spacing['4xl'],
   },
   logoContainer: {
-    marginBottom: 16,
+    marginBottom: spacing.lg,
   },
   logo: {
     width: 80,
     height: 80,
-    borderRadius: 24,
+    borderRadius: borderRadius['3xl'],
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#8B5CF6',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 16,
+    ...shadows.xl,
   },
   logoIcon: {
-    fontSize: 40,
+    fontSize: typography['4xl'],
   },
   appName: {
-    fontSize: 32,
+    fontSize: typography['4xl'],
     fontWeight: 'bold',
-    color: '#8B5CF6',
-    marginBottom: 8,
+    color: colors.primary[600],
+    marginBottom: spacing.sm,
   },
   tagline: {
-    fontSize: 18,
-    color: '#6B7280',
+    fontSize: typography.lg,
+    color: colors.gray[600],
   },
   messageSection: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: spacing['4xl'],
   },
   welcomeTitle: {
-    fontSize: 24,
+    fontSize: typography['2xl'],
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.gray[900],
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.lg,
   },
   welcomeDescription: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: typography.base,
+    color: colors.gray[600],
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: typography['2xl'],
   },
   featuresSection: {
-    gap: 16,
+    gap: spacing.lg,
   },
   featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    ...shadows.md,
   },
   featureIcon: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: spacing.md,
   },
   featureIconText: {
-    fontSize: 20,
+    fontSize: typography.xl,
   },
   featureText: {
     flex: 1,
   },
   featureTitle: {
-    fontSize: 16,
+    fontSize: typography.base,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 4,
+    color: colors.gray[900],
+    marginBottom: spacing.xs,
   },
   featureDescription: {
-    fontSize: 14,
-    color: '#6B7280',
+    fontSize: typography.sm,
+    color: colors.gray[600],
   },
   bottomSection: {
-    paddingHorizontal: 24,
-    paddingBottom: 32,
-    gap: 12,
+    paddingHorizontal: spacing['2xl'],
+    paddingBottom: spacing['3xl'],
+  },
+  buttonContainer: {
+    gap: spacing.md,
   },
   primaryButton: {
-    marginBottom: 8,
+    width: '100%',
   },
   secondaryButton: {
-    marginBottom: 24,
+    width: '100%',
+    marginBottom: spacing['2xl'],
   },
   portalAccess: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
-    gap: 8,
+    marginBottom: spacing.lg,
+    gap: spacing.sm,
   },
   portalLink: {
-    fontSize: 12,
-    color: '#8B5CF6',
+    fontSize: typography.xs,
+    color: colors.primary[600],
     fontWeight: '500',
   },
   portalSeparator: {
-    fontSize: 12,
-    color: '#9CA3AF',
+    fontSize: typography.xs,
+    color: colors.gray[400],
   },
   disclaimer: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: typography.xs,
+    color: colors.gray[600],
     textAlign: 'center',
   },
 });

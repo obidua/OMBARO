@@ -5,13 +5,14 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  Alert,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAuth } from '../context/AuthContext';
+import { colors, spacing, typography, borderRadius, shadows } from '../constants/theme';
 
 type MobileInputScreenNavigationProp = StackNavigationProp<any, 'MobileInput'>;
 
@@ -54,15 +55,12 @@ const MobileInputScreen: React.FC<Props> = ({ navigation }) => {
       await sendOTP(mobile);
       navigation.navigate('OTP');
     } catch (error) {
-      Alert.alert('Error', 'Failed to send OTP. Please try again.');
+      console.error('Failed to send OTP:', error);
     }
   };
 
   return (
-    <LinearGradient
-      colors={['#F3E8FF', '#FCE7F3', '#EEF2FF']}
-      style={styles.container}
-    >
+    <LinearGradient colors={[colors.primary[50], colors.secondary[50], '#EEF2FF']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
         <View style={styles.header}>
@@ -76,59 +74,61 @@ const MobileInputScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.spacer} />
         </View>
 
-        {/* Content */}
-        <View style={styles.content}>
-          {/* Icon */}
-          <View style={styles.iconSection}>
-            <LinearGradient
-              colors={['#8B5CF6', '#EC4899']}
-              style={styles.iconContainer}
-            >
-              <Text style={styles.iconText}>📱</Text>
-            </LinearGradient>
-            <Text style={styles.title}>Enter Your Mobile Number</Text>
-            <Text style={styles.description}>
-              We'll send you a verification code to confirm your number
-            </Text>
-          </View>
-
-          {/* Mobile Input */}
-          <View style={styles.inputSection}>
-            <Input
-              label="Mobile Number"
-              placeholder="Enter 10-digit mobile number"
-              value={mobile}
-              onChangeText={handleMobileChange}
-              keyboardType="numeric"
-              maxLength={10}
-              error={mobileError || authState.error || undefined}
-              containerStyle={styles.inputContainer}
-            />
-
-            <Button
-              title="Send OTP"
-              onPress={handleSendOTP}
-              loading={authState.isLoading}
-              disabled={!mobile || mobile.length !== 10}
-              size="lg"
-              style={styles.sendButton}
-            />
-          </View>
-
-          {/* Security Note */}
-          <View style={styles.securityNote}>
-            <View style={styles.securityIcon}>
-              <Text style={styles.securityIconText}>🛡️</Text>
-            </View>
-            <View style={styles.securityText}>
-              <Text style={styles.securityTitle}>Your Privacy is Protected</Text>
-              <Text style={styles.securityDescription}>
-                We use your mobile number only for account verification and booking confirmations. 
-                Your data is encrypted and never shared with third parties.
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          {/* Content */}
+          <View style={styles.content}>
+            {/* Icon */}
+            <View style={styles.iconSection}>
+              <LinearGradient
+                colors={[colors.primary[600], colors.secondary[500]]}
+                style={styles.iconContainer}
+              >
+                <Text style={styles.iconText}>📱</Text>
+              </LinearGradient>
+              <Text style={styles.title}>Enter Your Mobile Number</Text>
+              <Text style={styles.description}>
+                We'll send you a verification code to confirm your number
               </Text>
             </View>
+
+            {/* Mobile Input */}
+            <View style={styles.inputSection}>
+              <Input
+                label="Mobile Number"
+                placeholder="Enter 10-digit mobile number"
+                value={mobile}
+                onChangeText={handleMobileChange}
+                keyboardType="numeric"
+                maxLength={10}
+                error={mobileError || authState.error || undefined}
+                containerStyle={styles.inputContainer}
+              />
+
+              <Button
+                title="Send OTP"
+                onPress={handleSendOTP}
+                loading={authState.isLoading}
+                disabled={!mobile || mobile.length !== 10}
+                size="lg"
+                style={styles.sendButton}
+              />
+            </View>
+
+            {/* Security Note */}
+            <View style={styles.securityNote}>
+              <View style={styles.securityIcon}>
+                <Text style={styles.securityIconText}>🛡️</Text>
+              </View>
+              <View style={styles.securityText}>
+                <Text style={styles.securityTitle}>Your Privacy is Protected</Text>
+                <Text style={styles.securityDescription}>
+                  We use your mobile number only for account verification and booking confirmations. 
+                  Your data is encrypted and never shared with third parties.
+                </Text>
+              </View>
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -141,116 +141,116 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: spacing['2xl'],
+    paddingVertical: spacing.lg,
   },
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: borderRadius.lg,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...shadows.md,
   },
   backButtonText: {
-    fontSize: 20,
-    color: '#374151',
+    fontSize: typography.xl,
+    color: colors.gray[700],
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: typography.lg,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.gray[900],
   },
   spacer: {
     width: 40,
   },
   content: {
-    flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing['2xl'],
+    minHeight: 600,
   },
   iconSection: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: spacing['4xl'],
   },
   iconContainer: {
     width: 64,
     height: 64,
-    borderRadius: 16,
+    borderRadius: borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-    shadowColor: '#8B5CF6',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 16,
+    marginBottom: spacing.lg,
+    ...shadows.xl,
   },
   iconText: {
-    fontSize: 32,
+    fontSize: typography['3xl'],
   },
   title: {
-    fontSize: 24,
+    fontSize: typography['2xl'],
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.gray[900],
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   description: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: typography.base,
+    color: colors.gray[600],
     textAlign: 'center',
   },
   inputSection: {
-    marginBottom: 32,
+    marginBottom: spacing['3xl'],
   },
   inputContainer: {
-    marginBottom: 24,
+    marginBottom: spacing['2xl'],
   },
   sendButton: {
     width: '100%',
   },
   securityNote: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
     alignItems: 'flex-start',
+    ...shadows.sm,
   },
   securityIcon: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: '#D1FAE5',
+    borderRadius: borderRadius.md,
+    backgroundColor: colors.success[100],
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: spacing.md,
   },
   securityIconText: {
-    fontSize: 16,
+    fontSize: typography.base,
   },
   securityText: {
     flex: 1,
   },
   securityTitle: {
-    fontSize: 14,
+    fontSize: typography.sm,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 4,
+    color: colors.gray[900],
+    marginBottom: spacing.xs,
   },
   securityDescription: {
-    fontSize: 12,
-    color: '#6B7280',
-    lineHeight: 18,
+    fontSize: typography.xs,
+    color: colors.gray[600],
+    lineHeight: typography.lg,
+  },
+  bottomSection: {
+    paddingHorizontal: spacing['2xl'],
+    paddingBottom: spacing['3xl'],
   },
 });
 

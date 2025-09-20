@@ -15,6 +15,16 @@ import AuthLoginScreen from './src/screens/AuthLoginScreen';
 import EmployeeDashboardScreen from './src/screens/EmployeeDashboardScreen';
 import VendorDashboardScreen from './src/screens/VendorDashboardScreen';
 import AdminDashboardScreen from './src/screens/AdminDashboardScreen';
+import MapViewScreen from './src/screens/MapViewScreen';
+import SalonDetailScreen from './src/screens/SalonDetailScreen';
+import BookingScreen from './src/screens/BookingScreen';
+import PaymentScreen from './src/screens/PaymentScreen';
+import OrderTrackingScreen from './src/screens/OrderTrackingScreen';
+import BookingHistoryScreen from './src/screens/BookingHistoryScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import RescheduleBookingScreen from './src/screens/RescheduleBookingScreen';
+import ChatScreen from './src/screens/ChatScreen';
+import SpaOnboardingScreen from './src/screens/SpaOnboardingScreen';
 
 // Import context
 import { AuthProvider } from './src/context/AuthContext';
@@ -48,16 +58,31 @@ export default function App() {
               },
             }}
           >
+            {/* Authentication Flow */}
             <Stack.Screen name="Welcome" component={WelcomeScreen} />
             <Stack.Screen name="MobileInput" component={MobileInputScreen} />
             <Stack.Screen name="OTP" component={OTPScreen} />
             <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} />
             <Stack.Screen name="Completion" component={CompletionScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
+            
+            {/* Portal Authentication */}
             <Stack.Screen name="AuthLogin" component={AuthLoginScreen} />
             <Stack.Screen name="EmployeeDashboard" component={EmployeeDashboardScreen} />
             <Stack.Screen name="VendorDashboard" component={VendorDashboardScreen} />
             <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
+            <Stack.Screen name="SpaOnboarding" component={SpaOnboardingScreen} />
+            
+            {/* Customer Flow */}
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="MapView" component={MapViewScreen} />
+            <Stack.Screen name="SalonDetail" component={SalonDetailScreen} />
+            <Stack.Screen name="Booking" component={BookingScreen} />
+            <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen name="OrderTracking" component={OrderTrackingScreen} />
+            <Stack.Screen name="BookingHistory" component={BookingHistoryScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="RescheduleBooking" component={RescheduleBookingScreen} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>

@@ -6,13 +6,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { RadioGroup } from '../components/ui/RadioGroup';
+import { DatePicker } from '../components/ui/DatePicker';
 import { useAuth } from '../context/AuthContext';
+import { colors, spacing, typography, borderRadius, shadows } from '../constants/theme';
 
 type ProfileSetupScreenNavigationProp = StackNavigationProp<any, 'ProfileSetup'>;
 
@@ -41,7 +43,11 @@ const ProfileSetupScreen: React.FC<Props> = ({ navigation }) => {
     { value: 'male', label: 'Male', emoji: '👨' },
     { value: 'female', label: 'Female', emoji: '👩' },
     { value: 'other', label: 'Other', emoji: '👤' }
-  ];
+  ].map(option => ({
+    value: option.value,
+    label: option.label,
+    icon: <Text style={styles.genderEmoji}>{option.emoji}</Text>
+  }));
 
   const validateForm = () => {
     const errors = {
@@ -93,17 +99,14 @@ const ProfileSetupScreen: React.FC<Props> = ({ navigation }) => {
         navigation.navigate('Completion');
       } catch (error) {
         Alert.alert('Error', 'Failed to complete profile. Please try again.');
-      }
+      console.error('Failed to complete profile:', error);
     }
   };
 
   const isFormValid = formData.name && formData.email && formData.gender && formData.dateOfBirth;
 
   return (
-    <LinearGradient
-      colors={['#F3E8FF', '#FCE7F3', '#EEF2FF']}
-      style={styles.container}
-    >
+    <LinearGradient colors={[colors.primary[50], colors.secondary[50], '#EEF2FF']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
         <View style={styles.header}>
@@ -117,11 +120,11 @@ const ProfileSetupScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.spacer} />
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
           {/* Icon */}
           <View style={styles.iconSection}>
             <LinearGradient
-              colors={['#8B5CF6', '#EC4899']}
+              colors={[colors.primary[600], colors.secondary[500]]}
               style={styles.iconContainer}
             >
               <Text style={styles.iconText}>👤</Text>
@@ -152,39 +155,18 @@ const ProfileSetupScreen: React.FC<Props> = ({ navigation }) => {
               error={formErrors.email}
             />
 
-            {/* Gender Selection */}
-            <View style={styles.genderSection}>
-              <Text style={styles.genderLabel}>Gender</Text>
-              <View style={styles.genderOptions}>
-                {genderOptions.map((option) => (
-                  <TouchableOpacity
-                    key={option.value}
-                    style={[
-                      styles.genderOption,
-                      formData.gender === option.value && styles.genderOptionSelected,
-                    ]}
-                    onPress={() => handleInputChange('gender', option.value)}
-                  >
-                    <Text style={styles.genderEmoji}>{option.emoji}</Text>
-                    <Text style={[
-                      styles.genderText,
-                      formData.gender === option.value && styles.genderTextSelected,
-                    ]}>
-                      {option.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              {formErrors.gender && (
-                <Text style={styles.errorText}>{formErrors.gender}</Text>
-              )}
-            </View>
+            <RadioGroup
+              label="Gender"
+              options={genderOptions}
+              value={formData.gender}
+              onChange={(value) => handleInputChange('gender', value)}
+              error={formErrors.gender}
+            />
 
-            <Input
+            <DatePicker
               label="Date of Birth"
-              placeholder="YYYY-MM-DD"
               value={formData.dateOfBirth}
-              onChangeText={(value) => handleInputChange('dateOfBirth', value)}
+              onChange={(value) => handleInputChange('dateOfBirth', value)}
               error={formErrors.dateOfBirth}
             />
 
@@ -230,149 +212,99 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: spacing['2xl'],
+    paddingVertical: spacing.lg,
   },
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: borderRadius.lg,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...shadows.md,
   },
   backButtonText: {
-    fontSize: 20,
-    color: '#374151',
+    fontSize: typography.xl,
+    color: colors.gray[700],
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: typography.lg,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.gray[900],
   },
   spacer: {
     width: 40,
   },
   scrollView: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing['2xl'],
   },
   iconSection: {
     alignItems: 'center',
-    marginBottom: 32,
-    marginTop: 32,
+    marginBottom: spacing['3xl'],
+    marginTop: spacing['3xl'],
   },
   iconContainer: {
     width: 64,
     height: 64,
-    borderRadius: 16,
+    borderRadius: borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-    shadowColor: '#8B5CF6',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 16,
+    marginBottom: spacing.lg,
+    ...shadows.xl,
   },
   iconText: {
-    fontSize: 32,
+    fontSize: typography['3xl'],
   },
   title: {
-    fontSize: 24,
+    fontSize: typography['2xl'],
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.gray[900],
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   description: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: typography.base,
+    color: colors.gray[600],
     textAlign: 'center',
   },
   formSection: {
-    marginBottom: 32,
-  },
-  genderSection: {
-    marginBottom: 16,
-  },
-  genderLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: 8,
-  },
-  genderOptions: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  genderOption: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    borderWidth: 2,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
-  },
-  genderOptionSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    marginBottom: spacing['3xl'],
   },
   genderEmoji: {
-    fontSize: 20,
-    marginRight: 8,
-  },
-  genderText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
-  },
-  genderTextSelected: {
-    color: '#7C3AED',
-  },
-  errorText: {
-    fontSize: 12,
-    color: '#EF4444',
-    marginTop: 4,
+    fontSize: typography.xl,
   },
   globalError: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.error[50],
     borderWidth: 1,
-    borderColor: '#FECACA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+    borderColor: colors.error[200],
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
   },
   globalErrorText: {
-    fontSize: 14,
-    color: '#DC2626',
+    fontSize: typography.sm,
+    color: colors.error[600],
   },
   submitButton: {
     width: '100%',
   },
   privacyNote: {
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    marginBottom: spacing['3xl'],
+    ...shadows.sm,
   },
   privacyText: {
-    fontSize: 12,
-    color: '#6B7280',
+    fontSize: typography.xs,
+    color: colors.gray[600],
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: typography.lg,
   },
   privacyLink: {
-    color: '#8B5CF6',
+    color: colors.primary[600],
     fontWeight: '500',
   },
 });

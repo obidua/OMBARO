@@ -16,6 +16,7 @@ export interface AuthState {
   isLoading: boolean;
   error: string | null;
   selectedEntity?: any;
+  currentStep?: string;
 }
 
 interface AuthContextType {
@@ -24,6 +25,7 @@ interface AuthContextType {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setSelectedEntity: (entity: any) => void;
+  setCurrentStep: (step: string) => void;
   loginUser: (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => Promise<void>;
   logout: () => void;
   sendOTP: (mobile: string) => Promise<void>;
@@ -38,6 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     user: {},
     isLoading: false,
     error: null,
+    currentStep: 'welcome',
   });
 
   const setUser = (userData: Partial<User>) => {
@@ -57,6 +60,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const setSelectedEntity = (entity: any) => {
     setAuthState(prev => ({ ...prev, selectedEntity: entity }));
+  };
+
+  const setCurrentStep = (step: string) => {
+    setAuthState(prev => ({ ...prev, currentStep: step, error: null }));
   };
 
   const loginUser = async (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => {
@@ -113,6 +120,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       if (otp === '1234') {
         setUser({ isVerified: true });
+        // Don't navigate here - let the screen handle navigation
       } else {
         setError('Invalid OTP. Please try again.');
       }
@@ -131,6 +139,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await new Promise(resolve => setTimeout(resolve, 1500));
       console.log('Saving profile:', profileData);
       setUser(profileData);
+      // Don't navigate here - let the screen handle navigation
     } catch (error) {
       setError('Failed to save profile. Please try again.');
     } finally {
@@ -145,6 +154,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setLoading,
       setError,
       setSelectedEntity,
+      setCurrentStep,
       loginUser,
       logout,
       sendOTP,

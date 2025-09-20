@@ -5,11 +5,13 @@ import {
   StyleSheet,
   SafeAreaView,
   Animated,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
+import { colors, spacing, typography, borderRadius, shadows } from '../constants/theme';
 
 type CompletionScreenNavigationProp = StackNavigationProp<any, 'Completion'>;
 
@@ -35,95 +37,94 @@ const CompletionScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient
-      colors={['#F3E8FF', '#FCE7F3', '#EEF2FF']}
-      style={styles.container}
-    >
+    <LinearGradient colors={[colors.primary[50], colors.secondary[50], '#EEF2FF']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.content}>
-          {/* Success Animation */}
-          <Animated.View style={[
-            styles.successSection,
-            { transform: [{ scale: scaleValue }] }
-          ]}>
-            <View style={styles.successIconContainer}>
-              <LinearGradient
-                colors={['#10B981', '#059669']}
-                style={styles.successIcon}
-              >
-                <Text style={styles.successIconText}>✓</Text>
-              </LinearGradient>
-              <View style={styles.sparkleIcon}>
-                <Text style={styles.sparkleText}>✨</Text>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
+            {/* Success Animation */}
+            <Animated.View style={[
+              styles.successSection,
+              { transform: [{ scale: scaleValue }] }
+            ]}>
+              <View style={styles.successIconContainer}>
+                <LinearGradient
+                  colors={[colors.success[500], colors.success[600]]}
+                  style={styles.successIcon}
+                >
+                  <Text style={styles.successIconText}>✓</Text>
+                </LinearGradient>
+                <View style={styles.sparkleIcon}>
+                  <Text style={styles.sparkleText}>✨</Text>
+                </View>
               </View>
-            </View>
-          </Animated.View>
+            </Animated.View>
 
-          {/* Welcome Message */}
-          <View style={styles.messageSection}>
-            <Text style={styles.welcomeTitle}>
-              Welcome to ZexDream, {authState.user.name}! 🎉
-            </Text>
-            <Text style={styles.welcomeDescription}>
-              Your profile has been successfully created. You're all set to discover 
-              amazing beauty and wellness services near you.
-            </Text>
-            
-            {/* User Info Summary */}
-            <View style={styles.profileSummary}>
-              <Text style={styles.summaryTitle}>Your Profile</Text>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Name:</Text>
-                <Text style={styles.summaryValue}>{authState.user.name}</Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Email:</Text>
-                <Text style={styles.summaryValue}>{authState.user.email}</Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Mobile:</Text>
-                <Text style={styles.summaryValue}>+91 {authState.user.mobile}</Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <Text style={styles.summaryLabel}>Gender:</Text>
-                <Text style={[styles.summaryValue, styles.capitalize]}>{authState.user.gender}</Text>
+            {/* Welcome Message */}
+            <View style={styles.messageSection}>
+              <Text style={styles.welcomeTitle}>
+                Welcome to ZexDream, {authState.user.name}! 🎉
+              </Text>
+              <Text style={styles.welcomeDescription}>
+                Your profile has been successfully created. You're all set to discover 
+                amazing beauty and wellness services near you.
+              </Text>
+              
+              {/* User Info Summary */}
+              <View style={styles.profileSummary}>
+                <Text style={styles.summaryTitle}>Your Profile</Text>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Name:</Text>
+                  <Text style={styles.summaryValue}>{authState.user.name}</Text>
+                </View>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Email:</Text>
+                  <Text style={styles.summaryValue}>{authState.user.email}</Text>
+                </View>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Mobile:</Text>
+                  <Text style={styles.summaryValue}>+91 {authState.user.mobile}</Text>
+                </View>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Gender:</Text>
+                  <Text style={[styles.summaryValue, styles.capitalize]}>{authState.user.gender}</Text>
+                </View>
               </View>
             </View>
+
+            {/* Next Steps */}
+            <View style={styles.stepsSection}>
+              <Text style={styles.stepsTitle}>What's Next?</Text>
+              <View style={styles.stepsList}>
+                <View style={styles.stepItem}>
+                  <View style={[styles.stepNumber, { backgroundColor: colors.primary[100] }]}>
+                    <Text style={styles.stepNumberText}>1</Text>
+                  </View>
+                  <Text style={styles.stepText}>Explore salons and spas near you</Text>
+                </View>
+                <View style={styles.stepItem}>
+                  <View style={[styles.stepNumber, { backgroundColor: colors.secondary[100] }]}>
+                    <Text style={styles.stepNumberText}>2</Text>
+                  </View>
+                  <Text style={styles.stepText}>Book your first appointment</Text>
+                </View>
+                <View style={styles.stepItem}>
+                  <View style={[styles.stepNumber, { backgroundColor: '#EEF2FF' }]}>
+                    <Text style={styles.stepNumberText}>3</Text>
+                  </View>
+                  <Text style={styles.stepText}>Enjoy premium beauty services</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Continue Button */}
+            <Button
+              title="Start Exploring →"
+              onPress={handleContinue}
+              size="lg"
+              style={styles.continueButton}
+            />
           </View>
-
-          {/* Next Steps */}
-          <View style={styles.stepsSection}>
-            <Text style={styles.stepsTitle}>What's Next?</Text>
-            <View style={styles.stepsList}>
-              <View style={styles.stepItem}>
-                <View style={[styles.stepNumber, { backgroundColor: '#F3E8FF' }]}>
-                  <Text style={styles.stepNumberText}>1</Text>
-                </View>
-                <Text style={styles.stepText}>Explore salons and spas near you</Text>
-              </View>
-              <View style={styles.stepItem}>
-                <View style={[styles.stepNumber, { backgroundColor: '#FCE7F3' }]}>
-                  <Text style={styles.stepNumberText}>2</Text>
-                </View>
-                <Text style={styles.stepText}>Book your first appointment</Text>
-              </View>
-              <View style={styles.stepItem}>
-                <View style={[styles.stepNumber, { backgroundColor: '#EEF2FF' }]}>
-                  <Text style={styles.stepNumberText}>3</Text>
-                </View>
-                <Text style={styles.stepText}>Enjoy premium beauty services</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Continue Button */}
-          <Button
-            title="Start Exploring →"
-            onPress={handleContinue}
-            size="lg"
-            style={styles.continueButton}
-          />
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -136,14 +137,18 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  content: {
+  scrollView: {
     flex: 1,
-    paddingHorizontal: 24,
+  },
+  content: {
+    paddingHorizontal: spacing['2xl'],
     justifyContent: 'center',
+    minHeight: 600,
+    paddingVertical: spacing['2xl'],
   },
   successSection: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: spacing['4xl'],
   },
   successIconContainer: {
     position: 'relative',
@@ -151,18 +156,14 @@ const styles = StyleSheet.create({
   successIcon: {
     width: 96,
     height: 96,
-    borderRadius: 48,
+    borderRadius: borderRadius.full,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#10B981',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 16,
+    ...shadows.xl,
   },
   successIconText: {
-    fontSize: 48,
-    color: '#FFFFFF',
+    fontSize: spacing['4xl'],
+    color: colors.white,
     fontWeight: 'bold',
   },
   sparkleIcon: {
@@ -171,79 +172,75 @@ const styles = StyleSheet.create({
     right: -8,
     width: 32,
     height: 32,
-    backgroundColor: '#FCD34D',
-    borderRadius: 16,
+    backgroundColor: colors.warning[400],
+    borderRadius: borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
   },
   sparkleText: {
-    fontSize: 16,
+    fontSize: typography.base,
   },
   messageSection: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: spacing['4xl'],
   },
   welcomeTitle: {
-    fontSize: 24,
+    fontSize: typography['2xl'],
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.gray[900],
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.lg,
   },
   welcomeDescription: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: typography.base,
+    color: colors.gray[600],
     textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 24,
+    lineHeight: typography['2xl'],
+    marginBottom: spacing['2xl'],
   },
   profileSummary: {
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderRadius: 16,
-    padding: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: borderRadius.xl,
+    padding: spacing['2xl'],
     width: '100%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    ...shadows.lg,
   },
   summaryTitle: {
-    fontSize: 16,
+    fontSize: typography.base,
     fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 16,
+    color: colors.gray[900],
+    marginBottom: spacing.lg,
     textAlign: 'center',
   },
   summaryItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   summaryLabel: {
-    fontSize: 14,
-    color: '#6B7280',
+    fontSize: typography.sm,
+    color: colors.gray[600],
   },
   summaryValue: {
-    fontSize: 14,
+    fontSize: typography.sm,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.gray[900],
   },
   capitalize: {
     textTransform: 'capitalize',
   },
   stepsSection: {
-    marginBottom: 32,
+    marginBottom: spacing['3xl'],
   },
   stepsTitle: {
-    fontSize: 18,
+    fontSize: typography.lg,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.gray[900],
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.lg,
   },
   stepsList: {
-    gap: 12,
+    gap: spacing.md,
   },
   stepItem: {
     flexDirection: 'row',
@@ -252,19 +249,19 @@ const styles = StyleSheet.create({
   stepNumber: {
     width: 32,
     height: 32,
-    borderRadius: 8,
+    borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: spacing.md,
   },
   stepNumberText: {
-    fontSize: 14,
+    fontSize: typography.sm,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.primary[600],
   },
   stepText: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: typography.base,
+    color: colors.gray[600],
     flex: 1,
   },
   continueButton: {

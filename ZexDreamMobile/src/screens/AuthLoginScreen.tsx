@@ -5,7 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
-  Alert,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import { RouteProp } from '@react-navigation/native';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAuth } from '../context/AuthContext';
+import { colors, spacing, typography, borderRadius, shadows } from '../constants/theme';
 
 type AuthLoginScreenNavigationProp = StackNavigationProp<any, 'AuthLogin'>;
 type AuthLoginScreenRouteProp = RouteProp<{ AuthLogin: { userType: string } }, 'AuthLogin'>;
@@ -69,7 +70,7 @@ const AuthLoginScreen: React.FC<Props> = ({ navigation, route }) => {
             break;
         }
       } catch (error) {
-        Alert.alert('Login Failed', 'Please check your credentials and try again.');
+        console.error('Login failed:', error);
       }
     }
   };
@@ -84,10 +85,7 @@ const AuthLoginScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   return (
-    <LinearGradient
-      colors={['#F3E8FF', '#FCE7F3', '#EEF2FF']}
-      style={styles.container}
-    >
+    <LinearGradient colors={[colors.primary[50], colors.secondary[50], '#EEF2FF']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
         <View style={styles.header}>
@@ -101,79 +99,81 @@ const AuthLoginScreen: React.FC<Props> = ({ navigation, route }) => {
           <View style={styles.spacer} />
         </View>
 
-        {/* Content */}
-        <View style={styles.content}>
-          {/* Icon */}
-          <View style={styles.iconSection}>
-            <LinearGradient
-              colors={['#8B5CF6', '#EC4899']}
-              style={styles.iconContainer}
-            >
-              <Text style={styles.iconText}>{getIcon()}</Text>
-            </LinearGradient>
-            <Text style={styles.title}>{userType} Portal</Text>
-            <Text style={styles.description}>
-              Enter your credentials to access the {userType.toLowerCase()} dashboard
-            </Text>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+          {/* Content */}
+          <View style={styles.content}>
+            {/* Icon */}
+            <View style={styles.iconSection}>
+              <LinearGradient
+                colors={[colors.primary[600], colors.secondary[500]]}
+                style={styles.iconContainer}
+              >
+                <Text style={styles.iconText}>{getIcon()}</Text>
+              </LinearGradient>
+              <Text style={styles.title}>{userType} Portal</Text>
+              <Text style={styles.description}>
+                Enter your credentials to access the {userType.toLowerCase()} dashboard
+              </Text>
+            </View>
+
+            {/* Login Form */}
+            <View style={styles.formSection}>
+              <Input
+                label="Mobile Number"
+                placeholder="Enter 10-digit mobile number"
+                value={mobile}
+                onChangeText={(value) => {
+                  const numericValue = value.replace(/\D/g, '').slice(0, 10);
+                  setMobile(numericValue);
+                  if (formErrors.mobile) {
+                    setFormErrors(prev => ({ ...prev, mobile: '' }));
+                  }
+                }}
+                keyboardType="numeric"
+                maxLength={10}
+                error={formErrors.mobile}
+              />
+
+              <Input
+                label="Password"
+                placeholder="Enter password"
+                value={password}
+                onChangeText={(value) => {
+                  setPassword(value);
+                  if (formErrors.password) {
+                    setFormErrors(prev => ({ ...prev, password: '' }));
+                  }
+                }}
+                secureTextEntry
+                error={formErrors.password}
+              />
+
+              {authState.error && (
+                <View style={styles.globalError}>
+                  <Text style={styles.globalErrorText}>{authState.error}</Text>
+                </View>
+              )}
+
+              <Button
+                title={`Login to ${userType} Portal`}
+                onPress={handleLogin}
+                loading={authState.isLoading}
+                disabled={!mobile || !password}
+                size="lg"
+                style={styles.loginButton}
+              />
+            </View>
+
+            {/* Demo Credentials */}
+            <View style={styles.demoCredentials}>
+              <Text style={styles.demoTitle}>Demo Credentials</Text>
+              <Text style={styles.demoText}>
+                <Text style={styles.demoBold}>Mobile:</Text> Any 10-digit number{'\n'}
+                <Text style={styles.demoBold}>Password:</Text> 1234
+              </Text>
+            </View>
           </View>
-
-          {/* Login Form */}
-          <View style={styles.formSection}>
-            <Input
-              label="Mobile Number"
-              placeholder="Enter 10-digit mobile number"
-              value={mobile}
-              onChangeText={(value) => {
-                const numericValue = value.replace(/\D/g, '').slice(0, 10);
-                setMobile(numericValue);
-                if (formErrors.mobile) {
-                  setFormErrors(prev => ({ ...prev, mobile: '' }));
-                }
-              }}
-              keyboardType="numeric"
-              maxLength={10}
-              error={formErrors.mobile}
-            />
-
-            <Input
-              label="Password"
-              placeholder="Enter password"
-              value={password}
-              onChangeText={(value) => {
-                setPassword(value);
-                if (formErrors.password) {
-                  setFormErrors(prev => ({ ...prev, password: '' }));
-                }
-              }}
-              secureTextEntry
-              error={formErrors.password}
-            />
-
-            {authState.error && (
-              <View style={styles.globalError}>
-                <Text style={styles.globalErrorText}>{authState.error}</Text>
-              </View>
-            )}
-
-            <Button
-              title={`Login to ${userType} Portal`}
-              onPress={handleLogin}
-              loading={authState.isLoading}
-              disabled={!mobile || !password}
-              size="lg"
-              style={styles.loginButton}
-            />
-          </View>
-
-          {/* Demo Credentials */}
-          <View style={styles.demoCredentials}>
-            <Text style={styles.demoTitle}>Demo Credentials</Text>
-            <Text style={styles.demoText}>
-              <Text style={styles.demoBold}>Mobile:</Text> Any 10-digit number{'\n'}
-              <Text style={styles.demoBold}>Password:</Text> 1234
-            </Text>
-          </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -186,89 +186,85 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    paddingHorizontal: spacing['2xl'],
+    paddingVertical: spacing.lg,
   },
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: borderRadius.lg,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    ...shadows.md,
   },
   backButtonText: {
-    fontSize: 20,
-    color: '#374151',
+    fontSize: typography.xl,
+    color: colors.gray[700],
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: typography.lg,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.gray[900],
   },
   spacer: {
     width: 40,
   },
   content: {
-    flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing['2xl'],
+    minHeight: 600,
+    paddingVertical: spacing['2xl'],
   },
   iconSection: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: spacing['3xl'],
   },
   iconContainer: {
     width: 64,
     height: 64,
-    borderRadius: 16,
+    borderRadius: borderRadius.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
-    shadowColor: '#8B5CF6',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 16,
+    marginBottom: spacing.lg,
+    ...shadows.xl,
   },
   iconText: {
-    fontSize: 32,
+    fontSize: typography['3xl'],
   },
   title: {
-    fontSize: 24,
+    fontSize: typography['2xl'],
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.gray[900],
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   description: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: typography.base,
+    color: colors.gray[600],
     textAlign: 'center',
   },
   formSection: {
-    marginBottom: 32,
+    marginBottom: spacing['3xl'],
   },
   globalError: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.error[50],
     borderWidth: 1,
-    borderColor: '#FECACA',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
+    borderColor: colors.error[200],
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
   },
   globalErrorText: {
-    fontSize: 14,
-    color: '#DC2626',
+    fontSize: typography.sm,
+    color: colors.error[600],
   },
   loginButton: {
     width: '100%',
@@ -277,19 +273,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#EFF6FF',
     borderWidth: 1,
     borderColor: '#BFDBFE',
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    ...shadows.sm,
   },
   demoTitle: {
-    fontSize: 16,
+    fontSize: typography.base,
     fontWeight: '600',
     color: '#1E40AF',
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   demoText: {
-    fontSize: 14,
+    fontSize: typography.sm,
     color: '#1D4ED8',
-    lineHeight: 20,
+    lineHeight: typography.xl,
   },
   demoBold: {
     fontWeight: '600',
