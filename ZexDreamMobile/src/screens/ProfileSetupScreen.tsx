@@ -99,6 +99,7 @@ const ProfileSetupScreen: React.FC<Props> = ({ navigation }) => {
         navigation.navigate('Completion');
       } catch (error) {
         Alert.alert('Error', 'Failed to complete profile. Please try again.');
+      }
       console.error('Failed to complete profile:', error);
     }
   };
