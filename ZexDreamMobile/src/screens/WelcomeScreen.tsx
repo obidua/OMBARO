@@ -83,22 +83,6 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={[styles.featureIcon, { backgroundColor: '#EEF2FF' }]}>
                   <Text style={styles.featureIconText}>⭐</Text>
                 </View>
-                <View style={styles.featureText}>
-                  <Text style={styles.featureTitle}>Premium Quality</Text>
-                  <Text style={styles.featureDescription}>Verified professionals only</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-
-        {/* Bottom CTA */}
-        <View style={styles.bottomSection}>
-          <View style={styles.buttonContainer}>
-            <Button title="Sign Up" onPress={() => handleGetStarted('customer')} size="lg" style={styles.primaryButton} />
-            <Button title="Login" onPress={() => handleGetStarted('customer')} variant="outline" size="lg" style={styles.secondaryButton} />
-
-            {/* Portal Access - Simplified to a single button for all portals */}
             <View style={styles.portalAccessButtons}> {/* This is the container for the small text links */}
               <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}>
                 <Text style={styles.portalLink}>Employee</Text>

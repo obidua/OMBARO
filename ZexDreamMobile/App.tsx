@@ -25,6 +25,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import RescheduleBookingScreen from './src/screens/RescheduleBookingScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import SpaOnboardingScreen from './src/screens/SpaOnboardingScreen';
+import DocPortalScreen from './src/screens/DocPortalScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
 
 // Import context
@@ -73,6 +74,7 @@ export default function App() {
             <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
             <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
             <Stack.Screen name="SpaOnboarding" component={SpaOnboardingScreen} />
+            <Stack.Screen name="DocPortal" component={DocPortalScreen} />
             
             {/* Customer Flow */}
             <Stack.Screen name="Home" component={HomeScreen} />
