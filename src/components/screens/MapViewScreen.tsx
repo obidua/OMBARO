@@ -11,9 +11,15 @@ interface MapViewScreenProps {
   onBack: () => void;
   onNavigate: (screen: string, data?: any) => void;
   initialSelectedProviderId?: string;
+  singleServiceMode?: boolean;
 }
 
-export const MapViewScreen: React.FC<MapViewScreenProps> = ({ onBack, onNavigate, initialSelectedProviderId }) => {
+export const MapViewScreen: React.FC<MapViewScreenProps> = ({ 
+  onBack, 
+  onNavigate, 
+  initialSelectedProviderId,
+  singleServiceMode = false 
+}) => {
   const [userLocation, setUserLocation] = useState<Location | null>(null);
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -340,6 +346,7 @@ export const MapViewScreen: React.FC<MapViewScreenProps> = ({ onBack, onNavigate
                 selectedServices={selectedServices}
                 onServiceAdd={handleServiceAdd}
                 onServiceRemove={handleServiceRemove}
+                singleServiceMode={singleServiceMode}
               />
             </div>
           </div>

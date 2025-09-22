@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Phone, Shield } from 'lucide-react';
+import { ArrowLeft, Phone, Shield, Gift } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 
@@ -88,6 +88,19 @@ export const MobileInputScreen: React.FC<MobileInputScreenProps> = ({
 
           {/* Mobile Input */}
           <div className="space-y-6">
+            {/* Referral Code Input */}
+            <div>
+              <Input
+                type="text"
+                placeholder="Enter referral code (optional)"
+                icon={<Gift className="w-5 h-5 text-gray-400" />}
+                className="text-center tracking-wider"
+              />
+              <p className="text-xs text-center text-purple-600 mt-2">
+                Have a referral code? Get 10% off your first booking!
+              </p>
+            </div>
+
             <div>
               <Input
                 type="tel"

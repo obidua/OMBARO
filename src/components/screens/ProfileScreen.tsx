@@ -6,7 +6,7 @@ import { User as UserType } from '../../types/auth';
 interface ProfileScreenProps {
   user: Partial<UserType>;
   onLogout: () => void;
-  onNavigate: (screen: string) => void;
+  onNavigate: (screen: string, data?: any) => void;
 }
 
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({
@@ -40,6 +40,13 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
       action: () => console.log('Navigate to favorites')
     },
     {
+      id: 'referral',
+      label: 'Refer & Earn',
+      icon: Gift,
+      description: 'Invite friends and earn rewards',
+      action: () => onNavigate('referral')
+    },
+    {
       id: 'offers',
       label: 'Offers & Rewards',
       icon: Gift,
@@ -51,7 +58,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
       label: 'Notifications',
       icon: Bell,
       description: 'Manage your notification preferences',
-      action: () => console.log('Navigate to notifications')
+      action: () => onNavigate('notifications')
     },
     {
       id: 'settings',

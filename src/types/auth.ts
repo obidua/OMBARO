@@ -9,7 +9,7 @@ export interface User {
 }
 
 export interface AuthState {
-  currentStep: 'welcome' | 'mobile' | 'otp' | 'profile' | 'complete' | 'home' | 'salonDetail' | 'mapView' | 'booking' | 'payment' | 'orderTracking' | 'bookings' | 'employeeLogin' | 'employeeDashboard' | 'spaOnboarding' | 'vendorLogin' | 'vendorDashboard' | 'adminLogin' | 'adminDashboard' | 'categoryServices' | 'offerDetail' | 'reviewScreen' | 'rescheduleBooking' | 'chat';
+  currentStep: 'welcome' | 'mobile' | 'otp' | 'profile' | 'complete' | 'home' | 'salonDetail' | 'mapView' | 'booking' | 'payment' | 'orderTracking' | 'bookings' | 'employeeLogin' | 'employeeDashboard' | 'spaOnboarding' | 'vendorLogin' | 'vendorDashboard' | 'adminLogin' | 'adminDashboard' | 'categoryServices' | 'offerDetail' | 'reviewScreen' | 'rescheduleBooking' | 'chat' | 'referral' | 'notifications';
   user: Partial<User>;
   userType?: 'customer' | 'employee' | 'vendor' | 'admin';
   isLoading: boolean;

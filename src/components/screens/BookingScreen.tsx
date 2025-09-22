@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Calendar, Clock, CreditCard, MapPin, User } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, CreditCard, MapPin, User, Shield, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { TermsAndConditionsModal } from './TermsAndConditionsModal';
@@ -19,7 +19,9 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [aadhaarVerified, setAadhaarVerified] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showAadhaarVerification, setShowAadhaarVerification] = useState(false);
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     phone: '',
@@ -47,6 +49,11 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
   };
 
   const handleBooking = () => {
+    if (!aadhaarVerified) {
+      setShowAadhaarVerification(true);
+      return;
+    }
+    
     const bookingData = {
       cartItems,
       selectedDate,
@@ -60,6 +67,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
   };
 
   const isFormValid = selectedDate && selectedTime && customerInfo.name && customerInfo.phone && customerInfo.address && termsAccepted;
+  const isReadyForPayment = isFormValid && aadhaarVerified;
 
   return (
     <div className="min-h-screen bg-gray-50 pt-[120px] pb-[70px]">
@@ -206,10 +214,55 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
               </div>
             </div>
             
-            {!termsAccepted && (
+            {/* Aadhaar Verification Status */}
+            <div className={`border-2 rounded-xl p-4 ${
+              aadhaarVerified 
+                ? 'border-green-200 bg-green-50' 
+                : 'border-blue-200 bg-blue-50'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    aadhaarVerified ? 'bg-green-100' : 'bg-blue-100'
+                  }`}>
+                    {aadhaarVerified ? (
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <Shield className="w-5 h-5 text-blue-600" />
+                    )}
+                  </div>
+                  <div>
+                    <p className={`font-medium ${
+                      aadhaarVerified ? 'text-green-900' : 'text-blue-900'
+                    }`}>
+                      {aadhaarVerified ? 'Identity Verified' : 'Identity Verification Required'}
+                    </p>
+                    <p className={`text-sm ${
+                      aadhaarVerified ? 'text-green-700' : 'text-blue-700'
+                    }`}>
+                      {aadhaarVerified 
+                        ? 'Your identity has been verified with Aadhaar'
+                        : 'Verify your identity with Aadhaar OTP for secure booking'
+                      }
+                    </p>
+                  </div>
+                </div>
+                {!aadhaarVerified && (
+                  <Button
+                    onClick={() => setShowAadhaarVerification(true)}
+                    size="sm"
+                    variant="outline"
+                  >
+                    Verify Now
+                  </Button>
+                )}
+              </div>
+            </div>
+            
+            {(!termsAccepted || !aadhaarVerified) && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
                 <p className="text-yellow-800 text-sm">
-                  Please accept the Terms & Conditions to proceed with your booking.
+                  Please accept the Terms & Conditions and complete Aadhaar verification to proceed with your booking.
                 </p>
               </div>
             )}
@@ -220,7 +273,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
         <div className="space-y-3">
           <Button
             onClick={handleBooking}
-            disabled={!isFormValid}
+            disabled={!isReadyForPayment}
             size="lg"
             className="w-full"
           >
@@ -228,10 +281,10 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
             Proceed to Payment
           </Button>
           
-          {!isFormValid && (
+          {!isReadyForPayment && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
               <p className="text-yellow-800 text-sm text-center">
-                Please complete all required fields and accept the Terms & Conditions to proceed with your booking.
+                Please complete all required fields, accept the Terms & Conditions, and verify your identity with Aadhaar to proceed with your booking.
               </p>
             </div>
           )}
@@ -243,6 +296,59 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
         isOpen={showTermsModal}
         onClose={() => setShowTermsModal(false)}
       />
+
+      {/* Aadhaar Verification Modal */}
+      {showAadhaarVerification && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md">
+            <div className="p-6">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Identity Verification</h3>
+                <p className="text-gray-600">
+                  For your security and compliance, we need to verify your identity using Aadhaar OTP
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <Button
+                  onClick={() => {
+                    setShowAadhaarVerification(false);
+                    // In a real implementation, this would navigate to AadhaarVerificationScreen
+                    // For demo purposes, we'll simulate verification
+                    setTimeout(() => {
+                      setAadhaarVerified(true);
+                      alert('Aadhaar verification completed successfully!');
+                    }, 1000);
+                  }}
+                  size="lg"
+                  className="w-full"
+                >
+                  <Shield className="w-5 h-5 mr-2" />
+                  Verify with Aadhaar
+                </Button>
+                
+                <Button
+                  onClick={() => setShowAadhaarVerification(false)}
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
+                >
+                  Cancel
+                </Button>
+              </div>
+
+              <div className="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-200">
+                <p className="text-blue-800 text-sm text-center">
+                  <strong>Demo Mode:</strong> Verification will be simulated for testing
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

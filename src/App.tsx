@@ -23,6 +23,9 @@ import { BookingHistoryScreen } from './components/screens/BookingHistoryScreen'
 import { ProfileScreen } from './components/screens/ProfileScreen';
 import { RescheduleBookingScreen } from './components/screens/RescheduleBookingScreen';
 import { ChatScreen } from './components/screens/ChatScreen';
+import { ReviewScreen } from './components/screens/ReviewScreen';
+import { ReferralScreen } from './components/screens/ReferralScreen';
+import { NotificationScreen } from './components/screens/NotificationScreen';
 import { Button } from './components/ui/Button';
 
 function App() {
@@ -418,7 +421,49 @@ function App() {
           <ProfileScreen
             user={authState.user}
             onLogout={logout}
-            onNavigate={setCurrentStep}
+            onNavigate={(screen, data?) => {
+              if (screen === 'referral') {
+                setCurrentStep('referral' as any);
+              } else {
+                setCurrentStep(screen as any);
+              }
+            }}
+          />
+        );
+      
+      case 'referral':
+        return (
+          <ReferralScreen
+            user={authState.user}
+            onBack={() => setCurrentStep('profile' as any)}
+          />
+        );
+      
+      case 'notifications':
+        return (
+          <NotificationScreen
+            onBack={() => setCurrentStep('profile' as any)}
+            onNavigate={(screen, data?) => {
+              if (screen === 'reviewScreen' && data) {
+                setSelectedEntity(data);
+                setCurrentStep('reviewScreen' as any);
+              } else {
+                setCurrentStep(screen as any);
+              }
+            }}
+          />
+        );
+      
+      case 'reviewScreen':
+        return (
+          <ReviewScreen
+            bookingData={authState.selectedEntity}
+            onBack={() => setCurrentStep('bookings' as any)}
+            onSubmitReview={(reviewData) => {
+              console.log('Review submitted:', reviewData);
+              // In real app, this would call an API to save the review
+              setCurrentStep('bookings' as any);
+            }}
           />
         );
       

@@ -176,7 +176,15 @@ export const BookingHistoryScreen: React.FC<BookingHistoryScreenProps> = ({
 
   const handleRate = (booking: Booking) => {
     console.log('Rate booking:', booking.id);
-    onNavigate('reviewScreen', booking);
+    onNavigate('reviewScreen', {
+      id: booking.id,
+      serviceName: booking.serviceName,
+      salonName: booking.salonName,
+      therapistName: booking.therapistName,
+      date: booking.date,
+      time: booking.time,
+      salonImage: booking.salonImage
+    });
   };
 
   const updateBooking = (bookingId: string, newDate: string, newTime: string) => {

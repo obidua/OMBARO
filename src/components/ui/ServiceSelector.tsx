@@ -9,6 +9,7 @@ interface ServiceSelectorProps {
   selectedServices: { [serviceId: string]: number };
   onServiceAdd: (service: BookingService, provider: ServiceProvider) => void;
   onServiceRemove: (serviceId: string) => void;
+  singleServiceMode?: boolean;
   className?: string;
 }
 
@@ -18,6 +19,7 @@ export const ServiceSelector: React.FC<ServiceSelectorProps> = ({
   selectedServices,
   onServiceAdd,
   onServiceRemove,
+  singleServiceMode = false,
   className = ''
 }) => {
   const formatDuration = (minutes: number) => {
@@ -85,6 +87,16 @@ export const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                   {/* Quantity Controls */}
                   <div className="flex items-center space-x-3">
                     {quantity > 0 ? (
+                      singleServiceMode ? (
+                        <Button
+                          onClick={() => onServiceRemove(service.id)}
+                          variant="outline"
+                          size="sm"
+                          className="px-4"
+                        >
+                          Remove
+                        </Button>
+                      ) : (
                       <div className="flex items-center space-x-3">
                         <button
                           onClick={() => onServiceRemove(service.id)}
@@ -102,12 +114,20 @@ export const ServiceSelector: React.FC<ServiceSelectorProps> = ({
                           <Plus className="w-4 h-4 text-white" />
                         </button>
                       </div>
+                      )
                     ) : (
                       <Button
-                        onClick={() => onServiceAdd(service, provider)}
+                        onClick={() => {
+                          if (singleServiceMode && Object.keys(selectedServices).length > 0) {
+                            alert('Please remove the current service before adding a new one');
+                            return;
+                          }
+                          onServiceAdd(service, provider);
+                        }}
                         aria-label={`Add ${service.name} to cart for ₹${service.price}`}
                         size="sm"
                         className="px-4"
+                        disabled={singleServiceMode && Object.keys(selectedServices).length > 0}
                       >
                         <Plus className="w-4 h-4 mr-1" />
                         Add

@@ -39,7 +39,7 @@ export const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = (
             {/* Introduction */}
             <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
               <p className="text-purple-800 font-medium">
-                By proceeding with a booking on the <strong>SoCool App</strong>, you (the "Customer") acknowledge, 
+                By proceeding with a booking on the <strong>ZexDream App</strong>, you (the "Customer") acknowledge, 
                 confirm, and agree to the following terms and conditions:
               </p>
             </div>
@@ -53,7 +53,7 @@ export const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = (
                 <h3 className="text-lg font-semibold text-gray-900">Scope of Service</h3>
               </div>
               <div className="ml-8 space-y-2 text-gray-700">
-                <p>• SoCool provides a platform to connect customers with independent, verified wellness professionals and service vendors ("Vendors").</p>
+                <p>• ZexDream provides a platform to connect customers with independent, verified wellness professionals and service vendors ("Vendors").</p>
                 <p>• Services include massage, spa, wellness, beauty, and related non-medical, non-sexual therapies only.</p>
                 <p>• Services are strictly for <strong>wellness, relaxation, and therapeutic purposes</strong>.</p>
               </div>
@@ -72,7 +72,7 @@ export const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = (
               </div>
               <div className="ml-8 space-y-2">
                 <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                  <p className="text-red-800 font-medium mb-2">SoCool <strong>does not engage in, promote, or support</strong> any form of:</p>
+                  <p className="text-red-800 font-medium mb-2">ZexDream <strong>does not engage in, promote, or support</strong> any form of:</p>
                   <ul className="text-red-700 space-y-1 ml-4">
                     <li>• Human trafficking, forced labor, or exploitation</li>
                     <li>• Sexual activity, sexual services, or any illegal conduct</li>
@@ -121,7 +121,7 @@ export const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = (
               </div>
               <div className="ml-8 space-y-2 text-gray-700">
                 <p>• Vendors have the <strong>right to refuse service</strong> if they feel unsafe, disrespected, or pressured to perform outside the agreed scope.</p>
-                <p>• SoCool reserves the right to fully cooperate with law enforcement in cases of misconduct or violation of these Terms.</p>
+                <p>• ZexDream reserves the right to fully cooperate with law enforcement in cases of misconduct or violation of these Terms.</p>
               </div>
             </div>
 
@@ -134,8 +134,8 @@ export const TermsAndConditionsModal: React.FC<TermsAndConditionsModalProps> = (
                 <h3 className="text-lg font-semibold text-gray-900">Indemnity & Liability</h3>
               </div>
               <div className="ml-8 space-y-2 text-gray-700">
-                <p>• Customers agree to indemnify and hold harmless SoCool and its Vendors from any liability arising from misconduct, breach of these Terms, or unlawful actions by the Customer.</p>
-                <p>• SoCool is not liable for services outside the officially listed scope.</p>
+                <p>• Customers agree to indemnify and hold harmless ZexDream and its Vendors from any liability arising from misconduct, breach of these Terms, or unlawful actions by the Customer.</p>
+                <p>• ZexDream is not liable for services outside the officially listed scope.</p>
               </div>
             </div>
 
