@@ -341,6 +341,20 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
                     </Button>
 
                     <Button
+                      onClick={() => setCurrentScreen('docPortal')} // Assuming 'docPortal' is a valid screen name in your navigation
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-16"
+                    >
+                      <Building className="w-6 h-6 mr-3" />
+                      <div className="text-left">
+                        <p className="font-semibold">Doc Portal</p>
+                        <p className="text-sm opacity-70">Access project documentation</p>
+                      </div>
+                    </Button>
+
+
+                    <Button
                       onClick={() => setCurrentScreen('locationTracking')}
                       variant="outline"
                       size="lg"
