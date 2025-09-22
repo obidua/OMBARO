@@ -19,14 +19,10 @@ interface Props {
 }
 
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
-  const handleGetStarted = (userType?: string) => {
-    if (userType === 'employeeLogin') {
-      navigation.navigate('AuthLogin', { userType: 'Employee' });
-    } else if (userType === 'vendorLogin') {
-      navigation.navigate('AuthLogin', { userType: 'Vendor' });
-    } else if (userType === 'adminLogin') {
-      navigation.navigate('AuthLogin', { userType: 'Admin' });
-    } else {
+  const handleGetStarted = (type: 'customer' | 'portal' | 'department') => {
+    if (type === 'department') {
+      navigation.navigate('RoleSelection');
+    } else if (type === 'customer') {
       navigation.navigate('MobileInput');
     }
   };
@@ -99,35 +95,42 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
         {/* Bottom CTA */}
         <View style={styles.bottomSection}>
           <View style={styles.buttonContainer}>
+            <Button title="Sign Up" onPress={() => handleGetStarted('customer')} size="lg" style={styles.primaryButton} />
+            <Button title="Login" onPress={() => handleGetStarted('customer')} variant="outline" size="lg" style={styles.secondaryButton} />
+
+            {/* Portal Access - Simplified to a single button for all portals */}
             <Button
-              title="Sign Up"
-              onPress={() => handleGetStarted()}
-              size="lg"
-              style={styles.primaryButton}
-            />
-            <Button
-              title="Login"
-              onPress={() => handleGetStarted()}
+              title="Portal Login"
+              onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })} // Default to employee login, user can go back
               variant="outline"
               size="lg"
-              style={styles.secondaryButton}
+              style={styles.portalLoginButton}
             />
-            
-            {/* Portal Access */}
-            <View style={styles.portalAccess}>
-              <TouchableOpacity onPress={() => handleGetStarted('employeeLogin')}>
-                <Text style={styles.portalLink}>Employee</Text>
+
+            {/* Department Access */}
+            <Button
+              title="Department Login"
+              onPress={() => handleGetStarted('department')}
+              variant="outline"
+              size="lg"
+              style={styles.departmentLoginButton}
+            />
+
+            {/* Old Portal Access (kept for reference, will be removed) */}
+            {/* <View style={styles.portalAccess}>
+              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}>
+                <Text style={styles.portalLink}>Employee Login</Text>
               </TouchableOpacity>
               <Text style={styles.portalSeparator}>•</Text>
-              <TouchableOpacity onPress={() => handleGetStarted('vendorLogin')}>
-                <Text style={styles.portalLink}>Vendor</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'vendor' })}>
+                <Text style={styles.portalLink}>Vendor Login</Text>
               </TouchableOpacity>
               <Text style={styles.portalSeparator}>•</Text>
-              <TouchableOpacity onPress={() => handleGetStarted('adminLogin')}>
-                <Text style={styles.portalLink}>Admin</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'admin' })}>
+                <Text style={styles.portalLink}>Admin Login</Text>
               </TouchableOpacity>
-            </View>
-            
+            </View> */}
+
             <Text style={styles.disclaimer}>
               By continuing, you agree to our Terms & Privacy Policy
             </Text>
@@ -246,6 +249,12 @@ const styles = StyleSheet.create({
   secondaryButton: {
     width: '100%',
     marginBottom: spacing['2xl'],
+  },
+  portalLoginButton: {
+    width: '100%',
+  },
+  departmentLoginButton: {
+    width: '100%',
   },
   portalAccess: {
     flexDirection: 'row',

@@ -25,6 +25,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import RescheduleBookingScreen from './src/screens/RescheduleBookingScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import SpaOnboardingScreen from './src/screens/SpaOnboardingScreen';
+import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
 
 // Import context
 import { AuthProvider } from './src/context/AuthContext';
@@ -69,6 +70,7 @@ export default function App() {
             <Stack.Screen name="AuthLogin" component={AuthLoginScreen} />
             <Stack.Screen name="EmployeeDashboard" component={EmployeeDashboardScreen} />
             <Stack.Screen name="VendorDashboard" component={VendorDashboardScreen} />
+            <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
             <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
             <Stack.Screen name="SpaOnboarding" component={SpaOnboardingScreen} />
             

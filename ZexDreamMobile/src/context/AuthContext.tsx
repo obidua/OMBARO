@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-
+import { UserRole } from '../types/auth';
+import { UserRole } from '../types/auth';
+import { ROLE_DEFINITIONS } from '../types/roles';
 export interface User {
   id?: string;
   name?: string;
@@ -27,6 +29,7 @@ interface AuthContextType {
   setSelectedEntity: (entity: any) => void;
   setCurrentStep: (step: string) => void;
   loginUser: (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => Promise<void>;
+  selectRole: (role: UserRole) => Promise<void>;
   logout: () => void;
   sendOTP: (mobile: string) => Promise<void>;
   verifyOTP: (otp: string) => Promise<void>;
@@ -66,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setAuthState(prev => ({ ...prev, currentStep: step, error: null }));
   };
 
-  const loginUser = async (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => {
+  const loginUser = async (mobile: string, password: string, userType: UserRole) => {
     setLoading(true);
     setError(null);
     
@@ -75,13 +78,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       if (password === '1234') {
-        setUser({ mobile, isVerified: true });
-        setAuthState(prev => ({ ...prev, userType }));
+        const roleDef = ROLE_DEFINITIONS.find(role => role.id === userType);
+        if (roleDef) {
+          setUser({ mobile, isVerified: true });
+          setAuthState(prev => ({ ...prev, userType }));
+
+          // Navigate to appropriate dashboard based on role type
+          if (userType === 'customer') {
+            setCurrentStep('home');
+          } else if (userType === 'employee') {
+            setCurrentStep('EmployeeDashboard');
+          } else if (userType === 'vendor') {
+            setCurrentStep('VendorDashboard');
+          } else if (userType === 'admin' || userType === 'super_admin') {
+            setCurrentStep('AdminDashboard');
+          } else {
+            // All other departmental roles go to DepartmentDashboard
+            setCurrentStep('DepartmentDashboard');
+          }
+        } else {
+          setError('Invalid user type selected.');
+        }
+
+
       } else {
         setError('Invalid password. Please try again.');
       }
     } catch (error) {
       setError('Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectRole = async (role: UserRole) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setAuthState(prev => ({ ...prev, userType: role }));
+      setCurrentStep('DepartmentDashboard'); // All selected roles go to the generic dashboard
+    } catch (error) {
+      setError('Role selection failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -156,6 +195,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setSelectedEntity,
       setCurrentStep,
       loginUser,
+      selectRole,
       logout,
       sendOTP,
       verifyOTP,

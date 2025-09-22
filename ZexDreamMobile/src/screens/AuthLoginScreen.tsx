@@ -16,7 +16,7 @@ import { useAuth } from '../context/AuthContext';
 import { colors, spacing, typography, borderRadius, shadows } from '../constants/theme';
 
 type AuthLoginScreenNavigationProp = StackNavigationProp<any, 'AuthLogin'>;
-type AuthLoginScreenRouteProp = RouteProp<{ AuthLogin: { userType: string } }, 'AuthLogin'>;
+type AuthLoginScreenRouteProp = RouteProp<{ AuthLogin: { userType: UserRole } }, 'AuthLogin'>;
 
 interface Props {
   navigation: AuthLoginScreenNavigationProp;
@@ -54,21 +54,14 @@ const AuthLoginScreen: React.FC<Props> = ({ navigation, route }) => {
   const handleLogin = async () => {
     if (validateForm()) {
       try {
-        const userTypeKey = userType.toLowerCase() as 'employee' | 'vendor' | 'admin';
-        await loginUser(mobile, password, userTypeKey);
-        
-        // Navigate to appropriate dashboard
-        switch (userTypeKey) {
-          case 'employee':
-            navigation.navigate('EmployeeDashboard');
-            break;
-          case 'vendor':
-            navigation.navigate('VendorDashboard');
-            break;
-          case 'admin':
-            navigation.navigate('AdminDashboard');
-            break;
-        }
+        await loginUser(mobile, password, userType);
+
+        // Navigation is now handled by AuthContext based on the userType
+        // For portal logins, we'll navigate to the specific dashboard
+        // For departmental logins, AuthContext will navigate to DepartmentDashboard
+        // This screen will simply go back or navigate to a generic home if login is successful
+        navigation.goBack(); // Or navigate to a main screen like 'Home' or 'DepartmentDashboard'
+
       } catch (error) {
         console.error('Login failed:', error);
       }
@@ -76,10 +69,11 @@ const AuthLoginScreen: React.FC<Props> = ({ navigation, route }) => {
   };
 
   const getIcon = () => {
-    switch (userType) {
-      case 'Employee': return '👨‍💼';
-      case 'Vendor': return '🏪';
-      case 'Admin': return '👑';
+    // Use the userType directly from route.params
+    switch (userType.toLowerCase()) {
+      case 'employee': return '👨‍💼';
+      case 'vendor': return '🏪';
+      case 'admin': return '👑';
       default: return '🔐';
     }
   };
@@ -155,7 +149,7 @@ const AuthLoginScreen: React.FC<Props> = ({ navigation, route }) => {
               )}
 
               <Button
-                title={`Login to ${userType} Portal`}
+                title={`Login to ${userType.charAt(0).toUpperCase() + userType.slice(1)} Portal`}
                 onPress={handleLogin}
                 loading={authState.isLoading}
                 disabled={!mobile || !password}
