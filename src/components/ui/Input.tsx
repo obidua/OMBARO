@@ -35,9 +35,9 @@ export const Input: React.FC<InputProps> = ({
           aria-describedby={error ? errorId : undefined}
           aria-invalid={error ? 'true' : 'false'}
           className={`
-            w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200
+            input-field
             ${icon ? 'pl-10' : ''}
-            ${error ? 'border-red-500 focus:ring-red-500' : ''}
+            ${error ? 'border-error-500 focus:ring-error-500/50' : ''}
             ${className}
           `}
           {...props}

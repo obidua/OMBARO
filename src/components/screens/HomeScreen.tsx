@@ -270,16 +270,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ user, onLogout, onNaviga
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-[70px] pb-[70px]">
+    <div className="min-h-screen content-area pt-[70px] pb-[70px]">
       <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-6 space-y-4 sm:space-y-6 md:space-y-8">
         {/* Categories */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900">Categories</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-neutral-900">Categories</h2>
             <button
               onClick={() => onNavigate('categoryServices')}
               aria-label="View all service categories"
-              className="text-purple-600 font-medium text-xs sm:text-sm hover:text-purple-700 transition-colors"
+              className="text-primary-600 font-medium text-xs sm:text-sm hover:text-primary-700 transition-colors"
             >
               View All
             </button>
@@ -298,24 +298,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ user, onLogout, onNaviga
         {/* Featured Salons */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900">Featured Near You</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-neutral-900">Featured Near You</h2>
             <button 
               onClick={() => onNavigate('mapView')}
               aria-label="View all featured spas"
-              className="text-purple-600 font-medium text-xs sm:text-sm hover:text-purple-700 transition-colors"
+              className="text-primary-600 font-medium text-xs sm:text-sm hover:text-primary-700 transition-colors"
             >
               View All
             </button>
           </div>
           
           {/* View Toggle */}
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-4 sm:mb-6">
+          <div className="flex bg-neutral-100 rounded-xl p-1 mb-4 sm:mb-6">
             <button
               onClick={() => setFeaturedViewMode('list')}
               aria-label="Switch to list view"
               aria-pressed={featuredViewMode === 'list'}
               className={`flex-1 py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 flex items-center justify-center space-x-1 sm:space-x-2 ${
-                featuredViewMode === 'list' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-600'
+                featuredViewMode === 'list' ? 'bg-white text-primary-600 shadow-soft' : 'text-neutral-600'
               }`}
             >
               <List className="w-4 h-4" />
@@ -327,7 +327,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ user, onLogout, onNaviga
               aria-label="Switch to map view"
               aria-pressed={featuredViewMode === 'map'}
               className={`flex-1 py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 flex items-center justify-center space-x-1 sm:space-x-2 ${
-                featuredViewMode === 'map' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-600'
+                featuredViewMode === 'map' ? 'bg-white text-primary-600 shadow-soft' : 'text-neutral-600'
               }`}
             >
               <MapIcon className="w-4 h-4" />
@@ -349,7 +349,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ user, onLogout, onNaviga
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 shadow-sm border border-gray-100">
+            <div className="card p-2 sm:p-3 md:p-4">
               <Map
                 userLocation={userLocation}
                 providers={onboardedProviders}
@@ -358,7 +358,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ user, onLogout, onNaviga
                 className="h-48 sm:h-56 md:h-64 rounded-lg sm:rounded-xl"
               />
               <div className="mt-2 sm:mt-3 md:mt-4 text-center">
-                <p className="text-xs sm:text-sm text-gray-600">
+                <p className="text-xs sm:text-sm text-neutral-600">
                   Tap on markers to view spa details • {onboardedSpas.length} verified locations
                 </p>
               </div>

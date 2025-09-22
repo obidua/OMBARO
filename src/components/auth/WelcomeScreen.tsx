@@ -14,21 +14,21 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
         <div className="text-center max-w-md mx-auto">
           {/* Logo */}
           <div className="mb-8">
-            <div className="w-20 h-20 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+            <div className="w-20 h-20 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-strong">
               <Sparkles className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold text-gradient">
               ZexDream
             </h1>
-            <p className="text-gray-600 text-lg mt-2">Beauty & Wellness Hub</p>
+            <p className="text-neutral-600 text-lg mt-2">Beauty & Wellness Hub</p>
           </div>
 
           {/* Welcome Message */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl font-bold text-neutral-900 mb-4">
               Welcome to Your Beauty Journey
             </h2>
-            <p className="text-gray-600 text-lg leading-relaxed">
+            <p className="text-neutral-600 text-lg leading-relaxed">
               Discover and book premium spa, salon, and wellness services near you. 
               Experience luxury at your fingertips.
             </p>
@@ -36,33 +36,33 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
 
           {/* Features */}
           <div className="grid grid-cols-1 gap-4 mb-12">
-            <div className="flex items-center space-x-3 bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
-              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-purple-600" />
+            <div className="flex items-center space-x-3 glass rounded-2xl p-4 shadow-soft">
+              <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-primary-600" />
               </div>
               <div className="text-left">
-                <p className="font-semibold text-gray-900">Find Nearby</p>
-                <p className="text-sm text-gray-600">Discover salons & spas around you</p>
+                <p className="font-semibold text-neutral-900">Find Nearby</p>
+                <p className="text-sm text-neutral-600">Discover salons & spas around you</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
-              <div className="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center">
-                <Clock className="w-5 h-5 text-pink-600" />
+            <div className="flex items-center space-x-3 glass rounded-2xl p-4 shadow-soft">
+              <div className="w-10 h-10 bg-secondary-100 rounded-xl flex items-center justify-center">
+                <Clock className="w-5 h-5 text-secondary-600" />
               </div>
               <div className="text-left">
-                <p className="font-semibold text-gray-900">Easy Booking</p>
-                <p className="text-sm text-gray-600">Book appointments in seconds</p>
+                <p className="font-semibold text-neutral-900">Easy Booking</p>
+                <p className="text-sm text-neutral-600">Book appointments in seconds</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
-              <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-                <Star className="w-5 h-5 text-indigo-600" />
+            <div className="flex items-center space-x-3 glass rounded-2xl p-4 shadow-soft">
+              <div className="w-10 h-10 bg-accent-100 rounded-xl flex items-center justify-center">
+                <Star className="w-5 h-5 text-accent-600" />
               </div>
               <div className="text-left">
-                <p className="font-semibold text-gray-900">Premium Quality</p>
-                <p className="text-sm text-gray-600">Verified professionals only</p>
+                <p className="font-semibold text-neutral-900">Premium Quality</p>
+                <p className="text-sm text-neutral-600">Verified professionals only</p>
               </div>
             </div>
           </div>
@@ -92,37 +92,37 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
           <div className="flex justify-center space-x-6 mt-6">
             <button
               onClick={() => onGetStarted('employeeLogin')}
-              className="text-xs text-gray-500 hover:text-purple-600 transition-colors duration-200"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
             >
               Employee
             </button>
             <button
               onClick={() => onGetStarted('vendorLogin')}
-              className="text-xs text-gray-500 hover:text-purple-600 transition-colors duration-200"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
             >
               Vendor
             </button>
             <button
               onClick={() => onGetStarted('adminLogin')}
-              className="text-xs text-gray-500 hover:text-purple-600 transition-colors duration-200"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
             >
               Admin
             </button>
             <button
               onClick={() => onGetStarted('roleSelection')}
-              className="text-xs text-gray-500 hover:text-purple-600 transition-colors duration-200"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
             >
               Departments
             </button>
             <button
               onClick={() => onGetStarted('docPortal')}
-              className="text-xs text-gray-500 hover:text-purple-600 transition-colors duration-200"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
             >
               Doc
             </button>
           </div>
         </div>
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-neutral-500 mt-4">
           By continuing, you agree to our Terms & Privacy Policy
         </p>
       </div>
