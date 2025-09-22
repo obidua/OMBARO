@@ -1,5 +1,5 @@
 import React from 'react';
-import { GitBranch, Server, Database, Key, Shield, Zap } from 'lucide-react';
+import { GitBranch, Server, Database, Key, Shield, Zap, Smartphone } from 'lucide-react';
 
 export const APIIntegration: React.FC = () => {
   return (
