@@ -27,6 +27,7 @@ import ChatScreen from './src/screens/ChatScreen';
 import SpaOnboardingScreen from './src/screens/SpaOnboardingScreen';
 import DocPortalScreen from './src/screens/DocPortalScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
+import DocPortalScreen from './src/screens/DocPortalScreen';
 
 // Import context
 import { AuthProvider } from './src/context/AuthContext';

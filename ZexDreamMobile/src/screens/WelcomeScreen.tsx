@@ -99,8 +99,8 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
               <TouchableOpacity onPress={() => handleGetStarted('department')}>
                 <Text style={styles.portalLink}>Departments</Text>
               </TouchableOpacity>
-              <Text style={styles.portalSeparator}>•</Text> {/* Add a separator before "Doc" */}
-              <TouchableOpacity onPress={() => handleGetStarted('docPortalAccess')}>
+              <Text style={styles.portalSeparator}>•</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('DocPortal')}>
                 <Text style={styles.portalLink}>Doc</Text>
               </TouchableOpacity>
             </View>
