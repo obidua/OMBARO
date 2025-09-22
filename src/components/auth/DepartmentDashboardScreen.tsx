@@ -9,6 +9,7 @@ interface DepartmentDashboardScreenProps {
   userRole: UserRole;
   user: any;
   onLogout: () => void;
+  onBack: () => void;
 }
 
 export const DepartmentDashboardScreen: React.FC<DepartmentDashboardScreenProps> = ({

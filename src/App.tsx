@@ -89,6 +89,7 @@ function App() {
             userRole={authState.userType!}
             user={authState.user}
             onLogout={logout}
+            onBack={() => setCurrentStep('welcome')}
           />
         );
       
