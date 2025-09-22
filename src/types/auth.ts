@@ -2,10 +2,17 @@ export interface User {
   id?: string;
   name?: string;
   email?: string;
-  mobile: string;
+  mobile?: string;
   gender?: 'male' | 'female' | 'other';
   dateOfBirth?: string;
   isVerified: boolean;
+  password?: string;
+  role?: UserRole;
+  createdAt?: string;
+  updatedAt?: string;
+  status?: 'active' | 'inactive' | 'suspended';
+  lastLogin?: string;
+  createdBy?: string;
 }
 
 export type UserRole = 
