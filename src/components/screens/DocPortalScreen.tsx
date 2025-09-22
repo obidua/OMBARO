@@ -174,3 +174,7 @@ ZexDreamMobile/
 
   return <DocPortal onBack={onBack} />;
 };
+      }
+    ]
+  }
+]
