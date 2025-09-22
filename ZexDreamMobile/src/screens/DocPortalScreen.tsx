@@ -114,7 +114,7 @@ const DOC_CONTENT: DocSection[] = [
       { type: 'heading', level: 2, text: 'Version Control Strategy (Git)' },
       { type: 'list', items: [
         'Repository: GitHub for all project repositories (frontend, backend, mobile).',
-        'Branching Model: Feature Branching (each new feature/bug fix gets a dedicated branch from `develop`).',
+        'Branching Model: Feature Branching (each new feature/bug fix gets a dedicated branch from \`develop`).',
         'Pull Requests (PRs): Mandatory for all code changes, requiring at least one approval and passing CI checks before merging to `develop` or `main`.'
       ] },
       { type: 'heading', level: 2, text: 'CI/CD Pipelines' },
