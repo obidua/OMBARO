@@ -98,11 +98,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ user, onLogout, onNaviga
 
   // Mock data for categories
   const categories: Category[] = [
-    { id: '1', name: 'Hair', icon: 'scissors', color: 'bg-purple-100 text-purple-600' },
-    { id: '2', name: 'Spa', icon: 'sparkles', color: 'bg-pink-100 text-pink-600' },
-    { id: '3', name: 'Skin', icon: 'heart', color: 'bg-green-100 text-green-600' },
-    { id: '4', name: 'Nails', icon: 'palette', color: 'bg-yellow-100 text-yellow-600' },
-    { id: '5', name: 'Ayurveda', icon: 'leaf', color: 'bg-emerald-100 text-emerald-600' },
+    { id: '1', name: 'Spa', icon: 'sparkles', color: 'bg-purple-100 text-purple-600' },
+    { id: '2', name: 'Salon', icon: 'scissors', color: 'bg-pink-100 text-pink-600' },
+    { id: '3', name: 'Beauty Parlour', icon: 'heart', color: 'bg-green-100 text-green-600' },
   ];
 
   // Mock data for onboarded spas (simulating spas added by employees/admins)
