@@ -288,3 +288,6 @@ const DepartmentDashboard: React.FC<{ userRole: UserRole; user: any; onLogout: (
 };
 
 export { DepartmentDashboardScreen as DepartmentDashboard };
+
+
+export { DepartmentDashboard }
