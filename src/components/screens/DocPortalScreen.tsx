@@ -170,11 +170,12 @@ ZexDreamMobile/
 
 **Mobile Application:**
 - Use \`StyleSheet.create\` for defining styles to optimize performance in React Native.
-- Adhere to platform design guidelines (Material Design for Android, Human Interface Guidelines for iOS).
-
-  return <DocPortal onBack={onBack} />;
-};
+- Adhere to platform design guidelines (Material Design for Android, Human Interface Guidelines for iOS).`
       }
     ]
   }
-]
+];
+
+export const DocPortalScreen: React.FC<DocPortalScreenProps> = ({ onBack }) => {
+  return <DocPortal onBack={onBack} />;
+};
