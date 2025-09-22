@@ -99,37 +99,43 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
             <Button title="Login" onPress={() => handleGetStarted('customer')} variant="outline" size="lg" style={styles.secondaryButton} />
 
             {/* Portal Access - Simplified to a single button for all portals */}
-            <Button
-              title="Portal Login"
-              onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })} // Default to employee login, user can go back
-              variant="outline"
-              size="lg"
-              style={styles.portalLoginButton}
-            />
-
-            {/* Department Access */}
-            <Button
-              title="Department Login"
-              onPress={() => handleGetStarted('department')}
-              variant="outline"
-              size="lg"
-              style={styles.departmentLoginButton}
-            />
-
-            {/* Old Portal Access (kept for reference, will be removed) */}
-            {/* <View style={styles.portalAccess}>
-              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}>
-                <Text style={styles.portalLink}>Employee Login</Text>
-              </TouchableOpacity>
-              <Text style={styles.portalSeparator}>•</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'vendor' })}>
-                <Text style={styles.portalLink}>Vendor Login</Text>
-              </TouchableOpacity>
-              <Text style={styles.portalSeparator}>•</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'admin' })}>
-                <Text style={styles.portalLink}>Admin Login</Text>
-              </TouchableOpacity>
-            </View> */}
+            <View style={styles.portalAccessButtons}>
+              <Button
+                title="Employee"
+                onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}
+                variant="outline"
+                size="lg"
+                style={styles.portalButton}
+              />
+              <Button
+                title="Vendor"
+                onPress={() => navigation.navigate('AuthLogin', { userType: 'vendor' })}
+                variant="outline"
+                size="lg"
+                style={styles.portalButton}
+              />
+              <Button
+                title="Admin"
+                onPress={() => navigation.navigate('AuthLogin', { userType: 'admin' })}
+                variant="outline"
+                size="lg"
+                style={styles.portalButton}
+              />
+              <Button
+                title="Departments"
+                onPress={() => handleGetStarted('department')}
+                variant="outline"
+                size="lg"
+                style={styles.portalButton}
+              />
+              <Button
+                title="Doc"
+                onPress={() => handleGetStarted('docPortalAccess')}
+                variant="outline"
+                size="lg"
+                style={styles.portalButton}
+              />
+            </View>
 
             <Text style={styles.disclaimer}>
               By continuing, you agree to our Terms & Privacy Policy
@@ -250,18 +256,16 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: spacing['2xl'],
   },
-  portalLoginButton: {
-    width: '100%',
-  },
-  departmentLoginButton: {
-    width: '100%',
-  },
-  portalAccess: {
+  portalAccessButtons: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: spacing.lg,
-    gap: spacing.sm,
+    flexWrap: 'wrap',
+    gap: spacing.md,
+  },
+  portalButton: {
+    flexBasis: '48%', // Adjust as needed for layout
   },
   portalLink: {
     fontSize: typography.xs,
