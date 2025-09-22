@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AuthState, User } from '../types/auth';
+import { AuthState, User, UserRole } from '../types/auth';
 
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>({
@@ -32,7 +32,7 @@ export const useAuth = () => {
     setAuthState(prev => ({ ...prev, selectedEntity: entity }));
   };
 
-  const loginUser = async (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => {
+  const loginUser = async (mobile: string, password: string, userType: UserRole) => {
     setLoading(true);
     setError(null);
     
@@ -56,12 +56,42 @@ export const useAuth = () => {
           case 'admin':
             setCurrentStep('adminDashboard');
             break;
+          case 'super_admin':
+            setCurrentStep('adminDashboard'); // Super admin uses enhanced admin dashboard
+            break;
+          default:
+            // All other departmental roles go to department dashboard
+            setCurrentStep('departmentDashboard');
+            break;
         }
       } else {
         setError('Invalid password. Please try again.');
       }
     } catch (error) {
       setError('Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectRole = async (role: UserRole) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Simulate role selection
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setAuthState(prev => ({ ...prev, userType: role }));
+      
+      // Navigate based on role
+      if (role === 'super_admin') {
+        setCurrentStep('adminDashboard');
+      } else {
+        setCurrentStep('departmentDashboard');
+      }
+    } catch (error) {
+      setError('Role selection failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -138,12 +168,14 @@ export const useAuth = () => {
       setLoading(false);
     }
   };
+
   return {
     authState,
     setCurrentStep,
     setUser,
     setSelectedEntity,
     loginUser,
+    selectRole,
     logout,
     sendOTP,
     verifyOTP,

@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { ArrowLeft, User, Lock } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { UserRole } from '../../types/auth';
 
 interface AuthLoginScreenProps {
-  userType: 'Employee' | 'Vendor' | 'Admin';
+  userType: string;
   onBack: () => void;
-  onLogin: (mobile: string, password: string, userType: 'employee' | 'vendor' | 'admin') => void;
+  onLogin: (mobile: string, password: string, userType: UserRole) => void;
   isLoading: boolean;
   error: string | null;
 }
@@ -44,7 +45,7 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
 
   const handleLogin = () => {
     if (validateForm()) {
-      const userTypeKey = userType.toLowerCase() as 'employee' | 'vendor' | 'admin';
+      const userTypeKey = userType.toLowerCase().replace(/\s+/g, '_').replace(/[^\w]/g, '') as UserRole;
       onLogin(mobile, password, userTypeKey);
     }
   };
@@ -56,12 +57,18 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
   };
 
   const getIcon = () => {
-    switch (userType) {
-      case 'Employee': return '👨‍💼';
-      case 'Vendor': return '🏪';
-      case 'Admin': return '👑';
+    const lowerType = userType.toLowerCase();
+    if (lowerType.includes('admin')) return '👑';
+    if (lowerType.includes('vendor')) return '🏪';
+    if (lowerType.includes('employee')) return '👨‍💼';
+    if (lowerType.includes('accounts')) return '💰';
+    if (lowerType.includes('marketing')) return '📈';
+    if (lowerType.includes('finance')) return '💼';
+    if (lowerType.includes('legal')) return '⚖️';
+    if (lowerType.includes('customer')) return '🎧';
+    if (lowerType.includes('hr')) return '👥';
+    if (lowerType.includes('it')) return '💻';
       default: return '🔐';
-    }
   };
 
   return (
@@ -93,7 +100,7 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
               {userType} Portal
             </h2>
             <p className="text-gray-600">
-              Enter your credentials to access the {userType.toLowerCase()} dashboard
+              Enter your credentials to access the {userType} dashboard
             </p>
           </div>
 

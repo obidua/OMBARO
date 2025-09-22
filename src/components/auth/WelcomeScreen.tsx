@@ -108,6 +108,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
             >
               Admin
             </button>
+            <button
+              onClick={() => onGetStarted('roleSelection')}
+              className="text-xs text-gray-500 hover:text-purple-600 transition-colors duration-200"
+            >
+              Departments
+            </button>
           </div>
         </div>
         <p className="text-center text-sm text-gray-500 mt-4">

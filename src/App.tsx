@@ -5,6 +5,8 @@ import { FixedHeader } from './components/layout/FixedHeader';
 import { FixedFooter } from './components/layout/FixedFooter';
 import { WelcomeScreen } from './components/auth/WelcomeScreen';
 import { AuthLoginScreen } from './components/auth/AuthLoginScreen';
+import { RoleSelectionScreen } from './components/auth/RoleSelectionScreen';
+import { DepartmentDashboard } from './components/auth/DepartmentDashboardScreen';
 import { EmployeeDashboardScreen } from './components/auth/EmployeeDashboardScreen';
 import { SpaOnboardingScreen } from './components/auth/SpaOnboardingScreen';
 import { VendorDashboardScreen } from './components/auth/VendorDashboardScreen';
@@ -27,9 +29,10 @@ import { ReviewScreen } from './components/screens/ReviewScreen';
 import { ReferralScreen } from './components/screens/ReferralScreen';
 import { NotificationScreen } from './components/screens/NotificationScreen';
 import { Button } from './components/ui/Button';
+import { UserRole } from './types/auth';
 
 function App() {
-  const { authState, setCurrentStep, setSelectedEntity, loginUser, logout, sendOTP, verifyOTP, completeProfile } = useAuth();
+  const { authState, setCurrentStep, setSelectedEntity, loginUser, selectRole, logout, sendOTP, verifyOTP, completeProfile } = useAuth();
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleSearch = () => {
@@ -48,6 +51,8 @@ function App() {
       setCurrentStep('vendorLogin');
     } else if (userType === 'adminLogin') {
       setCurrentStep('adminLogin');
+    } else if (userType === 'roleSelection') {
+      setCurrentStep('roleSelection');
     } else {
       setCurrentStep('mobile');
     }
@@ -66,6 +71,24 @@ function App() {
         return (
           <WelcomeScreen 
             onGetStarted={handleWelcomeNavigation}
+          />
+        );
+      
+      case 'roleSelection':
+        return (
+          <RoleSelectionScreen
+            onBack={() => setCurrentStep('welcome')}
+            onRoleSelect={selectRole}
+            isLoading={authState.isLoading}
+          />
+        );
+      
+      case 'departmentDashboard':
+        return (
+          <DepartmentDashboard
+            userRole={authState.userType!}
+            user={authState.user}
+            onLogout={logout}
           />
         );
       
