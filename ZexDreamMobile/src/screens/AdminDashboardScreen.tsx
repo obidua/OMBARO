@@ -9,6 +9,7 @@ interface Props {
   navigation: AdminDashboardScreenNavigationProp;
 }
 
+const AdminDashboardScreen: React.FC<Props> = ({ navigation }) => {
   const { authState } = useAuth();
   return <DepartmentDashboardScreen navigation={navigation} />;
 };

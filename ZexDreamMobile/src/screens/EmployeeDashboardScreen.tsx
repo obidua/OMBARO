@@ -10,6 +10,7 @@ interface Props {
 }
 
 // This screen now acts as a wrapper to route to the generic DepartmentDashboardScreen
+const EmployeeDashboardScreen: React.FC<Props> = ({ navigation }) => {
   const { authState } = useAuth();
   return <DepartmentDashboardScreen navigation={navigation} />;
 };
