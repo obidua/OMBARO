@@ -99,42 +99,26 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
             <Button title="Login" onPress={() => handleGetStarted('customer')} variant="outline" size="lg" style={styles.secondaryButton} />
 
             {/* Portal Access - Simplified to a single button for all portals */}
-            <View style={styles.portalAccessButtons}>
-              <Button
-                title="Employee"
-                onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}
-                variant="outline"
-                size="lg"
-                style={styles.portalButton}
-              />
-              <Button
-                title="Vendor"
-                onPress={() => navigation.navigate('AuthLogin', { userType: 'vendor' })}
-                variant="outline"
-                size="lg"
-                style={styles.portalButton}
-              />
-              <Button
-                title="Admin"
-                onPress={() => navigation.navigate('AuthLogin', { userType: 'admin' })}
-                variant="outline"
-                size="lg"
-                style={styles.portalButton}
-              />
-              <Button
-                title="Departments"
-                onPress={() => handleGetStarted('department')}
-                variant="outline"
-                size="lg"
-                style={styles.portalButton}
-              />
-              <Button
-                title="Doc"
-                onPress={() => handleGetStarted('docPortalAccess')}
-                variant="outline"
-                size="lg"
-                style={styles.portalButton}
-              />
+            <View style={styles.portalAccessButtons}> {/* This is the container for the small text links */}
+              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}>
+                <Text style={styles.portalLink}>Employee</Text>
+              </TouchableOpacity>
+              <Text style={styles.portalSeparator}>•</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'vendor' })}>
+                <Text style={styles.portalLink}>Vendor</Text>
+              </TouchableOpacity>
+              <Text style={styles.portalSeparator}>•</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'admin' })}>
+                <Text style={styles.portalLink}>Admin</Text>
+              </TouchableOpacity>
+              <Text style={styles.portalSeparator}>•</Text>
+              <TouchableOpacity onPress={() => handleGetStarted('department')}>
+                <Text style={styles.portalLink}>Departments</Text>
+              </TouchableOpacity>
+              <Text style={styles.portalSeparator}>•</Text> {/* Add a separator before "Doc" */}
+              <TouchableOpacity onPress={() => handleGetStarted('docPortalAccess')}>
+                <Text style={styles.portalLink}>Doc</Text>
+              </TouchableOpacity>
             </View>
 
             <Text style={styles.disclaimer}>
