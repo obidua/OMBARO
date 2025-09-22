@@ -68,7 +68,7 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
     if (lowerType.includes('customer')) return '🎧';
     if (lowerType.includes('hr')) return '👥';
     if (lowerType.includes('it')) return '💻';
-      default: return '🔐';
+    return '🔐';
   };
 
   return (
