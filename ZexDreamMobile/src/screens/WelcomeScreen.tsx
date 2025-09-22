@@ -83,6 +83,24 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={[styles.featureIcon, { backgroundColor: '#EEF2FF' }]}>
                   <Text style={styles.featureIconText}>⭐</Text>
                 </View>
+                <View style={styles.featureText}>
+                  <Text style={styles.featureTitle}>Premium Quality</Text>
+                  <Text style={styles.featureDescription}>Top-rated services & professionals</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Bottom Section */}
+            <View style={styles.bottomSection}>
+              <View style={styles.buttonContainer}>
+                <Button
+                  title="Get Started"
+                  onPress={() => handleGetStarted('customer')}
+                  style={styles.primaryButton}
+                />
+              </View>
+            </View>
+
             <View style={styles.portalAccessButtons}> {/* This is the container for the small text links */}
               <TouchableOpacity onPress={() => navigation.navigate('AuthLogin', { userType: 'employee' })}>
                 <Text style={styles.portalLink}>Employee</Text>
@@ -109,15 +127,13 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
               By continuing, you agree to our Terms & Privacy Policy
             </Text>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-                }
-  )
   container: {
     flex: 1,
   },
