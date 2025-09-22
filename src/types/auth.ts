@@ -39,7 +39,7 @@ export type UserRole =
   | 'hr_department';
 
 export interface AuthState {
-  currentStep: 'welcome' | 'mobile' | 'otp' | 'profile' | 'complete' | 'home' | 'salonDetail' | 'mapView' | 'booking' | 'payment' | 'orderTracking' | 'bookings' | 'employeeLogin' | 'employeeDashboard' | 'spaOnboarding' | 'vendorLogin' | 'vendorDashboard' | 'adminLogin' | 'adminDashboard' | 'categoryServices' | 'offerDetail' | 'reviewScreen' | 'rescheduleBooking' | 'chat' | 'referral' | 'notifications' | 'roleSelection' | 'departmentDashboard';
+  currentStep: 'welcome' | 'mobile' | 'otp' | 'profile' | 'complete' | 'home' | 'salonDetail' | 'mapView' | 'booking' | 'payment' | 'orderTracking' | 'bookings' | 'employeeLogin' | 'employeeDashboard' | 'spaOnboarding' | 'vendorLogin' | 'vendorDashboard' | 'adminLogin' | 'adminDashboard' | 'categoryServices' | 'offerDetail' | 'reviewScreen' | 'rescheduleBooking' | 'chat' | 'referral' | 'notifications' | 'roleSelection' | 'departmentDashboard' | 'docPortal';
   user: Partial<User>;
   userType?: UserRole;
   isLoading: boolean;

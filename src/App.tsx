@@ -28,6 +28,7 @@ import { ChatScreen } from './components/screens/ChatScreen';
 import { ReviewScreen } from './components/screens/ReviewScreen';
 import { ReferralScreen } from './components/screens/ReferralScreen';
 import { NotificationScreen } from './components/screens/NotificationScreen';
+import { DocPortalScreen } from './components/screens/DocPortalScreen';
 import { Button } from './components/ui/Button';
 import { UserRole } from './types/auth';
 
@@ -53,6 +54,8 @@ function App() {
       setCurrentStep('adminLogin');
     } else if (userType === 'roleSelection') {
       setCurrentStep('roleSelection');
+    } else if (userType === 'docPortal') {
+      setCurrentStep('docPortal');
     } else {
       setCurrentStep('mobile');
     }
@@ -475,6 +478,13 @@ function App() {
                 setCurrentStep(screen as any);
               }
             }}
+          />
+        );
+      
+      case 'docPortal':
+        return (
+          <DocPortalScreen
+            onBack={() => setCurrentStep('welcome')}
           />
         );
       
