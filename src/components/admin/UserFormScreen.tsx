@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, User, Mail, Phone, Lock, Shield, Calendar, Save, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, User, Mail, Phone, Lock, Shield, Calendar, Save, Eye, EyeOff, RotateCcw } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { RadioGroup } from '../ui/RadioGroup';
@@ -39,12 +39,6 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
   const isReadOnly = mode === 'view';
   const isEditing = mode === 'edit';
   const isCreating = mode === 'create';
-
-  const roleOptions = ROLE_DEFINITIONS.map(role => ({
-    value: role.id,
-    label: role.name,
-    icon: <Shield className="w-5 h-5 text-purple-600" />
-  }));
 
   const statusOptions = [
     { value: 'active', label: 'Active', icon: <Shield className="w-5 h-5 text-green-600" /> },
@@ -122,9 +116,9 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
   };
 
   const generatePassword = () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
     let password = '';
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 12; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     handleInputChange('password', password);
@@ -184,7 +178,6 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
                   error={formErrors.mobile}
                   disabled={isReadOnly}
                   icon={<Phone className="w-5 h-5 text-gray-400" />}
-                  maxLength={10}
                 />
 
                 <Input
@@ -270,6 +263,7 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
                       size="sm"
                       className="mt-2"
                     >
+                      <RotateCcw className="w-4 h-4 mr-1" />
                       Generate Password
                     </Button>
                   )}
@@ -313,7 +307,7 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
             {/* Role Information */}
             {selectedRole && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Role Information</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Role Information & Access</h3>
                 <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
                   <div className="flex items-start space-x-3">
                     <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -323,7 +317,7 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
                       <h4 className="font-semibold text-purple-900 mb-1">{selectedRole.name}</h4>
                       <p className="text-purple-700 text-sm mb-3">{selectedRole.description}</p>
                       
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         <div>
                           <p className="text-purple-800 font-medium text-sm">Available Modules:</p>
                           <div className="flex flex-wrap gap-1 mt-1">
@@ -363,6 +357,22 @@ export const UserFormScreen: React.FC<UserFormScreenProps> = ({
                             </div>
                           </div>
                         )}
+
+                        <div>
+                          <p className="text-purple-800 font-medium text-sm">Key Permissions:</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {selectedRole.permissions.slice(0, 5).map(permission => (
+                              <span key={permission} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-lg">
+                                {permission}
+                              </span>
+                            ))}
+                            {selectedRole.permissions.length > 5 && (
+                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-lg">
+                                +{selectedRole.permissions.length - 5} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

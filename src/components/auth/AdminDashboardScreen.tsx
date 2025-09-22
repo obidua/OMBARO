@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { LogOut, Users, MapPin, BarChart3, Settings, Shield, AlertTriangle, TrendingUp, DollarSign, UserCheck, Building, Search, Filter, Eye, Edit, Ban, CheckCircle, XCircle, Navigation } from 'lucide-react';
+import { LogOut, Users, MapPin, BarChart3, Settings, Shield, AlertTriangle, TrendingUp, DollarSign, UserCheck, Building, Search, Filter, Eye, Edit, Ban, CheckCircle, XCircle, Navigation, UserCog, Lock } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { LocationTrackingScreen } from '../admin/LocationTrackingScreen';
+import { UserManagementScreen } from '../admin/UserManagementScreen';
+import { UserFormScreen } from '../admin/UserFormScreen';
+import { RoleManagementScreen } from '../admin/RoleManagementScreen';
+import { PermissionMatrixScreen } from '../admin/PermissionMatrixScreen';
+import { User } from '../../types/auth';
 
 interface AdminDashboardScreenProps {
   onLogout: () => void;
@@ -15,7 +20,8 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentScreen, setCurrentScreen] = useState<'dashboard' | 'locationTracking'>('dashboard');
+  const [currentScreen, setCurrentScreen] = useState<'dashboard' | 'locationTracking' | 'userManagement' | 'userForm' | 'roleManagement' | 'permissionMatrix'>('dashboard');
+  const [screenData, setScreenData] = useState<any>(null);
 
   const stats = [
     { label: 'Total Users', value: '2,847', icon: Users, color: 'bg-blue-100 text-blue-600', change: '+234 this month' },
@@ -85,6 +91,49 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
   if (currentScreen === 'locationTracking') {
     return (
       <LocationTrackingScreen
+        onBack={() => setCurrentScreen('dashboard')}
+      />
+    );
+  }
+
+  if (currentScreen === 'userManagement') {
+    return (
+      <UserManagementScreen
+        onBack={() => setCurrentScreen('dashboard')}
+        onNavigate={(screen, data) => {
+          setScreenData(data);
+          setCurrentScreen(screen as any);
+        }}
+      />
+    );
+  }
+
+  if (currentScreen === 'userForm') {
+    return (
+      <UserFormScreen
+        mode={screenData?.mode || 'create'}
+        user={screenData?.user}
+        onBack={() => setCurrentScreen('userManagement')}
+        onSave={(userData) => {
+          console.log('User saved:', userData);
+          alert(`User ${screenData?.mode === 'create' ? 'created' : 'updated'} successfully!`);
+          setCurrentScreen('userManagement');
+        }}
+      />
+    );
+  }
+
+  if (currentScreen === 'roleManagement') {
+    return (
+      <RoleManagementScreen
+        onBack={() => setCurrentScreen('dashboard')}
+      />
+    );
+  }
+
+  if (currentScreen === 'permissionMatrix') {
+    return (
+      <PermissionMatrixScreen
         onBack={() => setCurrentScreen('dashboard')}
       />
     );
@@ -184,6 +233,45 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
                       <div className="text-left">
                         <p className="font-semibold">User Management</p>
                         <p className="text-sm opacity-90">Manage all platform users</p>
+                      </div>
+                    </Button>
+
+                    <Button
+                      onClick={() => setCurrentScreen('userManagement')}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-16"
+                    >
+                      <UserCog className="w-6 h-6 mr-3" />
+                      <div className="text-left">
+                        <p className="font-semibold">User & Role Management</p>
+                        <p className="text-sm opacity-70">Create users and assign roles</p>
+                      </div>
+                    </Button>
+
+                    <Button
+                      onClick={() => setCurrentScreen('roleManagement')}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-16"
+                    >
+                      <Shield className="w-6 h-6 mr-3" />
+                      <div className="text-left">
+                        <p className="font-semibold">Role Management</p>
+                        <p className="text-sm opacity-70">Manage system roles</p>
+                      </div>
+                    </Button>
+
+                    <Button
+                      onClick={() => setCurrentScreen('permissionMatrix')}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-16"
+                    >
+                      <Lock className="w-6 h-6 mr-3" />
+                      <div className="text-left">
+                        <p className="font-semibold">Permission Matrix</p>
+                        <p className="text-sm opacity-70">Configure role permissions</p>
                       </div>
                     </Button>
 
