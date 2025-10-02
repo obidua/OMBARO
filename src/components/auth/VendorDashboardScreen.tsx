@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Package, BarChart3, Settings, Users, Calendar, Star, TrendingUp, Clock, Edit, Plus, Eye, DollarSign, MessageSquare } from 'lucide-react';
+import { LogOut, Package, BarChart3, Settings, Users, Calendar, Star, TrendingUp, Clock, CreditCard as Edit, Plus, Eye, DollarSign, MessageSquare } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 interface VendorDashboardScreenProps {
