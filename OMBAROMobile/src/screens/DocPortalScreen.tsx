@@ -99,7 +99,7 @@ const DOC_CONTENT: DocSection[] = [
       {
         id: 'project_summary',
         title: 'Project Summary',
-        content: \`ZexDream is a comprehensive beauty and wellness platform designed to connect customers with spa, salon, and wellness service providers. It features multi-portal authentication for various user roles including customers, employees, vendors, and administrators, ensuring a tailored experience for each. The platform aims to provide seamless service discovery, booking, payment, and tracking functionalities.
+        content: \`OMBARO is a comprehensive beauty and wellness platform designed to connect customers with spa, salon, and wellness service providers. It features multi-portal authentication for various user roles including customers, employees, vendors, and administrators, ensuring a tailored experience for each. The platform aims to provide seamless service discovery, booking, payment, and tracking functionalities.
         
         The project is structured into two main applications: a web application built with React, TypeScript, and Vite, and a mobile application built with React Native, Expo, and TypeScript. Both applications share core business logic, type definitions, and API integrations to maintain consistency and efficiency.`
       },
@@ -143,7 +143,7 @@ const DOC_CONTENT: DocSection[] = [
       {
         id: 'full_stack_overview',
         title: 'Full-Stack Overview',
-        content: \`ZexDream employs a modern full-stack architecture designed for scalability, performance, and maintainability. It separates concerns between frontend clients (web and mobile) and a centralized backend API, with a robust database for data persistence.
+        content: \`OMBARO employs a modern full-stack architecture designed for scalability, performance, and maintainability. It separates concerns between frontend clients (web and mobile) and a centralized backend API, with a robust database for data persistence.
         
         **Frontend:**
         - Web Application: React 18, TypeScript, Vite, Tailwind CSS, Lucide React.
@@ -194,7 +194,7 @@ const DOC_CONTENT: DocSection[] = [
         title: 'Getting Started (Mobile Application)',
         content: `1.  **Navigate to mobile directory:**
             \`\`\`bash
-            cd ZexDreamMobile
+            cd OMBAROMobile
             \`\`\`
         2.  **Install dependencies:**
             \`\`\`bash
@@ -220,7 +220,7 @@ const DOC_CONTENT: DocSection[] = [
         
         **Project Structure (Mobile Example):**
         \`\`\`
-        ZexDreamMobile/
+        OMBAROMobile/
         ├── src/
         │   ├── components/
         │   │   └── ui/           # Reusable UI components
@@ -284,7 +284,7 @@ const DOC_CONTENT: DocSection[] = [
     id: 'database',
     title: 'Database Schema',
     icon: Database,
-    content: `The primary database for ZexDream is PostgreSQL, managed via Supabase. Key entities include:
+    content: `The primary database for OMBARO is PostgreSQL, managed via Supabase. Key entities include:
     
     **Users:**
     - \`id\`: Unique identifier (UUID)
@@ -353,13 +353,13 @@ const DOC_CONTENT: DocSection[] = [
     - \`photos\`: Array of photo URLs
     - \`createdAt\`
     
-    This schema provides a foundation for managing all core operations of the ZexDream platform.`
+    This schema provides a foundation for managing all core operations of the OMBARO platform.`
   },
   {
     id: 'security',
     title: 'Security Considerations',
     icon: Shield,
-    content: `Security is paramount for ZexDream, especially given the sensitive nature of personal and financial data.
+    content: `Security is paramount for OMBARO, especially given the sensitive nature of personal and financial data.
     
     **Authentication & Authorization:**
     - Multi-portal authentication ensures role-based access control.
@@ -471,7 +471,7 @@ const DocPortalScreen: React.FC<Props> = ({ navigation }) => {
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>ZexDream Development Docs</Text>
+        <Text style={styles.headerTitle}>OMBARO Development Docs</Text>
         <View style={styles.spacer} />
       </View>
 

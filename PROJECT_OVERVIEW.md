@@ -23,11 +23,11 @@
 - **Build Status**: ✅ Successful
 
 ### 2. Mobile Application
-- **Location**: `/ZexDreamMobile`
+- **Location**: `/OMBAROMobile`
 - **Technology**: React Native + Expo + TypeScript
 - **Features**: Native iOS/Android app
 - **Status**: ✅ Updated with Supabase integration
-- **Documentation**: See `/ZexDreamMobile/MOBILE_APP_UPDATES.md`
+- **Documentation**: See `/OMBAROMobile/MOBILE_APP_UPDATES.md`
 
 ### 3. Backend API (Optional)
 - **Location**: `/backend`
@@ -135,7 +135,7 @@ npm run dev
 
 ### 3. Start Mobile Application
 ```bash
-cd ZexDreamMobile
+cd OMBAROMobile
 npm install
 npx expo start
 # Scan QR code with Expo Go app
@@ -166,8 +166,8 @@ npx expo start
 13. **QUICK_START_THERAPIST.md** - Therapist quick start
 
 ### Mobile Documentation
-14. **ZexDreamMobile/MOBILE_APP_UPDATES.md** - Mobile updates
-15. **ZexDreamMobile/README.md** - Mobile setup
+14. **OMBAROMobile/MOBILE_APP_UPDATES.md** - Mobile updates
+15. **OMBAROMobile/README.md** - Mobile setup
 
 ### Optional/Advanced
 16. **BACKEND_SETUP_GUIDE.md** - FastAPI setup (optional)
@@ -209,7 +209,7 @@ VITE_SUPABASE_URL=https://0ec90b57d6e95fcbda19832f.supabase.co
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### Mobile Application (`ZexDreamMobile/.env`)
+### Mobile Application (`OMBAROMobile/.env`)
 ```env
 EXPO_PUBLIC_SUPABASE_URL=https://0ec90b57d6e95fcbda19832f.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -239,7 +239,7 @@ project/
 │   │   └── supabase.ts              # Supabase client
 │   └── types/                        # TypeScript types
 │
-├── ZexDreamMobile/                   # Mobile application
+├── OMBAROMobile/                   # Mobile application
 │   ├── src/
 │   │   ├── screens/                  # Mobile screens
 │   │   ├── services/                 # Mobile services

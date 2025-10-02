@@ -34,7 +34,7 @@ React Native mobile application for OMBARO - Your Beauty & Wellness Platform, bu
 
 1. Navigate to the mobile app directory:
    ```bash
-   cd ZexDreamMobile
+   cd OMBAROMobile
    ```
 
 2. Install dependencies:
@@ -55,7 +55,7 @@ React Native mobile application for OMBARO - Your Beauty & Wellness Platform, bu
 ## Project Structure
 
 ```
-ZexDreamMobile/
+OMBAROMobile/
 ├── src/
 │   ├── components/
 │   │   └── ui/           # Reusable UI components

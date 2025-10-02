@@ -62,7 +62,7 @@ const CompletionScreen: React.FC<Props> = ({ navigation }) => {
             {/* Welcome Message */}
             <View style={styles.messageSection}>
               <Text style={styles.welcomeTitle}>
-                Welcome to ZexDream, {authState.user.name}! 🎉
+                Welcome to OMBARO, {authState.user.name}! 🎉
               </Text>
               <Text style={styles.welcomeDescription}>
                 Your profile has been successfully created. You're all set to discover 

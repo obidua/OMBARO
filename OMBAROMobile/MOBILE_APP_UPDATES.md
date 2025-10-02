@@ -1,12 +1,12 @@
 # OMBARO Mobile App - Updates Summary
 
 ## Overview
-The mobile application has been updated to match the web application structure and rebranded from "ZexDream" to "OMBARO - Your Beauty & Wellness Platform".
+The mobile application has been updated to match the web application structure and rebranded from "OMBARO" to "OMBARO - Your Beauty & Wellness Platform".
 
 ## Key Updates
 
 ### 1. Branding Changes
-- **Application Name**: Changed from "ZexDream" to "OMBARO"
+- **Application Name**: Changed from "OMBARO" to "OMBARO"
 - **Package Name**: Updated to `ombaro-mobile`
 - **Bundle Identifier**: `com.ombaro.mobile` (iOS and Android)
 - **Color Scheme**: Updated from purple-based to blue-based theme
@@ -39,7 +39,7 @@ The mobile application has been updated to match the web application structure a
 
 ### 5. Project Structure Updates
 ```
-ZexDreamMobile/
+OMBAROMobile/
 ├── src/
 │   ├── lib/
 │   │   └── supabase.ts          # Supabase client configuration
@@ -84,7 +84,7 @@ EXPO_PUBLIC_MAPS_API_KEY=your_google_maps_api_key
 
 ### Installation
 ```bash
-cd ZexDreamMobile
+cd OMBAROMobile
 npm install
 ```
 

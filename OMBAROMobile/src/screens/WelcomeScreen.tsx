@@ -42,8 +42,8 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
                   <Text style={styles.logoIcon}>✨</Text>
                 </LinearGradient>
               </View>
-              <Text style={styles.appName}>ZexDream</Text>
-              <Text style={styles.tagline}>Beauty & Wellness Hub</Text>
+              <Text style={styles.appName}>OMBARO</Text>
+              <Text style={styles.tagline}>Your Beauty & Wellness Platform</Text>
             </View>
 
             {/* Welcome Message */}

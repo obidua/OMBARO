@@ -66,7 +66,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.avatarText}>{getInitials(authState.user.name)}</Text>
           </View>
           <Text style={styles.userName}>{authState.user.name || 'User'}</Text>
-          <Text style={styles.userSubtitle}>ZexDream Member</Text>
+          <Text style={styles.userSubtitle}>OMBARO Member</Text>
           <View style={styles.verifiedBadge}>
             <Text style={styles.verifiedIcon}>✓</Text>
             <Text style={styles.verifiedText}>Verified Account</Text>
@@ -185,8 +185,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Made with ❤️ by ZexDream Team</Text>
-          <Text style={styles.footerCopyright}>© 2025 ZexDream. All rights reserved.</Text>
+          <Text style={styles.footerText}>Made with ❤️ by OMBARO Team</Text>
+          <Text style={styles.footerCopyright}>© 2025 OMBARO. All rights reserved.</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

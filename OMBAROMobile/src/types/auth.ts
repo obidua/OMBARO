@@ -1,6 +1,6 @@
 ```diff
---- a/ZexDreamMobile/src/types/auth.ts
-+++ b/ZexDreamMobile/src/types/auth.ts
+--- a/OMBAROMobile/src/types/auth.ts
++++ b/OMBAROMobile/src/types/auth.ts
 @@ -10,13 +10,30 @@
    isVerified?: boolean;
  }

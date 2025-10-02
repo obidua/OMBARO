@@ -163,7 +163,7 @@ const BookingScreen: React.FC<Props> = ({ navigation, route }) => {
                 {termsAccepted && <Text style={styles.checkmark}>✓</Text>}
               </View>
               <Text style={styles.termsText}>
-                I agree to ZexDream's Terms & Conditions and understand that the platform 
+                I agree to OMBARO's Terms & Conditions and understand that the platform
                 does not allow any inappropriate activities.
               </Text>
             </TouchableOpacity>

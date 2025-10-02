@@ -22,7 +22,7 @@ This repository contains three main applications:
 - **Features**: Responsive web interface, PWA capabilities
 - **Target**: Desktop and mobile browsers
 
-### 2. Mobile Application (`/ZexDreamMobile`)
+### 2. Mobile Application (`/OMBAROMobile`)
 - **Technology**: React Native + Expo + TypeScript
 - **Styling**: React Native StyleSheet
 - **Features**: Native mobile experience for iOS and Android
@@ -162,7 +162,7 @@ This repository contains three main applications:
 
 1. Navigate to mobile directory:
    ```bash
-   cd ZexDreamMobile
+   cd OMBAROMobile
    ```
 
 2. Install dependencies:
