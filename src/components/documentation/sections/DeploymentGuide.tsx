@@ -23,7 +23,7 @@ export const DeploymentGuide: React.FC = () => {
         
         <div className="card p-6 mb-6">
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            ZexDream applications are designed for modern deployment practices with containerization, 
+            OMBARO applications are designed for modern deployment practices with containerization, 
             CI/CD pipelines, and cloud-native hosting solutions.
           </p>
           
@@ -253,7 +253,7 @@ eas submit --platform ios`}</pre>
             <div className="bg-neutral-50 rounded-lg p-4">
               <h4 className="font-semibold text-neutral-900 mb-3">GitHub Actions Workflow</h4>
               <div className="bg-neutral-900 rounded-lg p-4">
-                <pre className="text-accent-400 font-mono text-sm">{`name: Deploy ZexDream
+                <pre className="text-accent-400 font-mono text-sm">{`name: Deploy OMBARO
 on:
   push:
     branches: [main]

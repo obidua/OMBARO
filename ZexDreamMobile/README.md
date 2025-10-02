@@ -1,6 +1,6 @@
-# ZexDream Mobile App
+# OMBARO Mobile App
 
-React Native mobile application for ZexDream Beauty & Wellness Hub, built with Expo.
+React Native mobile application for OMBARO Beauty & Wellness Hub, built with Expo.
 
 ## Features
 
@@ -34,7 +34,7 @@ React Native mobile application for ZexDream Beauty & Wellness Hub, built with E
 
 1. Navigate to the mobile app directory:
    ```bash
-   cd ZexDreamMobile
+   cd OmbaroMobile
    ```
 
 2. Install dependencies:
@@ -55,7 +55,7 @@ React Native mobile application for ZexDream Beauty & Wellness Hub, built with E
 ## Project Structure
 
 ```
-ZexDreamMobile/
+OmbaroMobile/
 ├── src/
 │   ├── components/
 │   │   └── ui/           # Reusable UI components

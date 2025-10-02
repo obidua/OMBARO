@@ -92,7 +92,7 @@ export const DocPortal: React.FC<DocPortalProps> = ({ onBack }) => {
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             <div className="text-center">
-              <h1 className="text-lg font-bold text-white">ZexDream Docs</h1>
+              <h1 className="text-lg font-bold text-white">OMBARO Docs</h1>
               <p className="text-white/80 text-sm">Development Documentation</p>
             </div>
             <div className="w-10" />
@@ -141,8 +141,8 @@ export const DocPortal: React.FC<DocPortalProps> = ({ onBack }) => {
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-neutral-200">
           <div className="text-center text-sm text-neutral-600">
-            <p>ZexDream v1.0.0</p>
-            <p>© 2025 ZexDream Team</p>
+            <p>OMBARO v1.0.0</p>
+            <p>© 2025 OMBARO Team</p>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@ export const DocPortal: React.FC<DocPortalProps> = ({ onBack }) => {
               <h1 className="text-2xl font-bold text-neutral-900">
                 {currentSection?.title || 'Documentation'}
               </h1>
-              <p className="text-neutral-600">ZexDream Development Documentation</p>
+              <p className="text-neutral-600">OMBARO Development Documentation</p>
             </div>
             <div className="flex items-center space-x-3">
               <Button variant="outline" size="sm">

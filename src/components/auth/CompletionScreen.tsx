@@ -30,7 +30,7 @@ export const CompletionScreen: React.FC<CompletionScreenProps> = ({
         {/* Welcome Message */}
         <div className="mb-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Welcome to ZexDream, {user.name}! 🎉
+            Welcome to OMBARO, {user.name}! 🎉
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed mb-6">
             Your profile has been successfully created. You're all set to discover 

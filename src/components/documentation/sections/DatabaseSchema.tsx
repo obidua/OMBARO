@@ -23,7 +23,7 @@ export const DatabaseSchema: React.FC = () => {
         
         <div className="card p-6 mb-6">
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            ZexDream uses PostgreSQL as the primary database, managed through Supabase. The schema is designed 
+            OMBARO uses PostgreSQL as the primary database, managed through Supabase. The schema is designed 
             to support multi-tenant operations with proper data isolation and security through Row Level Security (RLS).
           </p>
           
@@ -333,6 +333,38 @@ export const DatabaseSchema: React.FC = () => {
                     CREATE TABLE booking_services (booking_id uuid, service_id uuid, quantity int);
                   </code>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Therapist Tables */}
+          <div className="card p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-neutral-900">Therapist Management</h3>
+            </div>
+
+            <p className="text-neutral-600 mb-4">
+              Complete therapist management system with 5 related tables for assignments, schedules, leaves, and tracking
+            </p>
+
+            <div className="space-y-3 text-sm text-neutral-700">
+              <div className="bg-purple-50 rounded p-3">
+                <strong>therapists:</strong> Profiles, specializations, certifications, ratings
+              </div>
+              <div className="bg-blue-50 rounded p-3">
+                <strong>therapist_assignments:</strong> Task assignments with scheduling and location
+              </div>
+              <div className="bg-green-50 rounded p-3">
+                <strong>therapist_schedules:</strong> Weekly availability management
+              </div>
+              <div className="bg-yellow-50 rounded p-3">
+                <strong>therapist_leaves:</strong> Leave requests with approval workflow
+              </div>
+              <div className="bg-red-50 rounded p-3">
+                <strong>therapist_locations:</strong> Real-time GPS tracking
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ const DOC_CONTENT: DocSection[] = [
       {
         id: 'project_summary',
         title: 'Project Summary',
-        content: `ZexDream is a comprehensive beauty and wellness platform designed to connect customers with spa, salon, and wellness service providers. It features multi-portal authentication for various user roles including customers, employees, vendors, and administrators, ensuring a tailored experience for each. The platform aims to provide seamless service discovery, booking, payment, and tracking functionalities.
+        content: `OMBARO is a comprehensive beauty and wellness platform designed to connect customers with spa, salon, and wellness service providers. It features multi-portal authentication for various user roles including customers, employees, vendors, and administrators, ensuring a tailored experience for each. The platform aims to provide seamless service discovery, booking, payment, and tracking functionalities.
         
 The project is structured into two main applications: a web application built with React, TypeScript, and Vite, and a mobile application built with React Native, Expo, and TypeScript. Both applications share core business logic, type definitions, and API integrations to maintain consistency and efficiency.`
       },
@@ -72,7 +72,7 @@ The project is structured into two main applications: a web application built wi
       {
         id: 'full_stack_overview',
         title: 'Full-Stack Overview',
-        content: `ZexDream employs a modern full-stack architecture designed for scalability, performance, and maintainability. It separates concerns between frontend clients (web and mobile) and a centralized backend API, with a robust database for data persistence.
+        content: `OMBARO employs a modern full-stack architecture designed for scalability, performance, and maintainability. It separates concerns between frontend clients (web and mobile) and a centralized backend API, with a robust database for data persistence.
 
 **Frontend:**
 - Web Application: React 18, TypeScript, Vite, Tailwind CSS, Lucide React.
@@ -123,7 +123,7 @@ The web application uses Vite for fast development and build processes, and Tail
         title: 'Getting Started (Mobile Application)',
         content: `1. **Navigate to mobile directory:**
    \`\`\`bash
-   cd ZexDreamMobile
+   cd OmbaroMobile
    \`\`\`
 2. **Install dependencies:**
    \`\`\`bash
@@ -149,7 +149,7 @@ The mobile application leverages Expo for a streamlined development workflow and
 
 **Project Structure (Mobile Example):**
 \`\`\`
-ZexDreamMobile/
+OmbaroMobile/
 ├── src/
 │   ├── components/
 │   │   └── ui/           # Reusable UI components

@@ -18,7 +18,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
               <Sparkles className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-gradient">
-              ZexDream
+              OMBARO
             </h1>
             <p className="text-neutral-600 text-lg mt-2">Beauty & Wellness Hub</p>
           </div>

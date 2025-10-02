@@ -23,7 +23,7 @@ export const SecurityGuide: React.FC = () => {
         
         <div className="card p-6 mb-6">
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            Security is paramount for ZexDream, especially given the sensitive nature of personal and financial data. 
+            Security is paramount for OMBARO, especially given the sensitive nature of personal and financial data. 
             The platform implements multiple layers of security to protect user information and ensure safe operations.
           </p>
           
@@ -238,7 +238,7 @@ const ROLE_HIERARCHY = {
               <div>
                 <h3 className="text-xl font-semibold text-error-900 mb-3">Strict Policy Enforcement</h3>
                 <p className="text-error-800 mb-4">
-                  ZexDream maintains a zero-tolerance policy against inappropriate activities, human trafficking, 
+                  OMBARO maintains a zero-tolerance policy against inappropriate activities, human trafficking, 
                   or exploitation of any kind. The platform is designed exclusively for legitimate wellness services.
                 </p>
                 

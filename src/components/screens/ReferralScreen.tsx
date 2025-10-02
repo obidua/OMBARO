@@ -29,11 +29,11 @@ export const ReferralScreen: React.FC<ReferralScreenProps> = ({
   };
 
   const handleShare = () => {
-    const shareText = `Join ZexDream using my referral code ${referralCode} and get 10% off your first booking! Download the app now.`;
+    const shareText = `Join OMBARO using my referral code ${referralCode} and get 10% off your first booking! Download the app now.`;
     
     if (navigator.share) {
       navigator.share({
-        title: 'Join ZexDream',
+        title: 'Join OMBARO',
         text: shareText,
         url: window.location.origin
       });

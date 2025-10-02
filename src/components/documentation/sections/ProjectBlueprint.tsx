@@ -23,7 +23,7 @@ export const ProjectBlueprint: React.FC = () => {
         
         <div className="card p-6 mb-6">
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            ZexDream employs a modern full-stack architecture designed for scalability, performance, and maintainability. 
+            OMBARO employs a modern full-stack architecture designed for scalability, performance, and maintainability. 
             It separates concerns between frontend clients (web and mobile) and a centralized backend API, with a robust 
             database for data persistence.
           </p>

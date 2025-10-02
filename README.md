@@ -1,6 +1,6 @@
-# ZexDream - Beauty & Wellness Platform
+# OMBARO - Beauty & Wellness Platform
 
-A comprehensive beauty and wellness platform with both web and mobile applications, featuring multi-portal authentication for customers, employees, vendors, and administrators.
+A comprehensive beauty and wellness platform with both web and mobile applications, featuring multi-portal authentication for customers, employees, vendors, therapists, and administrators.
 
 ## Project Structure
 
@@ -12,7 +12,7 @@ This repository contains two main applications:
 - **Features**: Responsive web interface, PWA capabilities
 - **Target**: Desktop and mobile browsers
 
-### 2. Mobile Application (`/ZexDreamMobile`)
+### 2. Mobile Application (`/OmbaroMobile`)
 - **Technology**: React Native + Expo + TypeScript
 - **Styling**: React Native StyleSheet
 - **Features**: Native mobile experience for iOS and Android
@@ -37,8 +37,17 @@ This repository contains two main applications:
 ### Vendor Portal
 - **Service Management**: Add and manage offered services
 - **Booking Management**: View and manage customer bookings
+- **Therapist Management**: Add, manage, and assign therapists to bookings
+- **Task Assignment**: Assign spa services to therapists with scheduling
 - **Analytics Dashboard**: Track performance and revenue
 - **Customer Reviews**: Monitor and respond to feedback
+
+### Therapist Portal
+- **Assignment Dashboard**: View and manage assigned tasks
+- **Schedule Management**: Manage availability and working hours
+- **Leave Requests**: Apply for and track leave requests
+- **Location Tracking**: Real-time location sharing during service
+- **Performance Metrics**: Track ratings, earnings, and completion rates
 
 ### Admin Portal
 - **User Management**: Manage all platform users

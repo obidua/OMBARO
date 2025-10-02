@@ -94,7 +94,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
             </div>
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900">{user.name || 'User'}</h1>
-              <p className="text-gray-600">ZexDream Member</p>
+              <p className="text-gray-600">OMBARO Member</p>
               <div className="flex items-center space-x-2 mt-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="text-sm text-green-600 font-medium">Verified Account</span>
@@ -216,10 +216,10 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
         {/* Footer Info */}
         <div className="text-center py-4">
           <p className="text-sm text-gray-500">
-            Made with ❤️ by ZexDream Team
+            Made with ❤️ by OMBARO Team
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            © 2025 ZexDream. All rights reserved.
+            © 2025 OMBARO. All rights reserved.
           </p>
         </div>
       </div>

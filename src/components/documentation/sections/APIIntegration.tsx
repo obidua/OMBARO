@@ -23,7 +23,7 @@ export const APIIntegration: React.FC = () => {
         
         <div className="card p-6 mb-6">
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            The ZexDream platform communicates with a centralized backend API built on Supabase for all data operations. 
+            The OMBARO platform communicates with a centralized backend API built on Supabase for all data operations. 
             A shared service layer handles API requests, responses, and error handling across both web and mobile applications.
           </p>
           

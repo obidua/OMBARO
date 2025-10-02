@@ -200,7 +200,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
                   className="mt-1 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                 />
                 <label htmlFor="terms-checkbox" className="text-sm text-gray-700 leading-relaxed">
-                  I confirm I have read and agree to ZexDream's{' '}
+                  I confirm I have read and agree to OMBARO's{' '}
                   <button
                     type="button"
                     onClick={() => setShowTermsModal(true)}
@@ -208,7 +208,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
                   >
                     Terms & Conditions
                   </button>
-                  . I understand that ZexDream does not allow or support any sexual activity or human trafficking, 
+                  . I understand that OMBARO does not allow or support any sexual activity or human trafficking, 
                   and any violation may result in legal action.
                 </label>
               </div>
