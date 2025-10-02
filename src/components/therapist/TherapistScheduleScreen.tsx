@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Calendar, Clock, Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Plus, CreditCard as Edit2, Trash2, Save, X } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 interface ScheduleSlot {
