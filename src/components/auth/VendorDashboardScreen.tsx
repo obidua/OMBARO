@@ -5,11 +5,13 @@ import { Button } from '../ui/Button';
 interface VendorDashboardScreenProps {
   onLogout: () => void;
   user: any;
+  onNavigate?: (screen: string, data?: any) => void;
 }
 
 export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
   onLogout,
-  user
+  user,
+  onNavigate
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -104,6 +106,7 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
             {[
               { id: 'overview', label: 'Overview' },
               { id: 'services', label: 'My Services' },
+              { id: 'therapists', label: 'Therapists' },
               { id: 'bookings', label: 'Bookings' },
               { id: 'reviews', label: 'Reviews' },
               { id: 'analytics', label: 'Analytics' }
@@ -194,15 +197,15 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
                     </Button>
 
                     <Button
-                      onClick={() => console.log('Support')}
+                      onClick={() => onNavigate?.('therapistManagement')}
                       variant="outline"
                       size="lg"
                       className="w-full justify-start h-16"
                     >
                       <Users className="w-6 h-6 mr-3" />
                       <div className="text-left">
-                        <p className="font-semibold">Support Center</p>
-                        <p className="text-sm opacity-70">Get help and guidance</p>
+                        <p className="font-semibold">Manage Therapists</p>
+                        <p className="text-sm opacity-70">Add and assign therapists</p>
                       </div>
                     </Button>
                   </div>
@@ -286,6 +289,66 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
               </div>
             )}
 
+            {activeTab === 'therapists' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">My Therapists</h3>
+                  <Button
+                    size="sm"
+                    onClick={() => onNavigate?.('therapistManagement')}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Manage Therapists
+                  </Button>
+                </div>
+
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 text-center">
+                  <Users className="w-16 h-16 text-purple-600 mx-auto mb-4" />
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                    Complete Therapist Management
+                  </h4>
+                  <p className="text-gray-600 mb-4">
+                    Add therapists to your team, manage their profiles, assign bookings, and track their performance all in one place.
+                  </p>
+                  <Button onClick={() => onNavigate?.('therapistManagement')}>
+                    Go to Therapist Management
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white border border-gray-200 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Users className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">5</p>
+                      <p className="text-sm text-gray-600">Active Therapists</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-gray-200 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Calendar className="w-6 h-6 text-green-600" />
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">12</p>
+                      <p className="text-sm text-gray-600">Assignments Today</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-gray-200 rounded-xl p-4">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Star className="w-6 h-6 text-yellow-600" />
+                      </div>
+                      <p className="text-2xl font-bold text-gray-900">4.7</p>
+                      <p className="text-sm text-gray-600">Avg. Rating</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === 'bookings' && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -310,10 +373,18 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
                           <p className="text-sm text-gray-500">{booking.date} at {booking.time}</p>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2">
                         <span className={`px-3 py-1 rounded-lg text-xs font-medium ${getBookingStatusColor(booking.status)}`}>
                           {booking.status}
                         </span>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => onNavigate?.('assignTherapist', booking)}
+                        >
+                          <Users className="w-4 h-4 mr-1" />
+                          Assign
+                        </Button>
                         <Button size="sm" variant="outline">
                           Manage
                         </Button>

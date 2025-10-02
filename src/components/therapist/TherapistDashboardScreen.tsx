@@ -107,7 +107,7 @@ export const TherapistDashboardScreen: React.FC<TherapistDashboardScreenProps> =
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 gap-3">
             <Button
-              onClick={() => onNavigate('assignments')}
+              onClick={() => onNavigate('myAssignments')}
               variant="outline"
               className="flex flex-col items-center space-y-2 h-auto py-4"
             >

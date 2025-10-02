@@ -13,6 +13,11 @@ import { VendorDashboardScreen } from './components/auth/VendorDashboardScreen';
 import { AdminDashboardScreen } from './components/auth/AdminDashboardScreen';
 import { TherapistLoginScreen } from './components/auth/TherapistLoginScreen';
 import { TherapistDashboardScreen } from './components/therapist/TherapistDashboardScreen';
+import { TherapistManagementScreen } from './components/vendor/TherapistManagementScreen';
+import { TherapistFormScreen } from './components/vendor/TherapistFormScreen';
+import { AssignTaskScreen } from './components/vendor/AssignTaskScreen';
+import { MyAssignmentsScreen } from './components/therapist/MyAssignmentsScreen';
+import { TherapistTrackingScreen } from './components/screens/TherapistTrackingScreen';
 import { MobileInputScreen } from './components/auth/MobileInputScreen';
 import { OTPScreen } from './components/auth/OTPScreen';
 import { ProfileSetupScreen } from './components/auth/ProfileSetupScreen';
@@ -176,6 +181,22 @@ function App() {
           />
         );
 
+      case 'myAssignments':
+        return (
+          <MyAssignmentsScreen
+            therapistId="therapist_1"
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'therapistTracking':
+        return (
+          <TherapistTrackingScreen
+            assignment={authState.selectedEntity}
+            onBack={() => setCurrentStep('bookings')}
+          />
+        );
+
       case 'adminLogin':
         return (
           <AuthLoginScreen
@@ -209,9 +230,74 @@ function App() {
           <VendorDashboardScreen
             onLogout={logout}
             user={authState.user}
+            onNavigate={(screen, data) => {
+              if (data) {
+                setSelectedEntity(data);
+              }
+              setCurrentStep(screen);
+            }}
           />
         );
       
+      case 'therapistManagement':
+        return (
+          <TherapistManagementScreen
+            vendorId={authState.user?.mobile || 'vendor_1'}
+            onBack={() => setCurrentStep('vendorDashboard')}
+            onNavigate={(screen, data) => {
+              if (data) {
+                setSelectedEntity(data);
+              }
+              setCurrentStep(screen);
+            }}
+          />
+        );
+
+      case 'addTherapist':
+        return (
+          <TherapistFormScreen
+            vendorId={authState.user?.mobile || 'vendor_1'}
+            onBack={() => setCurrentStep('therapistManagement')}
+            onSave={(therapistData) => {
+              console.log('Save therapist:', therapistData);
+              // In real app, this would call Supabase to insert therapist
+              alert('Therapist added successfully!');
+              setCurrentStep('therapistManagement');
+            }}
+          />
+        );
+
+      case 'editTherapist':
+        return (
+          <TherapistFormScreen
+            therapist={authState.selectedEntity}
+            vendorId={authState.user?.mobile || 'vendor_1'}
+            onBack={() => setCurrentStep('therapistManagement')}
+            onSave={(therapistData) => {
+              console.log('Update therapist:', therapistData);
+              // In real app, this would call Supabase to update therapist
+              alert('Therapist updated successfully!');
+              setCurrentStep('therapistManagement');
+            }}
+          />
+        );
+
+      case 'assignTask':
+      case 'assignTherapist':
+        return (
+          <AssignTaskScreen
+            therapist={authState.selectedEntity}
+            vendorId={authState.user?.mobile || 'vendor_1'}
+            onBack={() => setCurrentStep(authState.currentStep === 'assignTherapist' ? 'vendorDashboard' : 'therapistManagement')}
+            onAssign={(assignmentData) => {
+              console.log('Assign task:', assignmentData);
+              // In real app, this would call Supabase to create assignment
+              alert('Task assigned successfully! Customer will be able to track therapist location.');
+              setCurrentStep('vendorDashboard');
+            }}
+          />
+        );
+
       case 'adminDashboard':
         return (
           <AdminDashboardScreen
@@ -219,7 +305,7 @@ function App() {
             user={authState.user}
           />
         );
-      
+
       case 'mobile':
         return (
           <MobileInputScreen
