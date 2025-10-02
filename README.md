@@ -1,8 +1,16 @@
 # OMBARO - Beauty & Wellness Platform
 
 > **Complete project overview available in [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)**
+> **Database schema documentation in [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md)**
 
 A comprehensive beauty and wellness platform with web, mobile, and backend applications, featuring multi-portal authentication for customers, employees, vendors, therapists, and administrators.
+
+## Database
+
+- **Tables**: 60 essential tables (optimized from 143)
+- **Technology**: PostgreSQL via Supabase
+- **Migration**: `supabase/migrations/20250115_clean_production_schema.sql`
+- **Documentation**: See [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md)
 
 ## Project Structure
 

@@ -1,4 +1,34 @@
-# OMBARO Platform - Complete Database Schema Documentation
+# OMBARO Platform - Database Schema Documentation
+
+> **Note**: This file has been replaced with a cleaner, more accurate documentation.
+> Please refer to `DATABASE_SCHEMA.md` for the current schema documentation.
+
+## Quick Summary
+
+- **Total Tables**: 60 (Essential Only - Down from 143)
+- **Migration File**: `supabase/migrations/20250115_clean_production_schema.sql`
+- **Status**: Production Ready ✅
+
+## Table Categories
+1. System & Configuration (6 tables)
+2. Location & Geography (5 tables)
+3. Departments & Roles (5 tables)
+4. Users & Authentication (8 tables)
+5. Vendors (8 tables)
+6. Therapists (6 tables)
+7. Services (5 tables)
+8. Customers (4 tables)
+9. Bookings (6 tables)
+10. Payments (5 tables)
+11. Support (2 tables)
+
+---
+
+For complete documentation, see: **[DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md)**
+
+---
+
+# Legacy Documentation (Archived)
 
 ## Table of Contents
 1. [System Architecture Overview](#system-architecture-overview)

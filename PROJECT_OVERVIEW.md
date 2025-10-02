@@ -7,9 +7,9 @@
 ### Key Information
 - **Project Name**: OMBARO (formerly ZexDream)
 - **Type**: Beauty & Wellness Booking Platform
-- **Database**: 143 tables (Supabase/PostgreSQL)
+- **Database**: 60 essential tables (Supabase/PostgreSQL)
 - **Status**: Production Ready ✅
-- **Last Updated**: October 2, 2025
+- **Last Updated**: January 15, 2025
 
 ---
 
@@ -39,29 +39,25 @@
 
 ## Database Architecture
 
-### Tables: 143 Total
-**Migration File**: `supabase/migrations/20250110_consolidated_143_tables.sql` (92KB)
+### Tables: 60 (Production Essentials)
+**Migration File**: `supabase/migrations/20250115_clean_production_schema.sql` (64KB)
 
-**Major Categories** (17):
-1. System & Configuration (10 tables)
+**Categories** (11):
+1. System & Configuration (6 tables)
 2. Location & Geography (5 tables)
-3. Departments & Roles (6 tables)
-4. Authentication & Users (9 tables)
-5. HR & Employees (15 tables)
-6. Vendors (13 tables)
-7. Therapists (8 tables)
-8. Services (13 tables)
-9. Customers (10 tables)
-10. Bookings (8 tables)
-11. Payments & Finance (14 tables)
-12. Marketing (10 tables)
-13. Support (5 tables)
-14. Legal & Compliance (4 tables)
-15. Operations & Inventory (6 tables)
-16. Communications (2 tables)
-17. Analytics (6 tables)
+3. Departments & Roles (5 tables)
+4. Users & Authentication (8 tables)
+5. Vendors (8 tables)
+6. Therapists (6 tables)
+7. Services (5 tables)
+8. Customers (4 tables)
+9. Bookings (6 tables)
+10. Payments (5 tables)
+11. Support (2 tables)
 
-**Full Table List**: See `ALL_143_TABLES_REFERENCE.md`
+**Full Schema Documentation**: See `DATABASE_SCHEMA.md`
+
+**What Changed**: Reduced from 143 bloated tables to 60 essential tables. Removed unused tables for analytics, marketing, legal, operations, and other features not yet implemented in the application.
 
 ---
 
@@ -124,10 +120,10 @@
 
 ## Quick Start
 
-### 1. Apply Database Migration (2 minutes)
+### 1. Apply Database Migration (1 minute)
 ```bash
 # Open Supabase Dashboard → SQL Editor
-# Run: supabase/migrations/20250110_consolidated_143_tables.sql
+# Run: supabase/migrations/20250115_clean_production_schema.sql
 ```
 
 ### 2. Start Web Application
@@ -155,9 +151,8 @@ npx expo start
 3. **DOCUMENTATION_INDEX.md** - All documentation links
 
 ### Database Documentation
-4. **ALL_143_TABLES_REFERENCE.md** - Complete table list
-5. **DATABASE_SCHEMA_DOCUMENTATION.md** - Detailed schema
-6. **DATABASE_TABLES_DETAILED.md** - Table details
+4. **DATABASE_SCHEMA.md** - Complete schema documentation (60 tables)
+5. **DATABASE_SCHEMA_DOCUMENTATION.md** - Legacy reference (archived)
 
 ### Implementation Guides
 7. **TECHNICAL_IMPLEMENTATION_GUIDE.md** - Developer guide
@@ -183,7 +178,7 @@ npx expo start
 ## Project Status
 
 ### ✅ Completed Features
-- [x] 143-table database schema
+- [x] Clean 60-table production schema
 - [x] Multi-portal authentication system
 - [x] Web application (React)
 - [x] Mobile application (React Native)
@@ -200,8 +195,9 @@ npx expo start
 ### Build Status
 - **Web**: ✅ Success (5.66s, 827KB bundle)
 - **Mobile**: ✅ Configured and ready
-- **Database**: ✅ Complete (143 tables)
+- **Database**: ✅ Clean & Optimized (60 essential tables)
 - **Errors**: None ✅
+- **Documentation**: ✅ Updated and accurate
 
 ---
 
@@ -260,7 +256,7 @@ project/
 │
 ├── supabase/
 │   └── migrations/
-│       └── 20250110_consolidated_143_tables.sql  # Main migration
+│       └── 20250115_clean_production_schema.sql  # Clean production schema
 │
 └── Documentation files (*.md)        # All documentation
 ```
@@ -302,8 +298,14 @@ project/
 
 ## Version History
 
-- **v1.0.0** (Oct 2, 2025) - Initial release
-  - Complete 143-table database
+- **v1.1.0** (Jan 15, 2025) - Schema Optimization
+  - Cleaned database from 143 to 60 essential tables
+  - Removed unused/bloated tables
+  - Updated all documentation
+  - Improved performance and maintainability
+
+- **v1.0.0** (Oct 2, 2024) - Initial release
+  - Complete database schema
   - Web and mobile applications
   - Multi-portal system
   - Supabase integration
@@ -313,4 +315,4 @@ project/
 
 **Project**: OMBARO Platform
 **Status**: Production Ready ✅
-**Last Updated**: October 2, 2025
+**Last Updated**: January 15, 2025
