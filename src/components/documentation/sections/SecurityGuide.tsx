@@ -332,8 +332,8 @@ const verifyPassword = async (
   "permissions": ["bookings:create", "reviews:create"],
   "iat": 1641234567,
   "exp": 1641321567,
-  "iss": "zexdream-api",
-  "aud": "zexdream-app"
+  "iss": "ombaro-api",
+  "aud": "ombaro-app"
 }`}</pre>
             </div>
             

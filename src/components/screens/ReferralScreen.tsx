@@ -68,7 +68,7 @@ export const ReferralScreen: React.FC<ReferralScreenProps> = ({
               <Gift className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Refer Friends & Earn</h2>
-            <p className="text-white/90">Share ZexDream and earn rewards together!</p>
+            <p className="text-white/90">Share OMBARO and earn rewards together!</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

@@ -1,11 +1,29 @@
 # OMBARO Platform - Documentation Index
 
+> **Quick Start: See [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) for complete project summary**
+
 ## Overview
 Complete documentation for the OMBARO spa and wellness services management platform with comprehensive database schema, role-based access control, and technical implementation guides.
 
 ---
 
-## Documentation Files
+## Core Documentation
+
+### 📋 PROJECT_OVERVIEW.md
+**Purpose**: Complete project summary and quick reference
+**Contents**:
+- Project status and statistics
+- All applications overview (web, mobile, backend)
+- Database summary (143 tables)
+- Quick start guide
+- Technology stack
+- Documentation roadmap
+
+**Start Here**: This is the best starting point for understanding the entire project.
+
+---
+
+## Detailed Documentation Files
 
 ### 1. DATABASE_SCHEMA_DOCUMENTATION.md
 **Purpose**: Complete database architecture documentation

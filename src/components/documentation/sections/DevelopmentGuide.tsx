@@ -75,7 +75,7 @@ export const DevelopmentGuide: React.FC = () => {
               <div>
                 <h4 className="font-semibold text-neutral-900 mb-2">1. Navigate to Mobile Directory</h4>
                 <div className="bg-neutral-900 rounded-lg p-4">
-                  <code className="text-accent-400 font-mono text-sm">cd ZexDreamMobile</code>
+                  <code className="text-accent-400 font-mono text-sm">cd OmbaroMobile</code>
                 </div>
               </div>
               
@@ -224,7 +224,7 @@ export const DevelopmentGuide: React.FC = () => {
           <div className="card p-6">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Mobile Application</h3>
             <div className="bg-neutral-50 rounded-lg p-4">
-              <pre className="text-sm text-neutral-700 font-mono whitespace-pre-wrap">{`ZexDreamMobile/
+              <pre className="text-sm text-neutral-700 font-mono whitespace-pre-wrap">{`OmbaroMobile/
 ├── src/
 │   ├── components/
 │   │   └── ui/            # Reusable UI components

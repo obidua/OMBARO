@@ -22,9 +22,9 @@ export const ProjectOverview: React.FC = () => {
         <h2 className="text-2xl font-semibold text-neutral-900 mb-4">Project Summary</h2>
         <div className="prose prose-neutral max-w-none">
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            ZexDream is a comprehensive beauty and wellness platform designed to connect customers with spa, salon, 
-            and wellness service providers. It features multi-portal authentication for various user roles including 
-            customers, employees, vendors, and administrators, ensuring a tailored experience for each user type.
+            OMBARO is a comprehensive beauty and wellness platform designed to connect customers with spa, salon,
+            and wellness service providers. It features multi-portal authentication for various user roles including
+            customers, employees, vendors, therapists, and administrators, ensuring a tailored experience for each user type.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
@@ -263,7 +263,7 @@ export const ProjectOverview: React.FC = () => {
           <div className="card p-6">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">Mobile Application Structure</h3>
             <div className="bg-neutral-50 rounded-lg p-4 font-mono text-sm">
-              <pre className="text-neutral-700 whitespace-pre-wrap">{`ZexDreamMobile/
+              <pre className="text-neutral-700 whitespace-pre-wrap">{`OmbaroMobile/
 ├── src/
 │   ├── components/
 │   │   └── ui/        # Reusable UI components

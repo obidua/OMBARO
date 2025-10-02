@@ -121,7 +121,7 @@ dist/`}</pre>
                 <h4 className="font-semibold text-neutral-900 mb-3">Production Environment</h4>
                 <div className="bg-neutral-900 rounded-lg p-4">
                   <pre className="text-accent-400 font-mono text-sm">{`# Production .env
-VITE_API_URL=https://api.zexdream.com
+VITE_API_URL=https://api.ombaro.com
 VITE_MAPS_API_KEY=prod_google_maps_key
 VITE_SUPABASE_URL=https://prod.supabase.co
 VITE_SUPABASE_ANON_KEY=prod_anon_key
@@ -133,7 +133,7 @@ VITE_STRIPE_PUBLIC_KEY=pk_live_...`}</pre>
                 <h4 className="font-semibold text-neutral-900 mb-3">Staging Environment</h4>
                 <div className="bg-neutral-900 rounded-lg p-4">
                   <pre className="text-accent-400 font-mono text-sm">{`# Staging .env
-VITE_API_URL=https://staging-api.zexdream.com
+VITE_API_URL=https://staging-api.ombaro.com
 VITE_MAPS_API_KEY=staging_google_maps_key
 VITE_SUPABASE_URL=https://staging.supabase.co
 VITE_SUPABASE_ANON_KEY=staging_anon_key
@@ -366,7 +366,7 @@ VITE_NODE_ENV=development`}</pre>
               </div>
               
               <div className="bg-neutral-900 rounded-lg p-3">
-                <pre className="text-accent-400 font-mono text-xs">{`VITE_API_URL=https://staging-api.zexdream.com
+                <pre className="text-accent-400 font-mono text-xs">{`VITE_API_URL=https://staging-api.ombaro.com
 VITE_NODE_ENV=staging`}</pre>
               </div>
             </div>
@@ -392,7 +392,7 @@ VITE_NODE_ENV=staging`}</pre>
               </div>
               
               <div className="bg-neutral-900 rounded-lg p-3">
-                <pre className="text-accent-400 font-mono text-xs">{`VITE_API_URL=https://api.zexdream.com
+                <pre className="text-accent-400 font-mono text-xs">{`VITE_API_URL=https://api.ombaro.com
 VITE_NODE_ENV=production`}</pre>
               </div>
             </div>
@@ -428,7 +428,7 @@ VITE_NODE_ENV=production`}</pre>
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.zexdream.com"
+        "EXPO_PUBLIC_API_URL": "https://api.ombaro.com"
       }
     }
   },

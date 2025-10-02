@@ -414,7 +414,7 @@ export const APIIntegration: React.FC = () => {
             
             <div className="bg-neutral-900 rounded-lg p-4 mb-4">
               <pre className="text-accent-400 font-mono text-sm">{`# .env
-VITE_API_URL=https://api.zexdream.com
+VITE_API_URL=https://api.ombaro.com
 VITE_MAPS_API_KEY=your_google_maps_key
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_anon_key
@@ -438,7 +438,7 @@ VITE_STRIPE_PUBLIC_KEY=your_stripe_key`}</pre>
             
             <div className="bg-neutral-900 rounded-lg p-4 mb-4">
               <pre className="text-accent-400 font-mono text-sm">{`# .env
-EXPO_PUBLIC_API_URL=https://api.zexdream.com
+EXPO_PUBLIC_API_URL=https://api.ombaro.com
 EXPO_PUBLIC_MAPS_API_KEY=your_google_maps_key
 EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key

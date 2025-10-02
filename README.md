@@ -1,5 +1,7 @@
 # OMBARO - Beauty & Wellness Platform
 
+> **Complete project overview available in [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)**
+
 A comprehensive beauty and wellness platform with web, mobile, and backend applications, featuring multi-portal authentication for customers, employees, vendors, therapists, and administrators.
 
 ## Project Structure
