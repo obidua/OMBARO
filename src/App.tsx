@@ -11,6 +11,8 @@ import { EmployeeDashboardScreen } from './components/auth/EmployeeDashboardScre
 import { SpaOnboardingScreen } from './components/auth/SpaOnboardingScreen';
 import { VendorDashboardScreen } from './components/auth/VendorDashboardScreen';
 import { AdminDashboardScreen } from './components/auth/AdminDashboardScreen';
+import { TherapistLoginScreen } from './components/auth/TherapistLoginScreen';
+import { TherapistDashboardScreen } from './components/therapist/TherapistDashboardScreen';
 import { MobileInputScreen } from './components/auth/MobileInputScreen';
 import { OTPScreen } from './components/auth/OTPScreen';
 import { ProfileSetupScreen } from './components/auth/ProfileSetupScreen';
@@ -50,6 +52,8 @@ function App() {
       setCurrentStep('employeeLogin');
     } else if (userType === 'vendorLogin') {
       setCurrentStep('vendorLogin');
+    } else if (userType === 'therapistLogin') {
+      setCurrentStep('therapistLogin');
     } else if (userType === 'adminLogin') {
       setCurrentStep('adminLogin');
     } else if (userType === 'roleSelection') {
@@ -117,7 +121,61 @@ function App() {
             error={authState.error}
           />
         );
-      
+
+      case 'therapistLogin':
+        return (
+          <TherapistLoginScreen
+            onBack={() => setCurrentStep('welcome')}
+            onLogin={(credentials) => {
+              // Mock therapist login
+              const mockTherapist = {
+                id: '1',
+                vendor_id: 'vendor_1',
+                name: 'Priya Sharma',
+                email: credentials.email,
+                mobile: '9876543210',
+                specialization: ['Swedish Massage', 'Deep Tissue', 'Aromatherapy'],
+                experience_years: 5,
+                certification: ['Certified Massage Therapist'],
+                rating: 4.8,
+                total_reviews: 156,
+                status: 'active' as const,
+                availability_status: 'available' as const,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              };
+              // In real app, this would validate credentials against therapists table
+              console.log('Therapist login:', credentials);
+              setCurrentStep('therapistDashboard');
+              // Store therapist data in auth state
+            }}
+          />
+        );
+
+      case 'therapistDashboard':
+        return (
+          <TherapistDashboardScreen
+            therapist={{
+              id: '1',
+              vendor_id: 'vendor_1',
+              name: 'Priya Sharma',
+              email: 'priya.sharma@example.com',
+              mobile: '9876543210',
+              specialization: ['Swedish Massage', 'Deep Tissue', 'Aromatherapy'],
+              experience_years: 5,
+              certification: ['Certified Massage Therapist'],
+              rating: 4.8,
+              total_reviews: 156,
+              status: 'active',
+              availability_status: 'available',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }}
+            onNavigate={(screen) => setCurrentStep(screen)}
+            onLogout={logout}
+          />
+        );
+
       case 'adminLogin':
         return (
           <AuthLoginScreen

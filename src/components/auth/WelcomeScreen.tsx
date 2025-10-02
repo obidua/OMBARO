@@ -89,34 +89,40 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
           </Button>
           
           {/* Portal Access Buttons */}
-          <div className="flex justify-center space-x-6 mt-6">
+          <div className="grid grid-cols-3 gap-3 mt-6">
             <button
               onClick={() => onGetStarted('employeeLogin')}
-              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
             >
               Employee
             </button>
             <button
               onClick={() => onGetStarted('vendorLogin')}
-              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
             >
               Vendor
             </button>
             <button
+              onClick={() => onGetStarted('therapistLogin')}
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
+            >
+              Therapist
+            </button>
+            <button
               onClick={() => onGetStarted('adminLogin')}
-              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
             >
               Admin
             </button>
             <button
               onClick={() => onGetStarted('roleSelection')}
-              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
             >
               Departments
             </button>
             <button
               onClick={() => onGetStarted('docPortal')}
-              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium"
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
             >
               Doc
             </button>
