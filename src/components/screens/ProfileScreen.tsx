@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, Calendar, Edit, LogOut, Settings, Heart, Gift, HelpCircle, Shield, Bell } from 'lucide-react';
+import { User, Mail, Phone, Calendar, CreditCard as Edit, LogOut, Settings, Heart, Gift, HelpCircle, Shield, Bell } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { User as UserType } from '../../types/auth';
 

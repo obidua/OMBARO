@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Database, Cloud, Shield, Zap, GitBranch } from 'lucide-react';
+import { LayoutGrid as Layout, Database, Cloud, Shield, Zap, GitBranch } from 'lucide-react';
 
 export const ProjectBlueprint: React.FC = () => {
   return (

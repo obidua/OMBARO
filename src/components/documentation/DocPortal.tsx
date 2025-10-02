@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Search, Book, Layout, Code, GitBranch, Database, Shield, Cloud } from 'lucide-react';
+import { ArrowLeft, Search, Book, LayoutGrid as Layout, Code, GitBranch, Database, Shield, Cloud } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { ProjectOverview } from './sections/ProjectOverview';

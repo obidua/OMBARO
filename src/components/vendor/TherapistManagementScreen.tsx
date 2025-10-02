@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Plus, Search, Filter, User, Star, MapPin, Clock, Edit, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Search, Filter, User, Star, MapPin, Clock, CreditCard as Edit, Trash2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Therapist } from '../../types/therapist';

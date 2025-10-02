@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book, Layout, Code } from 'lucide-react';
+import { Book, LayoutGrid as Layout, Code } from 'lucide-react';
 import { DocPortal } from '../documentation/DocPortal';
 
 interface DocPortalScreenProps {
