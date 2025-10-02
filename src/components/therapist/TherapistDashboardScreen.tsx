@@ -138,6 +138,38 @@ export const TherapistDashboardScreen: React.FC<TherapistDashboardScreenProps> =
               <XCircle className="w-6 h-6" />
               <span>Leave Requests</span>
             </Button>
+            <Button
+              onClick={() => onNavigate('earnings')}
+              variant="outline"
+              className="flex flex-col items-center space-y-2 h-auto py-4"
+            >
+              <TrendingUp className="w-6 h-6" />
+              <span>Earnings</span>
+            </Button>
+            <Button
+              onClick={() => onNavigate('performance')}
+              variant="outline"
+              className="flex flex-col items-center space-y-2 h-auto py-4"
+            >
+              <Star className="w-6 h-6" />
+              <span>Performance</span>
+            </Button>
+            <Button
+              onClick={() => onNavigate('therapistProfile')}
+              variant="outline"
+              className="flex flex-col items-center space-y-2 h-auto py-4"
+            >
+              <User className="w-6 h-6" />
+              <span>Profile</span>
+            </Button>
+            <Button
+              onClick={onLogout}
+              variant="outline"
+              className="flex flex-col items-center space-y-2 h-auto py-4 border-red-200 hover:border-red-300"
+            >
+              <CheckCircle className="w-6 h-6 text-red-600" />
+              <span className="text-red-600">Logout</span>
+            </Button>
           </div>
         </div>
 

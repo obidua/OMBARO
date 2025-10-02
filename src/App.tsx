@@ -18,6 +18,12 @@ import { TherapistFormScreen } from './components/vendor/TherapistFormScreen';
 import { AssignTaskScreen } from './components/vendor/AssignTaskScreen';
 import { MyAssignmentsScreen } from './components/therapist/MyAssignmentsScreen';
 import { TherapistTrackingScreen } from './components/screens/TherapistTrackingScreen';
+import { TherapistScheduleScreen } from './components/therapist/TherapistScheduleScreen';
+import { TherapistLocationScreen } from './components/therapist/TherapistLocationScreen';
+import { TherapistLeavesScreen } from './components/therapist/TherapistLeavesScreen';
+import { TherapistEarningsScreen } from './components/therapist/TherapistEarningsScreen';
+import { TherapistPerformanceScreen } from './components/therapist/TherapistPerformanceScreen';
+import { TherapistProfileScreen } from './components/therapist/TherapistProfileScreen';
 import { MobileInputScreen } from './components/auth/MobileInputScreen';
 import { OTPScreen } from './components/auth/OTPScreen';
 import { ProfileSetupScreen } from './components/auth/ProfileSetupScreen';
@@ -190,6 +196,48 @@ function App() {
         return (
           <MyAssignmentsScreen
             therapistId="therapist_1"
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'schedule':
+        return (
+          <TherapistScheduleScreen
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'location':
+        return (
+          <TherapistLocationScreen
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'leaves':
+        return (
+          <TherapistLeavesScreen
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'earnings':
+        return (
+          <TherapistEarningsScreen
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'performance':
+        return (
+          <TherapistPerformanceScreen
+            onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'therapistProfile':
+        return (
+          <TherapistProfileScreen
             onBack={() => setCurrentStep('therapistDashboard')}
           />
         );
