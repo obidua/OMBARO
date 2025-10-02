@@ -29,11 +29,13 @@ export const DatabaseSchema: React.FC = () => {
     { name: 'user_bank_details', category: 'auth', description: 'Encrypted bank account information', icon: DollarSign, color: 'blue' },
     { name: 'emergency_contacts', category: 'auth', description: 'Emergency contact information for users', icon: Users, color: 'blue' },
 
-    // Departments & Roles
+    // Departments & Roles (7 tables) - ACTUAL TABLES ONLY
     { name: 'departments', category: 'organization', description: 'All 18 departments with hierarchy and budget allocation', icon: Building, color: 'purple' },
     { name: 'department_hierarchy', category: 'organization', description: 'Complex organizational structure relationships', icon: Building, color: 'purple' },
     { name: 'roles', category: 'organization', description: 'Role definitions with permissions and categories', icon: UserCog, color: 'purple' },
+    { name: 'permissions', category: 'organization', description: 'System permissions and access control', icon: Shield, color: 'purple' },
     { name: 'permission_modules', category: 'organization', description: 'Granular permission modules and actions', icon: Shield, color: 'purple' },
+    { name: 'role_permissions', category: 'organization', description: 'Role to permission mapping', icon: Shield, color: 'purple' },
     { name: 'role_assignment_history', category: 'organization', description: 'Audit trail of role assignments', icon: FileText, color: 'purple' },
     { name: 'delegation_history', category: 'organization', description: 'Temporary role delegation tracking', icon: Users, color: 'purple' },
 
@@ -54,15 +56,20 @@ export const DatabaseSchema: React.FC = () => {
     { name: 'performance_reviews', category: 'hr', description: 'Employee performance evaluations', icon: TrendingUp, color: 'green' },
     { name: 'training_records', category: 'hr', description: 'Employee training and certification history', icon: FileText, color: 'green' },
 
-    // Vendors
+    // Vendors (13 tables) - ACTUAL TABLES ONLY
     { name: 'vendors', category: 'vendors', description: 'Spa/salon vendor profiles and business details', icon: Building, color: 'orange' },
     { name: 'vendor_applications', category: 'vendors', description: 'Vendor self-signup applications', icon: FileText, color: 'orange' },
     { name: 'vendor_application_history', category: 'vendors', description: 'Application status change history', icon: FileText, color: 'orange' },
     { name: 'vendor_staff', category: 'vendors', description: 'Staff members of vendor businesses', icon: Users, color: 'orange' },
     { name: 'vendor_documents', category: 'vendors', description: 'Vendor legal documents and licenses', icon: FileText, color: 'orange' },
     { name: 'vendor_services', category: 'vendors', description: 'Services offered by each vendor', icon: Package, color: 'orange' },
-    { name: 'vendor_availability', category: 'vendors', description: 'Vendor service area coverage', icon: Building, color: 'orange' },
-    { name: 'vendor_payouts', category: 'vendors', description: 'Vendor payment history', icon: DollarSign, color: 'orange' },
+    { name: 'vendor_availability', category: 'vendors', description: 'Vendor service area coverage and hours', icon: Building, color: 'orange' },
+    { name: 'vendor_payouts', category: 'vendors', description: 'Vendor payment history and settlements', icon: DollarSign, color: 'orange' },
+    { name: 'vendor_bank_accounts', category: 'vendors', description: 'Vendor bank account details', icon: DollarSign, color: 'orange' },
+    { name: 'vendor_ratings', category: 'vendors', description: 'Vendor rating and review summaries', icon: TrendingUp, color: 'orange' },
+    { name: 'vendor_reviews', category: 'vendors', description: 'Customer reviews for vendors', icon: FileText, color: 'orange' },
+    { name: 'vendor_contracts', category: 'vendors', description: 'Vendor legal contracts', icon: FileText, color: 'orange' },
+    { name: 'vendor_compliance', category: 'vendors', description: 'Vendor compliance and certification tracking', icon: Shield, color: 'orange' },
 
     // Therapists
     { name: 'therapists', category: 'therapists', description: 'Therapist profiles with certifications and ratings', icon: Users, color: 'teal' },
@@ -74,17 +81,20 @@ export const DatabaseSchema: React.FC = () => {
     { name: 'therapist_performance', category: 'therapists', description: 'Monthly performance metrics and KPIs', icon: TrendingUp, color: 'teal' },
     { name: 'assignment_timeline', category: 'therapists', description: 'Assignment status change history', icon: Calendar, color: 'teal' },
 
-    // Services
+    // Services (13 tables) - ACTUAL TABLES ONLY
     { name: 'services', category: 'services', description: '25+ massage and spa services catalog', icon: Package, color: 'pink' },
     { name: 'service_categories', category: 'services', description: 'Service categorization and hierarchy', icon: Package, color: 'pink' },
     { name: 'service_packages', category: 'services', description: 'Bundled service packages with discounts', icon: Package, color: 'pink' },
     { name: 'service_variants', category: 'services', description: 'Service duration and price variations', icon: Package, color: 'pink' },
     { name: 'service_pricing_tiers', category: 'services', description: 'Tiered pricing for services', icon: DollarSign, color: 'pink' },
-    { name: 'addon_services', category: 'services', description: 'Additional services and enhancements', icon: Package, color: 'pink' },
-    { name: 'service_reviews', category: 'services', description: 'Customer reviews and ratings', icon: FileText, color: 'pink' },
+    { name: 'addon_services', category: 'services', description: 'Add-on services and enhancements', icon: Package, color: 'pink' },
+    { name: 'service_reviews', category: 'services', description: 'Customer service reviews and ratings', icon: FileText, color: 'pink' },
     { name: 'service_availability', category: 'services', description: 'Service geographic availability', icon: Building, color: 'pink' },
     { name: 'service_tags', category: 'services', description: 'Service tags for categorization', icon: Package, color: 'pink' },
+    { name: 'service_tag_mapping', category: 'services', description: 'Service to tag mapping table', icon: Package, color: 'pink' },
     { name: 'popular_services', category: 'services', description: 'Trending and popular services', icon: TrendingUp, color: 'pink' },
+    { name: 'reviews', category: 'services', description: 'General reviews and ratings', icon: FileText, color: 'pink' },
+    { name: 'service_execution_log', category: 'services', description: 'Service delivery and completion logs', icon: Calendar, color: 'pink' },
 
     // Bookings
     { name: 'bookings', category: 'bookings', description: 'Customer service bookings', icon: Calendar, color: 'indigo' },
@@ -112,10 +122,11 @@ export const DatabaseSchema: React.FC = () => {
     { name: 'financial_reports', category: 'finance', description: 'Financial summaries and reports', icon: BarChart3, color: 'emerald' },
     { name: 'tax_records', category: 'finance', description: 'Tax filings and records', icon: FileText, color: 'emerald' },
 
-    // Customers
+    // Customers (10 tables) - ACTUAL TABLES ONLY
     { name: 'customers', category: 'customers', description: 'Customer profiles with loyalty and preferences', icon: Users, color: 'cyan' },
     { name: 'customer_addresses', category: 'customers', description: 'Saved customer addresses', icon: Building, color: 'cyan' },
     { name: 'customer_segments', category: 'customers', description: 'Customer grouping and segmentation', icon: Users, color: 'cyan' },
+    { name: 'customer_segment_mapping', category: 'customers', description: 'Customer to segment mapping', icon: Users, color: 'cyan' },
     { name: 'customer_preferences', category: 'customers', description: 'Service and communication preferences', icon: Settings, color: 'cyan' },
     { name: 'customer_loyalty_tiers', category: 'customers', description: 'Loyalty program levels', icon: TrendingUp, color: 'cyan' },
     { name: 'loyalty_points_transactions', category: 'customers', description: 'Points earning and redemption', icon: DollarSign, color: 'cyan' },
@@ -123,73 +134,67 @@ export const DatabaseSchema: React.FC = () => {
     { name: 'customer_complaints', category: 'customers', description: 'Complaint management system', icon: HelpCircle, color: 'cyan' },
     { name: 'customer_communication_log', category: 'customers', description: 'All customer communications', icon: FileText, color: 'cyan' },
 
-    // Marketing
-    { name: 'campaigns', category: 'marketing', description: 'Marketing campaigns and analytics', icon: TrendingUp, color: 'rose' },
-    { name: 'campaign_targets', category: 'marketing', description: 'Campaign audience targeting', icon: Users, color: 'rose' },
+    // Marketing (10 tables) - ACTUAL TABLES ONLY
+    { name: 'campaigns', category: 'marketing', description: 'Marketing campaigns', icon: TrendingUp, color: 'rose' },
     { name: 'campaign_analytics', category: 'marketing', description: 'Campaign performance metrics', icon: BarChart3, color: 'rose' },
     { name: 'promotions', category: 'marketing', description: 'Discount codes and promotional offers', icon: TrendingUp, color: 'rose' },
-    { name: 'promotion_rules', category: 'marketing', description: 'Promotion conditions and rules', icon: Settings, color: 'rose' },
     { name: 'promotion_usage', category: 'marketing', description: 'Promo code usage tracking', icon: BarChart3, color: 'rose' },
-    { name: 'coupons', category: 'marketing', description: 'Coupon codes management', icon: Package, color: 'rose' },
-    { name: 'referral_programs', category: 'marketing', description: 'Referral campaign setup', icon: Users, color: 'rose' },
+    { name: 'coupon_codes', category: 'marketing', description: 'Coupon code generation and management', icon: Package, color: 'rose' },
+    { name: 'coupon_usages', category: 'marketing', description: 'Coupon redemption tracking', icon: BarChart3, color: 'rose' },
+    { name: 'referral_rewards', category: 'marketing', description: 'Referral reward tracking', icon: Users, color: 'rose' },
     { name: 'email_templates', category: 'marketing', description: 'Email template library', icon: FileText, color: 'rose' },
-    { name: 'sms_templates', category: 'marketing', description: 'SMS template library', icon: FileText, color: 'rose' },
 
-    // Support
-    { name: 'support_tickets', category: 'support', description: 'Customer support tickets', icon: HelpCircle, color: 'yellow' },
+    // Support (3 tables) - ACTUAL TABLES ONLY
+    { name: 'support_tickets', category: 'support', description: 'Customer support ticket system', icon: HelpCircle, color: 'yellow' },
     { name: 'ticket_messages', category: 'support', description: 'Ticket conversation messages', icon: FileText, color: 'yellow' },
-    { name: 'ticket_categories', category: 'support', description: 'Support ticket categorization', icon: Package, color: 'yellow' },
-    { name: 'ticket_priorities', category: 'support', description: 'Priority level management', icon: AlertTriangle, color: 'yellow' },
-    { name: 'ticket_sla', category: 'support', description: 'SLA tracking and compliance', icon: Calendar, color: 'yellow' },
-    { name: 'canned_responses', category: 'support', description: 'Quick response templates', icon: FileText, color: 'yellow' },
-    { name: 'chat_conversations', category: 'support', description: 'Live chat sessions', icon: FileText, color: 'yellow' },
-    { name: 'notifications', category: 'support', description: 'Push, email, and SMS notifications', icon: Bell, color: 'yellow' },
+    { name: 'notifications', category: 'support', description: 'System notifications and alerts', icon: Bell, color: 'yellow' },
 
-    // Legal & Compliance
-    { name: 'contracts', category: 'legal', description: 'Legal contracts and agreements', icon: FileText, color: 'red' },
-    { name: 'contract_types', category: 'legal', description: 'Contract categorization', icon: Package, color: 'red' },
-    { name: 'legal_documents', category: 'legal', description: 'Legal document repository', icon: FileText, color: 'red' },
-    { name: 'compliance_requirements', category: 'legal', description: 'Regulatory compliance tracking', icon: Shield, color: 'red' },
-    { name: 'compliance_audits', category: 'legal', description: 'Audit records and findings', icon: FileText, color: 'red' },
-    { name: 'litigation_cases', category: 'legal', description: 'Legal case tracking', icon: FileText, color: 'red' },
-    { name: 'legal_notices', category: 'legal', description: 'Legal notifications', icon: Bell, color: 'red' },
-    { name: 'regulatory_filings', category: 'legal', description: 'Government filing records', icon: FileText, color: 'red' },
+    // Legal & Compliance (4 tables) - ACTUAL TABLES ONLY
+    { name: 'legal_documents', category: 'legal', description: 'Legal document repository with version control', icon: FileText, color: 'red' },
+    { name: 'compliance_audits', category: 'legal', description: 'Compliance audit records and findings', icon: Shield, color: 'red' },
+    { name: 'data_retention_policies', category: 'legal', description: 'Data retention and deletion policies', icon: FileText, color: 'red' },
+    { name: 'gdpr_requests', category: 'legal', description: 'GDPR data access and deletion requests', icon: Shield, color: 'red' },
 
-    // Operations & Inventory
-    { name: 'inventory_items', category: 'operations', description: 'Product inventory tracking', icon: Package, color: 'amber' },
-    { name: 'inventory_categories', category: 'operations', description: 'Inventory categorization', icon: Package, color: 'amber' },
-    { name: 'stock_movements', category: 'operations', description: 'Stock in/out tracking', icon: TrendingUp, color: 'amber' },
-    { name: 'purchase_orders', category: 'operations', description: 'Purchase order management', icon: FileText, color: 'amber' },
-    { name: 'suppliers', category: 'operations', description: 'Supplier database', icon: Building, color: 'amber' },
-    { name: 'equipment_registry', category: 'operations', description: 'Equipment asset tracking', icon: Package, color: 'amber' },
-    { name: 'maintenance_schedules', category: 'operations', description: 'Maintenance planning', icon: Calendar, color: 'amber' },
-    { name: 'service_areas', category: 'operations', description: 'Geographic service zones', icon: Building, color: 'amber' },
-    { name: 'operational_metrics', category: 'operations', description: 'Operational KPI tracking', icon: BarChart3, color: 'amber' },
-    { name: 'quality_checks', category: 'operations', description: 'Quality assurance records', icon: Shield, color: 'amber' },
+    // Operations & Inventory (6 tables) - ACTUAL TABLES ONLY
+    { name: 'inventory_items', category: 'operations', description: 'Product inventory with SKU, stock levels, and pricing', icon: Package, color: 'amber' },
+    { name: 'stock_transactions', category: 'operations', description: 'Stock movements: purchase, sale, adjustment, transfer', icon: TrendingUp, color: 'amber' },
+    { name: 'suppliers', category: 'operations', description: 'Supplier directory with contact and payment terms', icon: Building, color: 'amber' },
+    { name: 'purchase_orders', category: 'operations', description: 'Purchase order management with approval workflow', icon: FileText, color: 'amber' },
+    { name: 'warehouses', category: 'operations', description: 'Warehouse locations with capacity tracking', icon: Building, color: 'amber' },
+    { name: 'asset_tracking', category: 'operations', description: 'Equipment and asset tracking with maintenance dates', icon: Package, color: 'amber' },
 
-    // Analytics
+    // Analytics (6 tables) - ACTUAL TABLES ONLY
     { name: 'analytics_events', category: 'analytics', description: 'User behavior tracking events', icon: BarChart3, color: 'violet' },
-    { name: 'user_behavior_tracking', category: 'analytics', description: 'Detailed user action tracking', icon: Users, color: 'violet' },
-    { name: 'conversion_funnels', category: 'analytics', description: 'Conversion analysis', icon: TrendingUp, color: 'violet' },
-    { name: 'revenue_analytics', category: 'analytics', description: 'Revenue tracking and forecasting', icon: DollarSign, color: 'violet' },
-    { name: 'operational_reports', category: 'analytics', description: 'Operations performance reports', icon: BarChart3, color: 'violet' },
-    { name: 'performance_metrics', category: 'analytics', description: 'System performance metrics', icon: BarChart3, color: 'violet' },
-    { name: 'dashboard_configurations', category: 'analytics', description: 'Custom dashboard setups', icon: Settings, color: 'violet' },
-    { name: 'custom_reports', category: 'analytics', description: 'User-defined reports', icon: FileText, color: 'violet' },
+    { name: 'page_views', category: 'analytics', description: 'Page view tracking with device and location data', icon: Users, color: 'violet' },
+    { name: 'conversion_tracking', category: 'analytics', description: 'Conversion events: signup, booking, payment, referral', icon: TrendingUp, color: 'violet' },
+    { name: 'funnel_analytics', category: 'analytics', description: 'Conversion funnel analysis with drop-off rates', icon: DollarSign, color: 'violet' },
+    { name: 'cohort_analysis', category: 'analytics', description: 'User cohort retention and revenue analysis', icon: BarChart3, color: 'violet' },
+    { name: 'revenue_analytics', category: 'analytics', description: 'Revenue tracking by category with commissions', icon: DollarSign, color: 'violet' },
 
-    // System
+    // System (7 tables) - ACTUAL TABLES ONLY
     { name: 'system_settings', category: 'system', description: 'Dynamic system configuration', icon: Settings, color: 'gray' },
     { name: 'feature_flags', category: 'system', description: 'Feature rollout management', icon: Settings, color: 'gray' },
     { name: 'api_keys', category: 'system', description: 'API key management', icon: Key, color: 'gray' },
-    { name: 'webhooks', category: 'system', description: 'Webhook configuration', icon: Settings, color: 'gray' },
-    { name: 'scheduled_jobs', category: 'system', description: 'Cron job scheduling', icon: Calendar, color: 'gray' },
-    { name: 'job_queue', category: 'system', description: 'Background job queue', icon: Package, color: 'gray' },
+    { name: 'webhook_endpoints', category: 'system', description: 'Webhook endpoint configuration', icon: Settings, color: 'gray' },
+    { name: 'scheduled_tasks', category: 'system', description: 'Scheduled background tasks', icon: Calendar, color: 'gray' },
     { name: 'app_versions', category: 'system', description: 'Application version tracking', icon: Package, color: 'gray' },
     { name: 'audit_logs', category: 'system', description: 'System-wide audit trail', icon: FileText, color: 'gray' },
     { name: 'error_logs', category: 'system', description: 'Application error tracking', icon: AlertTriangle, color: 'gray' },
-    { name: 'data_backups', category: 'system', description: 'Backup tracking and restoration', icon: Database, color: 'gray' },
-    { name: 'maintenance_windows', category: 'system', description: 'Planned maintenance schedule', icon: Calendar, color: 'gray' },
-    { name: 'rate_limits', category: 'system', description: 'API rate limiting', icon: Shield, color: 'gray' },
+
+    // Location & Geography (5 tables) - NEW CATEGORY
+    { name: 'countries', category: 'location', description: 'Country master data', icon: Building, color: 'slate' },
+    { name: 'states', category: 'location', description: 'State/province master data', icon: Building, color: 'slate' },
+    { name: 'cities', category: 'location', description: 'City master data', icon: Building, color: 'slate' },
+    { name: 'zones', category: 'location', description: 'Service zones and areas', icon: Building, color: 'slate' },
+    { name: 'pincode_master', category: 'location', description: 'Pincode/ZIP code master data', icon: Building, color: 'slate' },
+
+    // Communications (6 tables) - NEW CATEGORY
+    { name: 'email_logs', category: 'communications', description: 'Email delivery logs', icon: FileText, color: 'fuchsia' },
+    { name: 'sms_logs', category: 'communications', description: 'SMS delivery logs', icon: FileText, color: 'fuchsia' },
+    { name: 'push_notifications', category: 'communications', description: 'Push notification history', icon: Bell, color: 'fuchsia' },
+    { name: 'whatsapp_logs', category: 'communications', description: 'WhatsApp message logs', icon: FileText, color: 'fuchsia' },
+    { name: 'in_app_messages', category: 'communications', description: 'In-app message center', icon: FileText, color: 'fuchsia' },
+    { name: 'notification_queue', category: 'communications', description: 'Notification queue for processing', icon: Package, color: 'fuchsia' },
   ];
 
   const categories = [
@@ -208,6 +213,8 @@ export const DatabaseSchema: React.FC = () => {
     { id: 'legal', name: 'Legal & Compliance', count: tables.filter(t => t.category === 'legal').length, color: 'red' },
     { id: 'operations', name: 'Operations & Inventory', count: tables.filter(t => t.category === 'operations').length, color: 'amber' },
     { id: 'analytics', name: 'Analytics', count: tables.filter(t => t.category === 'analytics').length, color: 'violet' },
+    { id: 'location', name: 'Location & Geography', count: tables.filter(t => t.category === 'location').length, color: 'slate' },
+    { id: 'communications', name: 'Communications', count: tables.filter(t => t.category === 'communications').length, color: 'fuchsia' },
     { id: 'system', name: 'System', count: tables.filter(t => t.category === 'system').length, color: 'gray' },
   ];
 
@@ -234,6 +241,8 @@ export const DatabaseSchema: React.FC = () => {
       violet: { bg: 'bg-violet-50', text: 'text-violet-600', border: 'border-violet-200' },
       red: { bg: 'bg-red-50', text: 'text-red-600', border: 'border-red-200' },
       amber: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200' },
+      slate: { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-200' },
+      fuchsia: { bg: 'bg-fuchsia-50', text: 'text-fuchsia-600', border: 'border-fuchsia-200' },
       gray: { bg: 'bg-gray-50', text: 'text-gray-600', border: 'border-gray-200' },
     };
     return colors[color] || colors.gray;
