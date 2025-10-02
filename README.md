@@ -1,10 +1,10 @@
 # OMBARO - Beauty & Wellness Platform
 
-A comprehensive beauty and wellness platform with both web and mobile applications, featuring multi-portal authentication for customers, employees, vendors, therapists, and administrators.
+A comprehensive beauty and wellness platform with web, mobile, and backend applications, featuring multi-portal authentication for customers, employees, vendors, therapists, and administrators.
 
 ## Project Structure
 
-This repository contains two main applications:
+This repository contains three main applications:
 
 ### 1. Web Application (Current Directory)
 - **Technology**: React + TypeScript + Vite
@@ -12,11 +12,19 @@ This repository contains two main applications:
 - **Features**: Responsive web interface, PWA capabilities
 - **Target**: Desktop and mobile browsers
 
-### 2. Mobile Application (`/OmbaroMobile`)
+### 2. Mobile Application (`/ZexDreamMobile`)
 - **Technology**: React Native + Expo + TypeScript
 - **Styling**: React Native StyleSheet
 - **Features**: Native mobile experience for iOS and Android
 - **Target**: iOS and Android app stores
+
+### 3. Backend API (`/backend`)
+- **Technology**: FastAPI + Python 3.11+
+- **Database**: PostgreSQL 15+
+- **Caching**: Redis 7+
+- **Authentication**: JWT (JSON Web Tokens)
+- **Features**: RESTful API, async/await, comprehensive role-based access control
+- **Documentation**: Auto-generated OpenAPI (Swagger/ReDoc)
 
 ## Features
 
@@ -58,6 +66,65 @@ This repository contains two main applications:
 
 ## Getting Started
 
+### Backend API
+
+1. Navigate to backend directory:
+   ```bash
+   cd backend
+   ```
+
+2. Create virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your database and Redis credentials
+   ```
+
+5. Install and start PostgreSQL:
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install postgresql postgresql-contrib
+   sudo systemctl start postgresql
+
+   # macOS
+   brew install postgresql
+   brew services start postgresql
+
+   # Create database
+   createdb ombaro_db
+   ```
+
+6. Install and start Redis:
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install redis-server
+   sudo systemctl start redis-server
+
+   # macOS
+   brew install redis
+   brew services start redis
+   ```
+
+7. Start development server:
+   ```bash
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
+
+8. Access API documentation:
+   - Swagger UI: http://localhost:8000/docs
+   - ReDoc: http://localhost:8000/redoc
+   - Health Check: http://localhost:8000/health
+
 ### Web Application
 
 1. Install dependencies:
@@ -65,12 +132,18 @@ This repository contains two main applications:
    npm install
    ```
 
-2. Start development server:
+2. Configure environment:
+   ```bash
+   # Create .env file with API URL
+   VITE_API_URL=http://localhost:8000
+   ```
+
+3. Start development server:
    ```bash
    npm run dev
    ```
 
-3. Build for production:
+4. Build for production:
    ```bash
    npm run build
    ```
@@ -87,12 +160,18 @@ This repository contains two main applications:
    npm install
    ```
 
-3. Start Expo development server:
+3. Configure environment:
+   ```bash
+   # Create .env file with API URL
+   EXPO_PUBLIC_API_URL=http://localhost:8000
+   ```
+
+4. Start Expo development server:
    ```bash
    npx expo start
    ```
 
-4. Run on platforms:
+5. Run on platforms:
    - iOS: Press `i` or scan QR with iOS device
    - Android: Press `a` or scan QR with Android device
 
@@ -114,6 +193,18 @@ This repository contains two main applications:
 - **Styling**: React Native StyleSheet
 - **State Management**: React Context
 - **Build**: Expo Build Service
+
+### Backend API
+- **Framework**: FastAPI 0.109+
+- **Language**: Python 3.11+
+- **Database**: PostgreSQL 15+ with asyncpg
+- **ORM**: SQLAlchemy 2.0 (async)
+- **Caching**: Redis 7+ with aioredis
+- **Authentication**: JWT with python-jose
+- **Password Hashing**: bcrypt with passlib
+- **CORS**: FastAPI middleware
+- **Documentation**: OpenAPI 3.0 (Swagger UI + ReDoc)
+- **Server**: Uvicorn with async workers
 
 ## Shared Components
 
@@ -155,16 +246,141 @@ Both applications share:
 
 ## Environment Setup
 
+### Backend (.env)
+```
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/ombaro_db
+ASYNC_DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/ombaro_db
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_URL=redis://localhost:6379/0
+
+# JWT
+SECRET_KEY=your-secret-key-here-change-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# API
+API_V1_PREFIX=/api/v1
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+```
+
 ### Web (.env)
 ```
-VITE_API_URL=your_api_url
+VITE_API_URL=http://localhost:8000
 VITE_MAPS_API_KEY=your_maps_api_key
 ```
 
 ### Mobile (.env)
 ```
-EXPO_PUBLIC_API_URL=your_api_url
+EXPO_PUBLIC_API_URL=http://localhost:8000
 EXPO_PUBLIC_MAPS_API_KEY=your_maps_api_key
+```
+
+## Documentation
+
+Comprehensive documentation is available in the following files:
+
+### API Documentation
+- **[API_DOCUMENTATION.md](./API_DOCUMENTATION.md)**: Complete API reference with endpoints for all roles
+  - Authentication endpoints
+  - Customer portal APIs
+  - Therapist portal APIs
+  - Vendor portal APIs
+  - Employee portal APIs
+  - Admin portal APIs
+  - Error handling and status codes
+  - Rate limiting and pagination
+
+### Redis Guide
+- **[REDIS_GUIDE.md](./REDIS_GUIDE.md)**: Complete Redis integration guide
+  - Installation and setup instructions
+  - Redis architecture and data structure
+  - Use cases (OTP, caching, location tracking, rate limiting)
+  - Role-specific Redis usage
+  - Best practices and troubleshooting
+  - Monitoring and performance optimization
+
+### Role-Specific Guides
+- **[THERAPIST_LOGIN_GUIDE.md](./THERAPIST_LOGIN_GUIDE.md)**: Therapist portal login guide
+- **[VENDOR_ONBOARDING_GUIDE.md](./VENDOR_ONBOARDING_GUIDE.md)**: Vendor onboarding process
+- **[QUICK_START_THERAPIST.md](./QUICK_START_THERAPIST.md)**: Quick start for therapists
+
+### Technical Documentation
+- **[TECHNICAL_IMPLEMENTATION_GUIDE.md](./TECHNICAL_IMPLEMENTATION_GUIDE.md)**: Technical implementation details
+- **[DATABASE_SCHEMA_DOCUMENTATION.md](./DATABASE_SCHEMA_DOCUMENTATION.md)**: Database schema documentation
+- **[COMPLETE_WORKFLOW_GUIDE.md](./COMPLETE_WORKFLOW_GUIDE.md)**: Complete workflow guide
+
+## API Testing
+
+### Using Swagger UI
+1. Start the backend server
+2. Navigate to http://localhost:8000/docs
+3. Click "Authorize" and enter JWT token
+4. Test endpoints interactively
+
+### Using cURL
+```bash
+# Get OTP
+curl -X POST http://localhost:8000/api/v1/auth/send-otp \
+  -H "Content-Type: application/json" \
+  -d '{"mobile": "+919876543210"}'
+
+# Login with OTP
+curl -X POST http://localhost:8000/api/v1/auth/verify-otp \
+  -H "Content-Type: application/json" \
+  -d '{"mobile": "+919876543210", "otp": "123456"}'
+
+# Get profile (with token)
+curl -X GET http://localhost:8000/api/v1/customer/profile \
+  -H "Authorization: Bearer <access_token>"
+```
+
+### Using Postman
+Import the OpenAPI spec from http://localhost:8000/openapi.json
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     Client Layer                         │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │   Web App    │  │  Mobile App  │  │   Admin      │  │
+│  │  (React)     │  │ (React Native)│  │   Portal     │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           │ HTTPS/REST
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│                   API Gateway/Backend                    │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │           FastAPI Application                     │  │
+│  │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐   │  │
+│  │  │  Auth  │ │Customer│ │Therapist│ │ Vendor │   │  │
+│  │  │  APIs  │ │  APIs  │ │  APIs  │ │  APIs  │   │  │
+│  │  └────────┘ └────────┘ └────────┘ └────────┘   │  │
+│  │  ┌────────┐ ┌────────┐                          │  │
+│  │  │Employee│ │ Admin  │      JWT Auth            │  │
+│  │  │  APIs  │ │  APIs  │      Middleware          │  │
+│  │  └────────┘ └────────┘                          │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+              │                         │
+              ▼                         ▼
+┌──────────────────────┐   ┌──────────────────────┐
+│   PostgreSQL DB      │   │      Redis Cache     │
+│                      │   │                      │
+│  ┌───────────────┐  │   │  ┌───────────────┐  │
+│  │ Users         │  │   │  │ OTP Codes     │  │
+│  │ Bookings      │  │   │  │ Sessions      │  │
+│  │ Services      │  │   │  │ Cache Data    │  │
+│  │ Therapists    │  │   │  │ Location      │  │
+│  │ Vendors       │  │   │  │ Rate Limits   │  │
+│  └───────────────┘  │   │  └───────────────┘  │
+└──────────────────────┘   └──────────────────────┘
 ```
 
 ## Contributing
@@ -175,6 +391,7 @@ EXPO_PUBLIC_MAPS_API_KEY=your_maps_api_key
 4. Test on both web and mobile platforms
 5. Ensure responsive design for web
 6. Test on both iOS and Android for mobile
+7. Test API endpoints with Swagger/Postman
 
 ## License
 
@@ -182,4 +399,7 @@ This project is proprietary software. All rights reserved.
 
 ## Support
 
-For technical support or questions, please contact the development team.
+For technical support or questions:
+- API Support: api-support@ombaro.com
+- Frontend Support: frontend@ombaro.com
+- DevOps Support: devops@ombaro.com
