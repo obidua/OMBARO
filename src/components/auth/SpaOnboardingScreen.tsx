@@ -114,6 +114,13 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
     return Object.keys(errors).length === 0;
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (formErrors[field]) {
+      setFormErrors((prev: any) => ({ ...prev, [field]: '' }));
+    }
+  };
+
   const handleGetLiveLocation = async () => {
     setLocationState({ isLoading: true, isSuccess: false, error: null });
 
@@ -125,7 +132,7 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
       });
       return;
     }
-  const handleInputChange = (field: string, value: string) => {
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
@@ -176,12 +183,6 @@ export const SpaOnboardingScreen: React.FC<SpaOnboardingScreenProps> = ({
         maximumAge: 60000
       }
     );
-  };
-
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (formErrors[field]) {
-      setFormErrors((prev: any) => ({ ...prev, [field]: '' }));
-    }
   };
 
   const handleSocialMediaChange = (platform: string, value: string) => {
