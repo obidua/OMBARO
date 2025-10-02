@@ -36,6 +36,9 @@ import { ReviewScreen } from './components/screens/ReviewScreen';
 import { ReferralScreen } from './components/screens/ReferralScreen';
 import { NotificationScreen } from './components/screens/NotificationScreen';
 import { DocPortalScreen } from './components/screens/DocPortalScreen';
+import VendorSignupScreen from './components/auth/VendorSignupScreen';
+import VendorSignupSuccessScreen from './components/auth/VendorSignupSuccessScreen';
+import VendorApprovalScreen from './components/admin/VendorApprovalScreen';
 import { Button } from './components/ui/Button';
 import { UserRole } from './types/auth';
 
@@ -57,6 +60,8 @@ function App() {
       setCurrentStep('employeeLogin');
     } else if (userType === 'vendorLogin') {
       setCurrentStep('vendorLogin');
+    } else if (userType === 'vendorSignup') {
+      setCurrentStep('vendorSignup');
     } else if (userType === 'therapistLogin') {
       setCurrentStep('therapistLogin');
     } else if (userType === 'adminLogin') {
@@ -303,6 +308,7 @@ function App() {
           <AdminDashboardScreen
             onLogout={logout}
             user={authState.user}
+            onNavigate={setCurrentStep}
           />
         );
 
@@ -625,13 +631,35 @@ function App() {
           />
         );
       
+      case 'vendorSignup':
+        return (
+          <VendorSignupScreen
+            onNavigate={setCurrentStep}
+          />
+        );
+
+      case 'vendorSignupSuccess':
+        return (
+          <VendorSignupSuccessScreen
+            onNavigate={setCurrentStep}
+            data={authState.selectedEntity}
+          />
+        );
+
+      case 'vendorApproval':
+        return (
+          <VendorApprovalScreen
+            onNavigate={setCurrentStep}
+          />
+        );
+
       case 'docPortal':
         return (
           <DocPortalScreen
             onBack={() => setCurrentStep('welcome')}
           />
         );
-      
+
       case 'reviewScreen':
         return (
           <ReviewScreen

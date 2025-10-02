@@ -79,7 +79,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
           >
             Sign Up
           </Button>
-          <Button 
+          <Button
             onClick={onGetStarted}
             variant="outline"
             size="lg"
@@ -87,7 +87,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
           >
             Login
           </Button>
-          
+
+          {/* Vendor Signup Button */}
+          <button
+            onClick={() => onGetStarted('vendorSignup')}
+            className="w-full text-center text-sm text-amber-600 hover:text-amber-700 font-medium py-3 px-4 border-2 border-dashed border-amber-300 rounded-lg hover:border-amber-400 transition-all duration-200"
+          >
+            🏪 Become a Vendor Partner
+          </button>
+
           {/* Portal Access Buttons */}
           <div className="grid grid-cols-3 gap-3 mt-6">
             <button

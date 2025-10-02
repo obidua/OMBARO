@@ -12,11 +12,13 @@ import { User } from '../../types/auth';
 interface AdminDashboardScreenProps {
   onLogout: () => void;
   user: any;
+  onNavigate?: (screen: string) => void;
 }
 
 export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
   onLogout,
-  user
+  user,
+  onNavigate
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
@@ -364,6 +366,19 @@ export const AdminDashboardScreen: React.FC<AdminDashboardScreenProps> = ({
                       <div className="text-left">
                         <p className="font-semibold">Location Tracking</p>
                         <p className="text-sm opacity-70">Track employee locations</p>
+                      </div>
+                    </Button>
+
+                    <Button
+                      onClick={() => onNavigate && onNavigate('vendorApproval')}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-16 border-amber-300 hover:border-amber-400 hover:bg-amber-50"
+                    >
+                      <Building className="w-6 h-6 mr-3 text-amber-600" />
+                      <div className="text-left">
+                        <p className="font-semibold text-amber-900">Vendor Approvals</p>
+                        <p className="text-sm opacity-70 text-amber-700">Review vendor applications</p>
                       </div>
                     </Button>
                   </div>
