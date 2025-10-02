@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { supabase } from './src/lib/supabase';
 
-// Import screens
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import MobileInputScreen from './src/screens/MobileInputScreen';
 import OTPScreen from './src/screens/OTPScreen';
@@ -27,14 +27,21 @@ import ChatScreen from './src/screens/ChatScreen';
 import SpaOnboardingScreen from './src/screens/SpaOnboardingScreen';
 import DocPortalScreen from './src/screens/DocPortalScreen';
 import RoleSelectionScreen from './src/screens/RoleSelectionScreen';
-import DocPortalScreen from './src/screens/DocPortalScreen';
-
-// Import context
 import { AuthProvider } from './src/context/AuthContext';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.id);
+    });
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
+  }, []);
+
   return (
     <SafeAreaProvider>
       <AuthProvider>

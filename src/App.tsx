@@ -381,8 +381,8 @@ function App() {
             error={authState.error}
           />
         );
-      
-      case 'profile':
+
+      case 'profileSetup':
         return (
           <ProfileSetupScreen
             onBack={() => setCurrentStep('otp')}
@@ -599,48 +599,7 @@ function App() {
             </div>
           </div>
         );
-      
-      case 'reviewScreen':
-        return (
-          <div className="min-h-screen bg-gray-50 pt-[70px] pb-[70px]">
-            {/* Header with Back Button */}
-            <div className="bg-white shadow-sm border-b border-gray-100">
-              <div className="flex items-center justify-between p-4">
-                <button
-                  onClick={() => setCurrentStep('bookings')}
-                  aria-label="Go back to bookings"
-                  className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center hover:bg-gray-200 transition-colors"
-                >
-                  <ArrowLeft className="w-5 h-5 text-gray-700" />
-                </button>
-                <h1 className="text-lg font-semibold text-gray-900">Rate Your Experience</h1>
-                <div className="w-10" />
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-center flex-1 p-6">
-              <div className="text-center max-w-md mx-auto">
-                {authState.selectedEntity && (
-                  <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                      {authState.selectedEntity.serviceName}
-                    </h2>
-                    <p className="text-gray-600 mb-4">{authState.selectedEntity.salonName}</p>
-                    <p className="text-sm text-gray-500">
-                      {authState.selectedEntity.date} at {authState.selectedEntity.time}
-                    </p>
-                  </div>
-                )}
-                <div className="space-y-3">
-                  <Button onClick={() => setCurrentStep('bookings')} className="w-full">
-                    Submit Review
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      
+
       case 'profile':
         return (
           <ProfileScreen

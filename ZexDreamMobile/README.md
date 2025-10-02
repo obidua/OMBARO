@@ -1,6 +1,6 @@
-# OMBARO Mobile App
+# OMBARO Mobile
 
-React Native mobile application for OMBARO Beauty & Wellness Hub, built with Expo.
+React Native mobile application for OMBARO - Your Beauty & Wellness Platform, built with Expo.
 
 ## Features
 
@@ -34,7 +34,7 @@ React Native mobile application for OMBARO Beauty & Wellness Hub, built with Exp
 
 1. Navigate to the mobile app directory:
    ```bash
-   cd OmbaroMobile
+   cd ZexDreamMobile
    ```
 
 2. Install dependencies:
@@ -55,14 +55,15 @@ React Native mobile application for OMBARO Beauty & Wellness Hub, built with Exp
 ## Project Structure
 
 ```
-OmbaroMobile/
+ZexDreamMobile/
 ├── src/
 │   ├── components/
 │   │   └── ui/           # Reusable UI components
 │   ├── context/          # React Context for state management
 │   ├── screens/          # Screen components
 │   ├── types/            # TypeScript type definitions
-│   └── utils/            # Utility functions
+│   ├── lib/              # Supabase client and utilities
+│   └── services/         # API service layers
 ├── assets/               # Images, fonts, and other assets
 ├── app.json             # Expo configuration
 └── App.tsx              # Main app component
@@ -135,9 +136,18 @@ npx expo build:ios
 Create a `.env` file in the root directory:
 
 ```
-EXPO_PUBLIC_API_URL=your_api_url
+EXPO_PUBLIC_SUPABASE_URL=https://0ec90b57d6e95fcbda19832f.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 EXPO_PUBLIC_MAPS_API_KEY=your_maps_api_key
 ```
+
+## Database Integration
+
+The mobile app connects to the same Supabase backend as the web application, providing:
+- Real-time data synchronization
+- Row Level Security for data protection
+- User authentication with email/password
+- Multi-role portal access (Customer, Employee, Vendor, Admin, Therapist)
 
 ## Contributing
 

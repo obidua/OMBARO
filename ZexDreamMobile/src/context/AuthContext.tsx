@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { UserRole } from '../types/auth';
-import { UserRole } from '../types/auth';
 import { ROLE_DEFINITIONS } from '../types/roles';
+import { supabase } from '../lib/supabase';
+import { authService } from '../services';
 export interface User {
   id?: string;
   name?: string;

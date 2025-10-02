@@ -1,5 +1,5 @@
 {
-  "name": "ombaromobile",
+  "name": "ombaro-mobile",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
@@ -26,7 +26,10 @@
     "expo-linear-gradient": "^12.7.2",
     "@react-native-community/datetimepicker": "^7.6.2",
     "react-native-web": "~0.19.12",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "@supabase/supabase-js": "^2.58.0",
+    "expo-location": "^18.0.1",
+    "expo-notifications": "^0.30.0"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
