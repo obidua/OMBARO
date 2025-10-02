@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Database, Table, Key, Shield, Users, Calendar, FileText, DollarSign, Building, UserCog, Settings, TrendingUp, Package, BarChart3, Bell, HelpCircle, AlertTriangle, Search } from 'lucide-react';
+import { Database, Table, Key, Shield, Users, Calendar, FileText, DollarSign, Building, UserCog, Settings, TrendingUp, Package, BarChart3, Bell, HelpCircle, AlertTriangle, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { tableColumns, type ColumnInfo } from './tableColumns';
 
 interface TableInfo {
   name: string;
@@ -13,6 +14,7 @@ interface TableInfo {
 export const DatabaseSchema: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [expandedTable, setExpandedTable] = useState<string | null>(null);
 
   // Complete table structure from migrations
   const tables: TableInfo[] = [
@@ -318,29 +320,91 @@ export const DatabaseSchema: React.FC = () => {
       </div>
 
       {/* Tables Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="space-y-4">
         {filteredTables.map((table) => {
           const Icon = table.icon;
           const colors = getColorClasses(table.color);
+          const isExpanded = expandedTable === table.name;
+          const columns = tableColumns[table.name] || [];
 
           return (
-            <div key={table.name} className={`card p-6 border-l-4 ${colors.border} hover:shadow-lg transition-shadow`}>
-              <div className="flex items-start space-x-3 mb-4">
-                <div className={`w-10 h-10 ${colors.bg} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                  <Icon className={`w-5 h-5 ${colors.text}`} />
+            <div key={table.name} className={`card border-l-4 ${colors.border} overflow-hidden transition-all`}>
+              {/* Table Header */}
+              <button
+                onClick={() => setExpandedTable(isExpanded ? null : table.name)}
+                className="w-full p-6 text-left hover:bg-neutral-50 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start space-x-3 flex-1">
+                    <div className={`w-10 h-10 ${colors.bg} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                      <Icon className={`w-5 h-5 ${colors.text}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-mono text-sm font-bold text-neutral-900">
+                          {table.name}
+                        </h3>
+                        {columns.length > 0 && (
+                          <span className="text-xs text-neutral-500">
+                            ({columns.length} columns)
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded ${colors.bg} ${colors.text}`}>
+                          {table.category}
+                        </span>
+                        <p className="text-sm text-neutral-600">
+                          {table.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    {isExpanded ? (
+                      <ChevronDown className="w-5 h-5 text-neutral-400" />
+                    ) : (
+                      <ChevronRight className="w-5 h-5 text-neutral-400" />
+                    )}
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-mono text-sm font-bold text-neutral-900 mb-1 break-all">
-                    {table.name}
-                  </h3>
-                  <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded ${colors.bg} ${colors.text}`}>
-                    {table.category}
-                  </span>
+              </button>
+
+              {/* Expanded Column Details */}
+              {isExpanded && columns.length > 0 && (
+                <div className="border-t border-neutral-200 bg-neutral-50 p-6">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-neutral-300">
+                          <th className="text-left py-3 px-4 font-semibold text-neutral-700">Column</th>
+                          <th className="text-left py-3 px-4 font-semibold text-neutral-700">Type</th>
+                          <th className="text-left py-3 px-4 font-semibold text-neutral-700">Constraints</th>
+                          <th className="text-left py-3 px-4 font-semibold text-neutral-700">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {columns.map((column, index) => (
+                          <tr key={column.name} className={index % 2 === 0 ? 'bg-white' : 'bg-neutral-50'}>
+                            <td className="py-3 px-4 font-mono text-xs font-medium text-neutral-900">
+                              {column.name}
+                            </td>
+                            <td className="py-3 px-4 font-mono text-xs text-blue-600">
+                              {column.type}
+                            </td>
+                            <td className="py-3 px-4 text-xs text-neutral-600">
+                              {column.constraints || '-'}
+                            </td>
+                            <td className="py-3 px-4 text-xs text-neutral-700">
+                              {column.description}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-              <p className="text-sm text-neutral-600 leading-relaxed">
-                {table.description}
-              </p>
+              )}
             </div>
           );
         })}
