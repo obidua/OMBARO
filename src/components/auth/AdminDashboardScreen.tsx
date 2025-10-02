@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Users, MapPin, BarChart3, Settings, Shield, AlertTriangle, TrendingUp, DollarSign, UserCheck, Building, Search, Filter, Eye, Edit, Ban, CheckCircle, XCircle, Navigation, UserCog, Lock } from 'lucide-react';
+import { LogOut, Users, MapPin, BarChart3, Settings, Shield, AlertTriangle, TrendingUp, DollarSign, UserCheck, Building, Search, Filter, Eye, CreditCard as Edit, Ban, CheckCircle, XCircle, Navigation, UserCog, Lock } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { LocationTrackingScreen } from '../admin/LocationTrackingScreen';
