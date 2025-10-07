@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Clock, CheckCircle, XCircle, User, Star, TrendingUp, LogOut, DollarSign, BarChart3 } from 'lucide-react';
+import { Calendar, MapPin, Clock, CheckCircle, XCircle, User, Star, TrendingUp, LogOut, DollarSign, BarChart3, Home, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Therapist, TherapistAssignment, TherapistPerformance } from '../../types/therapist';
 

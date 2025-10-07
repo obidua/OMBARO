@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Calendar, Clock, MapPin, User, FileText, Save } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, MapPin, User, FileText, Save, Home, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Therapist, TherapistAssignment } from '../../types/therapist';
@@ -17,6 +17,7 @@ export const AssignTaskScreen: React.FC<AssignTaskScreenProps> = ({
   onBack,
   onAssign
 }) => {
+  const [serviceType, setServiceType] = useState<'at_home' | 'visit_spa'>('at_home');
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_phone: '',
@@ -88,6 +89,62 @@ export const AssignTaskScreen: React.FC<AssignTaskScreenProps> = ({
               <h2 className="font-semibold">{therapist.name}</h2>
               <p className="text-sm text-white/90">{therapist.specialization.join(', ')}</p>
             </div>
+          </div>
+        </div>
+
+        {/* Service Type Selection */}
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Service Type</h2>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setServiceType('at_home')}
+              className={`p-4 rounded-xl border-2 transition-all ${
+                serviceType === 'at_home'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-gray-200 hover:border-blue-300'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  serviceType === 'at_home' ? 'bg-blue-500' : 'bg-blue-100'
+                }`}>
+                  <Home className={`w-6 h-6 ${
+                    serviceType === 'at_home' ? 'text-white' : 'text-blue-600'
+                  }`} />
+                </div>
+                <span className={`text-sm font-medium ${
+                  serviceType === 'at_home' ? 'text-blue-700' : 'text-gray-700'
+                }`}>
+                  At Home Service
+                </span>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setServiceType('visit_spa')}
+              className={`p-4 rounded-xl border-2 transition-all ${
+                serviceType === 'visit_spa'
+                  ? 'border-pink-500 bg-pink-50'
+                  : 'border-gray-200 hover:border-pink-300'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  serviceType === 'visit_spa' ? 'bg-pink-500' : 'bg-pink-100'
+                }`}>
+                  <Building2 className={`w-6 h-6 ${
+                    serviceType === 'visit_spa' ? 'text-white' : 'text-pink-600'
+                  }`} />
+                </div>
+                <span className={`text-sm font-medium ${
+                  serviceType === 'visit_spa' ? 'text-pink-700' : 'text-gray-700'
+                }`}>
+                  Spa Visit
+                </span>
+              </div>
+            </button>
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { TermsAndConditionsModal } from './TermsAndConditionsModal';
 import { CartItem } from '../../types/booking';
+import { ServiceTypeSelector, ServiceType } from '../booking/ServiceTypeSelector';
 
 interface BookingScreenProps {
   cartItems: CartItem[];
@@ -16,6 +17,7 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
   onBack,
   onNavigate
 }) => {
+  const [serviceType, setServiceType] = useState<ServiceType | null>(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -26,6 +28,13 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
     name: '',
     phone: '',
     address: ''
+  });
+  const [homeAddress, setHomeAddress] = useState({
+    street: '',
+    area: '',
+    landmark: '',
+    city: '',
+    pincode: ''
   });
 
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.service.price * item.quantity), 0);
@@ -56,9 +65,12 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
     
     const bookingData = {
       cartItems,
+      serviceType,
       selectedDate,
       selectedTime,
       customerInfo,
+      homeAddress: serviceType === 'at_home' ? homeAddress : null,
+      spaAddress: serviceType === 'visit_spa' ? cartItems[0]?.provider?.address : null,
       termsAccepted,
       totalAmount,
       totalDuration
@@ -66,7 +78,10 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
     onNavigate('payment', bookingData);
   };
 
-  const isFormValid = selectedDate && selectedTime && customerInfo.name && customerInfo.phone && customerInfo.address && termsAccepted;
+  const isAddressValid = serviceType === 'at_home'
+    ? homeAddress.street && homeAddress.area && homeAddress.city && homeAddress.pincode
+    : true;
+  const isFormValid = serviceType && selectedDate && selectedTime && customerInfo.name && customerInfo.phone && isAddressValid && termsAccepted;
   const isReadyForPayment = isFormValid && aadhaarVerified;
 
   return (
@@ -87,6 +102,15 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
       </div>
 
       <div className="p-4 space-y-6">
+        {/* Service Type Selection */}
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <ServiceTypeSelector
+            selectedType={serviceType}
+            onSelect={setServiceType}
+            vendorName={cartItems[0]?.provider?.name || 'this location'}
+          />
+        </div>
+
         {/* Booking Summary */}
         <div className="bg-white rounded-2xl p-4 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Booking Summary</h2>
@@ -175,13 +199,70 @@ export const BookingScreen: React.FC<BookingScreenProps> = ({
               icon={<Clock className="w-5 h-5 text-gray-400" />}
             />
             
-            <Input
-              label="Service Address"
-              placeholder="Enter your complete address"
-              value={customerInfo.address}
-              onChange={(e) => setCustomerInfo(prev => ({ ...prev, address: e.target.value }))}
-              icon={<MapPin className="w-5 h-5 text-gray-400" />}
-            />
+            {serviceType === 'at_home' && (
+              <>
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
+                  <p className="text-sm text-blue-800 font-medium">Service Location: Your Home</p>
+                  <p className="text-xs text-blue-700 mt-1">Professional will visit your address</p>
+                </div>
+
+                <Input
+                  label="Street Address"
+                  placeholder="House/Flat No, Street Name"
+                  value={homeAddress.street}
+                  onChange={(e) => setHomeAddress(prev => ({ ...prev, street: e.target.value }))}
+                  icon={<MapPin className="w-5 h-5 text-gray-400" />}
+                />
+
+                <Input
+                  label="Area/Locality"
+                  placeholder="Area or Locality name"
+                  value={homeAddress.area}
+                  onChange={(e) => setHomeAddress(prev => ({ ...prev, area: e.target.value }))}
+                  icon={<MapPin className="w-5 h-5 text-gray-400" />}
+                />
+
+                <Input
+                  label="Landmark (Optional)"
+                  placeholder="Nearby landmark"
+                  value={homeAddress.landmark}
+                  onChange={(e) => setHomeAddress(prev => ({ ...prev, landmark: e.target.value }))}
+                  icon={<MapPin className="w-5 h-5 text-gray-400" />}
+                />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Input
+                    label="City"
+                    placeholder="City name"
+                    value={homeAddress.city}
+                    onChange={(e) => setHomeAddress(prev => ({ ...prev, city: e.target.value }))}
+                    icon={<MapPin className="w-5 h-5 text-gray-400" />}
+                  />
+
+                  <Input
+                    label="Pincode"
+                    placeholder="6-digit pincode"
+                    value={homeAddress.pincode}
+                    onChange={(e) => setHomeAddress(prev => ({ ...prev, pincode: e.target.value }))}
+                    icon={<MapPin className="w-5 h-5 text-gray-400" />}
+                  />
+                </div>
+              </>
+            )}
+
+            {serviceType === 'visit_spa' && (
+              <div className="bg-pink-50 border border-pink-200 rounded-xl p-4">
+                <p className="text-sm text-pink-800 font-medium mb-2">Service Location: Spa/Salon Visit</p>
+                <div className="flex items-start space-x-2">
+                  <MapPin className="w-5 h-5 text-pink-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-pink-900">{cartItems[0]?.provider?.name || 'Spa/Salon'}</p>
+                    <p className="text-sm text-pink-700 mt-1">{cartItems[0]?.provider?.address || 'Address will be provided'}</p>
+                    <p className="text-xs text-pink-600 mt-2">Please arrive 10 minutes before your appointment time</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

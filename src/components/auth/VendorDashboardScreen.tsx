@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Package, BarChart3, Settings, Users, Calendar, Star, TrendingUp, Clock, CreditCard as Edit, Plus, Eye, DollarSign, MessageSquare } from 'lucide-react';
+import { LogOut, Package, BarChart3, Settings, Users, Calendar, Star, TrendingUp, Clock, CreditCard as Edit, Plus, Eye, DollarSign, MessageSquare, Home, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 interface VendorDashboardScreenProps {
@@ -31,10 +31,10 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
   ];
 
   const upcomingBookings = [
-    { id: 1, service: 'Swedish Massage', customer: 'Priya S.', time: '10:00 AM', date: 'Today', status: 'Confirmed' },
-    { id: 2, service: 'Deep Tissue', customer: 'Rahul K.', time: '2:30 PM', date: 'Today', status: 'Confirmed' },
-    { id: 3, service: 'Aromatherapy', customer: 'Anita D.', time: '4:00 PM', date: 'Tomorrow', status: 'Pending' },
-    { id: 4, service: 'Hot Stone', customer: 'Vikram M.', time: '11:00 AM', date: 'Tomorrow', status: 'Confirmed' },
+    { id: 1, service: 'Swedish Massage', customer: 'Priya S.', time: '10:00 AM', date: 'Today', status: 'Confirmed', type: 'at_home', address: 'MG Road, Bangalore' },
+    { id: 2, service: 'Deep Tissue', customer: 'Rahul K.', time: '2:30 PM', date: 'Today', status: 'Confirmed', type: 'visit_spa', address: 'In-house' },
+    { id: 3, service: 'Aromatherapy', customer: 'Anita D.', time: '4:00 PM', date: 'Tomorrow', status: 'Pending', type: 'at_home', address: 'Koramangala, Bangalore' },
+    { id: 4, service: 'Hot Stone', customer: 'Vikram M.', time: '11:00 AM', date: 'Tomorrow', status: 'Confirmed', type: 'visit_spa', address: 'In-house' },
   ];
 
   const recentReviews = [
@@ -229,22 +229,42 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Today's Schedule</h3>
                   <div className="space-y-3">
                     {upcomingBookings.filter(booking => booking.date === 'Today').map((booking) => (
-                      <div key={booking.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                            <Clock className="w-6 h-6 text-blue-600" />
+                      <div key={booking.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border-l-4 border-l-transparent hover:border-l-blue-500 transition-all">
+                        <div className="flex items-center space-x-4 flex-1">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            booking.type === 'at_home' ? 'bg-blue-100' : 'bg-pink-100'
+                          }`}>
+                            {booking.type === 'at_home' ? (
+                              <Home className="w-6 h-6 text-blue-600" />
+                            ) : (
+                              <Building2 className="w-6 h-6 text-pink-600" />
+                            )}
                           </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-900">{booking.service}</h4>
-                            <p className="text-sm text-gray-600">{booking.customer} • {booking.time}</p>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              <h4 className="font-semibold text-gray-900">{booking.service}</h4>
+                              <span className={`px-2 py-0.5 rounded-md text-xs font-medium ${
+                                booking.type === 'at_home'
+                                  ? 'bg-blue-100 text-blue-700'
+                                  : 'bg-pink-100 text-pink-700'
+                              }`}>
+                                {booking.type === 'at_home' ? 'At Home' : 'Spa Visit'}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">{booking.customer} • {booking.time}</p>
+                            <p className="text-xs text-gray-500 mt-0.5">{booking.address}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-3">
                           <span className={`px-3 py-1 rounded-lg text-xs font-medium ${getBookingStatusColor(booking.status)}`}>
                             {booking.status}
                           </span>
-                          <Button size="sm" variant="outline">
-                            View Details
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onNavigate?.('assignTherapist', booking)}
+                          >
+                            {booking.type === 'at_home' ? 'Assign Professional' : 'View Details'}
                           </Button>
                         </div>
                       </div>
