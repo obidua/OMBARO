@@ -73,6 +73,10 @@ function App() {
       setCurrentStep('vendorLogin');
     } else if (userType === 'vendorSignup') {
       setCurrentStep('vendorSignup');
+    } else if (userType === 'vendorCategorySelection') {
+      setCurrentStep('vendorCategorySelection');
+    } else if (userType === 'vendorSignupOld') {
+      setCurrentStep('vendorSignup');
     } else if (userType === 'therapistLogin') {
       setCurrentStep('therapistLogin');
     } else if (userType === 'adminLogin') {
