@@ -117,6 +117,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
               Therapist
             </button>
             <button
+              onClick={() => onGetStarted('beauticianLogin')}
+              className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
+            >
+              Beautician
+            </button>
+            <button
               onClick={() => onGetStarted('adminLogin')}
               className="text-xs text-neutral-500 hover:text-primary-600 transition-colors duration-200 font-medium text-center"
             >

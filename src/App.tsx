@@ -12,6 +12,7 @@ import { SpaOnboardingScreen } from './components/auth/SpaOnboardingScreen';
 import { VendorDashboardScreen } from './components/auth/VendorDashboardScreen';
 import { AdminDashboardScreen } from './components/auth/AdminDashboardScreen';
 import { TherapistLoginScreen } from './components/auth/TherapistLoginScreen';
+import { BeauticianLoginScreen } from './components/auth/BeauticianLoginScreen';
 import { TherapistDashboardScreen } from './components/therapist/TherapistDashboardScreen';
 import { TherapistManagementScreen } from './components/vendor/TherapistManagementScreen';
 import { TherapistFormScreen } from './components/vendor/TherapistFormScreen';
@@ -87,6 +88,8 @@ function App() {
       setCurrentStep('vendorSignup');
     } else if (userType === 'therapistLogin') {
       setCurrentStep('therapistLogin');
+    } else if (userType === 'beauticianLogin') {
+      setCurrentStep('beauticianLogin');
     } else if (userType === 'adminLogin') {
       setCurrentStep('adminLogin');
     } else if (userType === 'roleSelection') {
@@ -181,6 +184,34 @@ function App() {
               console.log('Therapist login:', credentials);
               setCurrentStep('therapistDashboard');
               // Store therapist data in auth state
+            }}
+          />
+        );
+
+      case 'beauticianLogin':
+        return (
+          <BeauticianLoginScreen
+            onBack={() => setCurrentStep('welcome')}
+            onLogin={(credentials) => {
+              // Mock beautician login
+              const mockBeautician = {
+                id: '1',
+                vendor_id: 'vendor_1',
+                name: 'Priya Sharma',
+                email: credentials.email,
+                mobile: '9876543210',
+                specializations: ['Hair Styling', 'Makeup', 'Nail Art'],
+                experience_years: 5,
+                certifications: ['Certified Beauty Professional'],
+                rating: 4.8,
+                total_reviews: 145,
+                status: 'active' as const,
+                availability_status: 'available' as const
+              };
+              // In real app, this would validate credentials against beauticians table
+              console.log('Beautician login:', credentials);
+              setCurrentStep('beauticianDashboard');
+              // Store beautician data in auth state
             }}
           />
         );
