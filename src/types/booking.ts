@@ -45,6 +45,8 @@ export interface BookingOrder {
   customerLocation: Location;
   providerLocation: Location;
   scheduledDateTime: string;
+  customerName: string;
+  customerMobile: string;
   therapistInfo?: {
     name: string;
     photo: string;

@@ -4,6 +4,8 @@ export interface CreateBookingData {
   customer_id: string;
   vendor_id: string;
   customer_address_id: string;
+  customer_name: string;
+  customer_mobile: string;
   booking_date: string;
   booking_time: string;
   services: Array<{
@@ -24,6 +26,8 @@ export interface Booking {
   booking_number: string;
   customer_id: string;
   vendor_id: string;
+  customer_name: string;
+  customer_mobile: string;
   booking_date: string;
   booking_time: string;
   scheduled_at: string;
@@ -47,6 +51,8 @@ export class BookingService {
         customer_id: data.customer_id,
         vendor_id: data.vendor_id,
         customer_address_id: data.customer_address_id,
+        customer_name: data.customer_name,
+        customer_mobile: data.customer_mobile,
         booking_date: data.booking_date,
         booking_time: data.booking_time,
         scheduled_at: scheduledAt,
