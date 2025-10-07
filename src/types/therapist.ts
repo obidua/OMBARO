@@ -23,26 +23,32 @@ export interface Therapist {
 export interface TherapistAssignment {
   id: string;
   therapist_id: string;
-  therapist_name: string;
-  therapist_photo?: string;
+  vendor_id: string;
   customer_id: string;
-  customer_name: string;
-  customer_mobile: string;
-  service_name: string;
-  service_duration: number;
-  scheduled_date: string;
-  scheduled_time: string;
+  service_id: string;
+  assignment_date: string;
+  assignment_time: string;
+  status: 'assigned' | 'in_progress' | 'completed' | 'cancelled';
   location: {
     latitude: number;
     longitude: number;
     address: string;
   };
-  status: 'pending' | 'confirmed' | 'in-progress' | 'completed' | 'cancelled';
-  payment_amount: number;
-  payment_status: 'pending' | 'paid' | 'refunded';
+  service_type?: 'at_home' | 'visit_spa';
+  customer_name?: string;
+  service_name?: string;
+  estimated_duration?: number;
   notes?: string;
-  created_at: string;
-  updated_at: string;
+  therapist_name?: string;
+  therapist_photo?: string;
+  customer_mobile?: string;
+  service_duration?: number;
+  scheduled_date?: string;
+  scheduled_time?: string;
+  payment_amount?: number;
+  payment_status?: 'pending' | 'paid' | 'refunded';
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface TherapistPerformance {

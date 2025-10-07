@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, MapPin, Phone, MessageCircle, Navigation, Clock, CheckCircle, User } from 'lucide-react';
+import { ArrowLeft, MapPin, Phone, MessageCircle, Navigation, Clock, CheckCircle, User, Home, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Map } from '../ui/Map';
 import { Location } from '../../types/booking';
@@ -53,40 +53,51 @@ export const OrderTrackingScreen: React.FC<OrderTrackingScreenProps> = ({
     });
   }, []);
 
+  const serviceType = orderData?.serviceType || 'at_home';
+  const isAtHome = serviceType === 'at_home';
+
   const getStatusInfo = () => {
     switch (orderStatus) {
       case 'confirmed':
         return {
           title: 'Booking Confirmed',
-          description: 'We are assigning a therapist for your appointment',
+          description: isAtHome
+            ? 'We are assigning a professional for your at-home appointment'
+            : 'Your spa appointment has been confirmed',
           color: 'text-blue-600',
           bgColor: 'bg-blue-100'
         };
       case 'therapist-assigned':
         return {
-          title: 'Therapist Assigned',
-          description: 'Your therapist is preparing to come to your location',
+          title: `${isAtHome ? 'Professional' : 'Therapist'} Assigned`,
+          description: isAtHome
+            ? 'Your professional is preparing to come to your location'
+            : 'Your therapist is ready for your spa visit',
           color: 'text-purple-600',
           bgColor: 'bg-purple-100'
         };
       case 'en-route':
         return {
           title: 'On the Way',
-          description: 'Your therapist is traveling to your location',
+          description: 'Your professional is traveling to your location',
           color: 'text-orange-600',
           bgColor: 'bg-orange-100'
         };
       case 'arrived':
         return {
-          title: 'Therapist Arrived',
-          description: 'Your therapist has reached your location',
+          title: `${isAtHome ? 'Professional' : 'Therapist'} ${isAtHome ? 'Arrived' : 'Ready'}`,
+          description: isAtHome
+            ? 'Your professional has reached your location'
+            : 'Your therapist is ready at the spa',
           color: 'text-green-600',
           bgColor: 'bg-green-100'
         };
       case 'in-progress':
         return {
           title: 'Service in Progress',
-          description: 'Your spa session is currently ongoing',
+          description: isAtHome
+            ? 'Your at-home service session is currently ongoing'
+            : 'Your spa session is currently ongoing',
           color: 'text-indigo-600',
           bgColor: 'bg-indigo-100'
         };
@@ -133,6 +144,23 @@ export const OrderTrackingScreen: React.FC<OrderTrackingScreenProps> = ({
       </div>
 
       <div className="p-4 space-y-6">
+        {/* Service Type Badge */}
+        <div className={`rounded-xl p-4 ${isAtHome ? 'bg-blue-50 border border-blue-200' : 'bg-pink-50 border border-pink-200'}`}>
+          <div className="flex items-center space-x-2">
+            {isAtHome ? (
+              <><Home className="w-5 h-5 text-blue-600" /><span className="font-medium text-blue-900">At Home Service</span></>
+            ) : (
+              <><Building2 className="w-5 h-5 text-pink-600" /><span className="font-medium text-pink-900">Spa Visit Service</span></>
+            )}
+          </div>
+          <p className="text-sm text-gray-700 mt-1">
+            {isAtHome
+              ? 'Professional will arrive at your location'
+              : 'Please arrive at the spa on time'
+            }
+          </p>
+        </div>
+
         {/* Order Status */}
         <div className="bg-white rounded-2xl p-4 shadow-sm">
           <div className="flex items-center space-x-3 mb-4">
@@ -203,8 +231,8 @@ export const OrderTrackingScreen: React.FC<OrderTrackingScreenProps> = ({
           </div>
         )}
 
-        {/* Live Tracking Map */}
-        {orderStatus === 'en-route' && (
+        {/* Live Tracking Map - Only show for at-home services */}
+        {isAtHome && orderStatus === 'en-route' && (
           <div className="bg-white rounded-2xl p-4 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Live Tracking</h3>
             <Map
@@ -226,6 +254,20 @@ export const OrderTrackingScreen: React.FC<OrderTrackingScreenProps> = ({
               onProviderSelect={() => {}}
               className="h-64"
             />
+          </div>
+        )}
+
+        {/* Spa Location Info - Only show for spa visit services */}
+        {!isAtHome && (
+          <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Spa Location</h3>
+            <div className="flex items-start space-x-3 bg-pink-50 border border-pink-200 rounded-xl p-4">
+              <MapPin className="w-5 h-5 text-pink-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-medium text-gray-900">{orderData?.spaAddress || 'Serenity Spa & Wellness'}</p>
+                <p className="text-sm text-gray-600 mt-1">Please arrive 10 minutes before your appointment</p>
+              </div>
+            </div>
           </div>
         )}
 

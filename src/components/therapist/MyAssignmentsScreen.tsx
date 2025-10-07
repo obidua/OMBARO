@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Calendar, MapPin, Clock, User, Phone, Navigation, PlayCircle, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Clock, User, Phone, Navigation, PlayCircle, CheckCircle, XCircle, Home, Building2 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { TherapistAssignment } from '../../types/therapist';
 
@@ -26,6 +26,9 @@ export const MyAssignmentsScreen: React.FC<MyAssignmentsScreenProps> = ({
         latitude: 12.9716,
         longitude: 77.5946
       },
+      service_type: 'at_home',
+      customer_name: 'Priya Sharma',
+      service_name: 'Swedish Full Body Massage',
       estimated_duration: 90
     },
     {
@@ -40,6 +43,9 @@ export const MyAssignmentsScreen: React.FC<MyAssignmentsScreenProps> = ({
         latitude: 12.9784,
         longitude: 77.6408
       },
+      service_type: 'at_home',
+      customer_name: 'Rahul Kumar',
+      service_name: 'Deep Tissue Massage',
       estimated_duration: 120
     },
     {
@@ -54,7 +60,27 @@ export const MyAssignmentsScreen: React.FC<MyAssignmentsScreenProps> = ({
         latitude: 12.9698,
         longitude: 77.7500
       },
+      service_type: 'at_home',
+      customer_name: 'Anita Desai',
+      service_name: 'Aromatherapy Session',
       estimated_duration: 60
+    },
+    {
+      id: '4',
+      customer_id: 'c4',
+      service_id: 's4',
+      assignment_date: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+      assignment_time: '11:00',
+      status: 'assigned',
+      location: {
+        address: 'Serenity Spa & Wellness Center',
+        latitude: 12.9716,
+        longitude: 77.5946
+      },
+      service_type: 'visit_spa',
+      customer_name: 'Vikram Mehta',
+      service_name: 'Hot Stone Therapy',
+      estimated_duration: 90
     }
   ]);
 
@@ -157,12 +183,21 @@ export const MyAssignmentsScreen: React.FC<MyAssignmentsScreenProps> = ({
                 key={assignment.id}
                 className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200"
               >
-                {/* Status Badge */}
+                {/* Status and Service Type */}
                 <div className="flex items-center justify-between mb-4">
-                  <span className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(assignment.status!)}`}>
-                    <StatusIcon className="w-4 h-4" />
-                    <span className="capitalize">{assignment.status?.replace('_', ' ')}</span>
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <span className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(assignment.status!)}`}>
+                      <StatusIcon className="w-4 h-4" />
+                      <span className="capitalize">{assignment.status?.replace('_', ' ')}</span>
+                    </span>
+                    <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-md text-xs font-medium ${(assignment as any).service_type === 'at_home' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'}`}>
+                      {(assignment as any).service_type === 'at_home' ? (
+                        <><Home className="w-3 h-3" /><span>At Home</span></>
+                      ) : (
+                        <><Building2 className="w-3 h-3" /><span>Spa Visit</span></>
+                      )}
+                    </span>
+                  </div>
                   <span className="text-sm font-medium text-gray-600">
                     {assignment.assignment_time}
                   </span>
@@ -173,8 +208,8 @@ export const MyAssignmentsScreen: React.FC<MyAssignmentsScreenProps> = ({
                   <div className="flex items-start space-x-3">
                     <User className="w-5 h-5 text-gray-600 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Customer Name</p>
-                      <p className="text-sm text-gray-600">Swedish Full Body Massage</p>
+                      <p className="text-sm font-medium text-gray-900">{(assignment as any).customer_name || 'Customer Name'}</p>
+                      <p className="text-sm text-gray-600">{(assignment as any).service_name || 'Service'}</p>
                     </div>
                   </div>
 

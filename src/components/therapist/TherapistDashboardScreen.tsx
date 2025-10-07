@@ -14,7 +14,68 @@ export const TherapistDashboardScreen: React.FC<TherapistDashboardScreenProps> =
   onNavigate,
   onLogout
 }) => {
-  const [todayAssignments] = useState<TherapistAssignment[]>([]);
+  const [todayAssignments] = useState<TherapistAssignment[]>([
+    {
+      id: '1',
+      therapist_id: therapist.id,
+      vendor_id: 'vendor_1',
+      customer_id: 'customer_1',
+      service_id: 'service_1',
+      assignment_date: new Date().toISOString().split('T')[0],
+      assignment_time: '10:00 AM',
+      status: 'assigned',
+      location: {
+        address: 'MG Road, Bangalore - 560001',
+        latitude: 12.9716,
+        longitude: 77.5946
+      },
+      service_type: 'at_home',
+      customer_name: 'Priya Sharma',
+      service_name: 'Swedish Full Body Massage',
+      estimated_duration: 90,
+      notes: 'Customer prefers light pressure'
+    },
+    {
+      id: '2',
+      therapist_id: therapist.id,
+      vendor_id: 'vendor_1',
+      customer_id: 'customer_2',
+      service_id: 'service_2',
+      assignment_date: new Date().toISOString().split('T')[0],
+      assignment_time: '2:30 PM',
+      status: 'assigned',
+      location: {
+        address: 'Serenity Spa & Wellness Center',
+        latitude: 12.9716,
+        longitude: 77.5946
+      },
+      service_type: 'visit_spa',
+      customer_name: 'Rahul Kumar',
+      service_name: 'Deep Tissue Massage',
+      estimated_duration: 120,
+      notes: 'Focus on back and shoulders'
+    },
+    {
+      id: '3',
+      therapist_id: therapist.id,
+      vendor_id: 'vendor_1',
+      customer_id: 'customer_3',
+      service_id: 'service_3',
+      assignment_date: new Date().toISOString().split('T')[0],
+      assignment_time: '5:00 PM',
+      status: 'in_progress',
+      location: {
+        address: 'Koramangala 4th Block, Bangalore - 560034',
+        latitude: 12.9352,
+        longitude: 77.6245
+      },
+      service_type: 'at_home',
+      customer_name: 'Anita Desai',
+      service_name: 'Aromatherapy Session',
+      estimated_duration: 60,
+      notes: 'Use lavender oil'
+    }
+  ]);
   const [performance] = useState<TherapistPerformance>({
     therapist_id: therapist.id,
     total_assignments: 45,
@@ -207,10 +268,27 @@ export const TherapistDashboardScreen: React.FC<TherapistDashboardScreenProps> =
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">Customer Name</h3>
-                      <p className="text-sm text-gray-600 mt-1">{assignment.assignment_time}</p>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <h3 className="font-semibold text-gray-900">{assignment.customer_name || 'Customer Name'}</h3>
+                        <span className={`px-2 py-0.5 rounded-md text-xs font-medium flex items-center space-x-1 ${
+                          assignment.service_type === 'at_home'
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-pink-100 text-pink-700'
+                        }`}>
+                          {assignment.service_type === 'at_home' ? (
+                            <><Home className="w-3 h-3" /><span>At Home</span></>
+                          ) : (
+                            <><Building2 className="w-3 h-3" /><span>Spa Visit</span></>
+                          )}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600">{assignment.service_name || 'Service'}</p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        <Clock className="w-3.5 h-3.5 inline mr-1" />
+                        {assignment.assignment_time} • {assignment.estimated_duration} min
+                      </p>
                     </div>
-                    <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                    <span className={`text-xs px-3 py-1 rounded-full font-medium whitespace-nowrap ${
                       assignment.status === 'assigned' ? 'bg-blue-100 text-blue-700' :
                       assignment.status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' :
                       assignment.status === 'completed' ? 'bg-green-100 text-green-700' :
@@ -219,9 +297,9 @@ export const TherapistDashboardScreen: React.FC<TherapistDashboardScreenProps> =
                       {assignment.status.replace('_', ' ')}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <MapPin className="w-4 h-4" />
-                    <span className="line-clamp-1">{assignment.location.address}</span>
+                  <div className="flex items-start space-x-2 text-sm text-gray-600 bg-gray-50 rounded-lg p-2">
+                    <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span className="line-clamp-2">{assignment.location.address}</span>
                   </div>
                 </div>
               ))}
