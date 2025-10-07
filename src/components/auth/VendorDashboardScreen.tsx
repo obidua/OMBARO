@@ -184,7 +184,7 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
                     </Button>
 
                     <Button
-                      onClick={() => console.log('Profile settings')}
+                      onClick={() => onNavigate?.('vendorProfile')}
                       variant="outline"
                       size="lg"
                       className="w-full justify-start h-16"
@@ -192,7 +192,7 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
                       <Settings className="w-6 h-6 mr-3" />
                       <div className="text-left">
                         <p className="font-semibold">Profile Settings</p>
-                        <p className="text-sm opacity-70">Update spa information</p>
+                        <p className="text-sm opacity-70">Update business information</p>
                       </div>
                     </Button>
 
@@ -204,8 +204,21 @@ export const VendorDashboardScreen: React.FC<VendorDashboardScreenProps> = ({
                     >
                       <Users className="w-6 h-6 mr-3" />
                       <div className="text-left">
-                        <p className="font-semibold">Manage Therapists</p>
-                        <p className="text-sm opacity-70">Add and assign therapists</p>
+                        <p className="font-semibold">Manage Staff</p>
+                        <p className="text-sm opacity-70">Add and assign service providers</p>
+                      </div>
+                    </Button>
+
+                    <Button
+                      onClick={() => onNavigate?.('vendorSettings')}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-16"
+                    >
+                      <Settings className="w-6 h-6 mr-3" />
+                      <div className="text-left">
+                        <p className="font-semibold">Settings</p>
+                        <p className="text-sm opacity-70">Configure preferences</p>
                       </div>
                     </Button>
                   </div>

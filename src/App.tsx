@@ -24,6 +24,14 @@ import { TherapistLeavesScreen } from './components/therapist/TherapistLeavesScr
 import { TherapistEarningsScreen } from './components/therapist/TherapistEarningsScreen';
 import { TherapistPerformanceScreen } from './components/therapist/TherapistPerformanceScreen';
 import { TherapistProfileScreen } from './components/therapist/TherapistProfileScreen';
+import { TherapistSettingsScreen } from './components/therapist/TherapistSettingsScreen';
+import { VendorProfileSettingsScreen } from './components/vendor/VendorProfileSettingsScreen';
+import { VendorSettingsScreen } from './components/vendor/VendorSettingsScreen';
+import { BeauticianManagementScreen } from './components/vendor/BeauticianManagementScreen';
+import { BeauticianDashboardScreen } from './components/beautician/BeauticianDashboardScreen';
+import { BeauticianProfileScreen } from './components/beautician/BeauticianProfileScreen';
+import { AdminProfileScreen } from './components/admin/AdminProfileScreen';
+import { AdminSettingsScreen } from './components/admin/AdminSettingsScreen';
 import { MobileInputScreen } from './components/auth/MobileInputScreen';
 import { OTPScreen } from './components/auth/OTPScreen';
 import { ProfileSetupScreen } from './components/auth/ProfileSetupScreen';
@@ -248,6 +256,88 @@ function App() {
         return (
           <TherapistProfileScreen
             onBack={() => setCurrentStep('therapistDashboard')}
+          />
+        );
+
+      case 'therapistSettings':
+        return (
+          <TherapistSettingsScreen
+            onBack={() => setCurrentStep('therapistDashboard')}
+            onLogout={logout}
+          />
+        );
+
+      case 'vendorProfile':
+        return (
+          <VendorProfileSettingsScreen
+            vendorId={authState.user?.mobile || 'vendor_1'}
+            onBack={() => setCurrentStep('vendorDashboard')}
+          />
+        );
+
+      case 'vendorSettings':
+        return (
+          <VendorSettingsScreen
+            onBack={() => setCurrentStep('vendorDashboard')}
+            onLogout={logout}
+          />
+        );
+
+      case 'beauticianManagement':
+        return (
+          <BeauticianManagementScreen
+            vendorId={authState.user?.mobile || 'vendor_1'}
+            onBack={() => setCurrentStep('vendorDashboard')}
+            onNavigate={(screen, data) => {
+              if (data) {
+                setSelectedEntity(data);
+              }
+              setCurrentStep(screen);
+            }}
+          />
+        );
+
+      case 'beauticianDashboard':
+        return (
+          <BeauticianDashboardScreen
+            beautician={{
+              id: '1',
+              vendor_id: 'vendor_1',
+              name: 'Priya Sharma',
+              email: 'priya.sharma@example.com',
+              mobile: '9876543210',
+              specializations: ['Hair Styling', 'Makeup', 'Nail Art'],
+              experience_years: 5,
+              certifications: ['Certified Beauty Professional'],
+              rating: 4.8,
+              total_reviews: 145,
+              status: 'active',
+              availability_status: 'available'
+            }}
+            onNavigate={(screen) => setCurrentStep(screen)}
+            onLogout={logout}
+          />
+        );
+
+      case 'beauticianProfile':
+        return (
+          <BeauticianProfileScreen
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'adminProfile':
+        return (
+          <AdminProfileScreen
+            onBack={() => setCurrentStep('adminDashboard')}
+          />
+        );
+
+      case 'adminSettings':
+        return (
+          <AdminSettingsScreen
+            onBack={() => setCurrentStep('adminDashboard')}
+            onLogout={logout}
           />
         );
 

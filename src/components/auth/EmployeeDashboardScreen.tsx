@@ -6,6 +6,8 @@ import { AttendanceTracker } from '../ui/AttendanceTracker';
 import { SelfAttendanceScreen } from '../employee/SelfAttendanceScreen';
 import { LeaveRequestScreen } from '../employee/LeaveRequestScreen';
 import { HRDocumentsScreen } from '../employee/HRDocumentsScreen';
+import { EmployeeProfileScreen } from '../employee/EmployeeProfileScreen';
+import { EmployeeSettingsScreen } from '../employee/EmployeeSettingsScreen';
 import { AttendanceStatus } from '../../types/services';
 
 interface EmployeeDashboardScreenProps {
@@ -21,7 +23,7 @@ export const EmployeeDashboardScreen: React.FC<EmployeeDashboardScreenProps> = (
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
-  const [currentScreen, setCurrentScreen] = useState<'dashboard' | 'selfAttendance' | 'leaveRequest' | 'hrDocuments'>('dashboard');
+  const [currentScreen, setCurrentScreen] = useState<'dashboard' | 'selfAttendance' | 'leaveRequest' | 'hrDocuments' | 'employeeProfile' | 'employeeSettings'>('dashboard');
 
   const stats = [
     { label: 'Total Spas', value: '47', icon: MapPin, color: 'bg-purple-100 text-purple-600', change: '+5 this month' },
@@ -85,6 +87,24 @@ export const EmployeeDashboardScreen: React.FC<EmployeeDashboardScreenProps> = (
       <HRDocumentsScreen
         employeeId={user.mobile || 'EMP001'}
         onBack={() => setCurrentScreen('dashboard')}
+      />
+    );
+  }
+
+  if (currentScreen === 'employeeProfile') {
+    return (
+      <EmployeeProfileScreen
+        employeeId={user.mobile || 'EMP001'}
+        onBack={() => setCurrentScreen('dashboard')}
+      />
+    );
+  }
+
+  if (currentScreen === 'employeeSettings') {
+    return (
+      <EmployeeSettingsScreen
+        onBack={() => setCurrentScreen('dashboard')}
+        onLogout={onLogout}
       />
     );
   }
@@ -237,15 +257,28 @@ export const EmployeeDashboardScreen: React.FC<EmployeeDashboardScreenProps> = (
                     </Button>
 
                     <Button
-                      onClick={() => console.log('Settings')}
+                      onClick={() => setCurrentScreen('employeeSettings')}
                       variant="outline"
                       size="lg"
                       className="w-full justify-start h-14 sm:h-16 text-left"
                     >
                       <Settings className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3 flex-shrink-0" />
                       <div className="text-left">
-                        <p className="text-sm sm:text-base font-semibold">System Settings</p>
+                        <p className="text-sm sm:text-base font-semibold">Settings</p>
                         <p className="text-xs sm:text-sm opacity-70">Configure preferences</p>
+                      </div>
+                    </Button>
+
+                    <Button
+                      onClick={() => setCurrentScreen('employeeProfile')}
+                      variant="outline"
+                      size="lg"
+                      className="w-full justify-start h-14 sm:h-16 text-left"
+                    >
+                      <User className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3 flex-shrink-0" />
+                      <div className="text-left">
+                        <p className="text-sm sm:text-base font-semibold">My Profile</p>
+                        <p className="text-xs sm:text-sm opacity-70">View and edit profile</p>
                       </div>
                     </Button>
 
