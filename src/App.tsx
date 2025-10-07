@@ -31,6 +31,13 @@ import { VendorSettingsScreen } from './components/vendor/VendorSettingsScreen';
 import { BeauticianManagementScreen } from './components/vendor/BeauticianManagementScreen';
 import { BeauticianDashboardScreen } from './components/beautician/BeauticianDashboardScreen';
 import { BeauticianProfileScreen } from './components/beautician/BeauticianProfileScreen';
+import { BeauticianAssignmentsScreen } from './components/beautician/BeauticianAssignmentsScreen';
+import { BeauticianScheduleScreen } from './components/beautician/BeauticianScheduleScreen';
+import { BeauticianLocationScreen } from './components/beautician/BeauticianLocationScreen';
+import { BeauticianLeavesScreen } from './components/beautician/BeauticianLeavesScreen';
+import { BeauticianEarningsScreen } from './components/beautician/BeauticianEarningsScreen';
+import { BeauticianPerformanceScreen } from './components/beautician/BeauticianPerformanceScreen';
+import { BeauticianSettingsScreen } from './components/beautician/BeauticianSettingsScreen';
 import { AdminProfileScreen } from './components/admin/AdminProfileScreen';
 import { AdminSettingsScreen } from './components/admin/AdminSettingsScreen';
 import { MobileInputScreen } from './components/auth/MobileInputScreen';
@@ -353,6 +360,62 @@ function App() {
       case 'beauticianProfile':
         return (
           <BeauticianProfileScreen
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianAssignments':
+        return (
+          <BeauticianAssignmentsScreen
+            beauticianId="1"
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianSchedule':
+        return (
+          <BeauticianScheduleScreen
+            beauticianId="1"
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianLocation':
+        return (
+          <BeauticianLocationScreen
+            beauticianId="1"
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianLeaves':
+        return (
+          <BeauticianLeavesScreen
+            beauticianId="1"
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianEarnings':
+        return (
+          <BeauticianEarningsScreen
+            beauticianId="1"
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianPerformance':
+        return (
+          <BeauticianPerformanceScreen
+            beauticianId="1"
+            onBack={() => setCurrentStep('beauticianDashboard')}
+          />
+        );
+
+      case 'beauticianSettings':
+        return (
+          <BeauticianSettingsScreen
+            beauticianId="1"
             onBack={() => setCurrentStep('beauticianDashboard')}
           />
         );
