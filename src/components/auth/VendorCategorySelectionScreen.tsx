@@ -145,7 +145,7 @@ export default function VendorCategorySelectionScreen({ onNavigate }: VendorCate
                 fullWidth
                 size="lg"
               >
-                Continue to Signup Options
+                {selectedCategory ? 'Continue to Signup' : 'Select a Category to Continue'}
               </Button>
             </>
           )}

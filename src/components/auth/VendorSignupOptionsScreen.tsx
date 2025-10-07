@@ -41,7 +41,7 @@ export default function VendorSignupOptionsScreen({
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">How would you like to get started?</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">How would you like to sign up?</h2>
             <p className="text-gray-600">Choose the signup method that works best for you</p>
           </div>
 
