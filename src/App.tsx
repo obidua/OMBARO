@@ -42,6 +42,11 @@ import { ReviewScreen } from './components/screens/ReviewScreen';
 import { ReferralScreen } from './components/screens/ReferralScreen';
 import { NotificationScreen } from './components/screens/NotificationScreen';
 import { DocPortalScreen } from './components/screens/DocPortalScreen';
+import VendorCategorySelectionScreen from './components/auth/VendorCategorySelectionScreen';
+import VendorSignupOptionsScreen from './components/auth/VendorSignupOptionsScreen';
+import VendorQuickSignupScreen from './components/auth/VendorQuickSignupScreen';
+import VendorMobileVerificationScreen from './components/auth/VendorMobileVerificationScreen';
+import VendorQuickSignupSuccessScreen from './components/auth/VendorQuickSignupSuccessScreen';
 import VendorSignupScreen from './components/auth/VendorSignupScreen';
 import VendorSignupSuccessScreen from './components/auth/VendorSignupSuccessScreen';
 import VendorApprovalScreen from './components/admin/VendorApprovalScreen';
@@ -638,10 +643,75 @@ function App() {
           />
         );
       
+      case 'vendorCategorySelection':
+        return (
+          <VendorCategorySelectionScreen
+            onNavigate={(screen, data?) => {
+              if (data) setSelectedEntity(data);
+              setCurrentStep(screen as any);
+            }}
+          />
+        );
+
+      case 'vendorSignupOptions':
+        return (
+          <VendorSignupOptionsScreen
+            onNavigate={(screen, data?) => {
+              if (data) setSelectedEntity(data);
+              setCurrentStep(screen as any);
+            }}
+            selectedCategory={authState.selectedEntity?.selectedCategory}
+          />
+        );
+
+      case 'vendorQuickSignup':
+        return (
+          <VendorQuickSignupScreen
+            onNavigate={(screen, data?) => {
+              if (data) setSelectedEntity(data);
+              setCurrentStep(screen as any);
+            }}
+            selectedCategory={authState.selectedEntity?.selectedCategory}
+          />
+        );
+
+      case 'vendorMobileVerification':
+        return (
+          <VendorMobileVerificationScreen
+            onNavigate={(screen, data?) => {
+              if (data) setSelectedEntity(data);
+              setCurrentStep(screen as any);
+            }}
+            selectedCategory={authState.selectedEntity?.selectedCategory}
+            signupType={authState.selectedEntity?.signupType}
+            provider={authState.selectedEntity?.provider}
+          />
+        );
+
+      case 'vendorQuickSignupSuccess':
+        return (
+          <VendorQuickSignupSuccessScreen
+            onNavigate={(screen, data?) => {
+              if (data) setSelectedEntity(data);
+              setCurrentStep(screen as any);
+            }}
+            selectedCategory={authState.selectedEntity?.selectedCategory}
+            mobile={authState.selectedEntity?.mobile}
+            userName={authState.selectedEntity?.userName}
+          />
+        );
+
       case 'vendorSignup':
         return (
           <VendorSignupScreen
-            onNavigate={setCurrentStep}
+            onNavigate={(screen, data?) => {
+              if (data) setSelectedEntity(data);
+              setCurrentStep(screen as any);
+            }}
+            selectedCategory={authState.selectedEntity?.selectedCategory}
+            signupType={authState.selectedEntity?.signupType}
+            isProfileCompletion={authState.selectedEntity?.isProfileCompletion}
+            mobile={authState.selectedEntity?.mobile}
           />
         );
 

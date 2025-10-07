@@ -105,6 +105,75 @@ export class AuthService {
       callback(session?.user || null);
     });
   }
+
+  async sendOTP(mobile: string) {
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+
+    const { data, error } = await supabase
+      .from('otp_verifications')
+      .insert({
+        mobile: mobile,
+        otp_code: '1234',
+        expires_at: expiresAt.toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  async verifyOTP(mobile: string, otpCode: string) {
+    const { data, error } = await supabase
+      .rpc('verify_otp', {
+        p_mobile: mobile,
+        p_otp_code: otpCode
+      });
+
+    if (error) throw error;
+    return data;
+  }
+
+  async signInWithSocial(provider: 'google' | 'facebook') {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}`,
+        scopes: provider === 'google' ? 'email profile' : 'email public_profile'
+      }
+    });
+
+    if (error) throw error;
+    return data;
+  }
+
+  async createQuickSignupProfile(userId: string, mobile: string, category: string) {
+    const { data, error } = await supabase
+      .from('quick_signup_profiles')
+      .insert({
+        user_id: userId,
+        vendor_category: category,
+        mobile: mobile,
+        mobile_verified: true,
+        partner_type: 'INDEPENDENT'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  async getSocialAuthProviders(userId: string) {
+    const { data, error } = await supabase
+      .from('social_auth_providers')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) throw error;
+    return data;
+  }
 }
 
 export const authService = new AuthService();

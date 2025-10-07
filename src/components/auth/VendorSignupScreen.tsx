@@ -5,20 +5,30 @@ import { Input } from '../ui/Input';
 
 interface VendorSignupScreenProps {
   onNavigate: (screen: string, data?: any) => void;
+  selectedCategory?: string;
+  signupType?: string;
+  isProfileCompletion?: boolean;
+  mobile?: string;
 }
 
-export default function VendorSignupScreen({ onNavigate }: VendorSignupScreenProps) {
+export default function VendorSignupScreen({
+  onNavigate,
+  selectedCategory,
+  signupType = 'detailed',
+  isProfileCompletion = false,
+  mobile: preMobile
+}: VendorSignupScreenProps) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     // Personal Info
     name: '',
     email: '',
-    mobile: '',
+    mobile: preMobile || '',
     password: '',
     confirmPassword: '',
     // Business Info
     businessName: '',
-    businessType: 'spa',
+    businessType: selectedCategory || 'spa',
     contactPerson: '',
     contactMobile: '',
     contactEmail: '',
@@ -110,7 +120,11 @@ export default function VendorSignupScreen({ onNavigate }: VendorSignupScreenPro
     if (step > 1) {
       setStep(step - 1);
     } else {
-      onNavigate('welcome');
+      if (isProfileCompletion) {
+        onNavigate('vendorDashboard');
+      } else {
+        onNavigate('vendorSignupOptions', { selectedCategory });
+      }
     }
   }
 
@@ -181,8 +195,19 @@ export default function VendorSignupScreen({ onNavigate }: VendorSignupScreenPro
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Personal Information</h2>
-                <p className="text-gray-600">Create your account to get started</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  {isProfileCompletion ? 'Complete Your Profile' : 'Personal Information'}
+                </h2>
+                <p className="text-gray-600">
+                  {isProfileCompletion
+                    ? 'Add your details to complete your vendor profile'
+                    : 'Create your account to get started'}
+                </p>
+                {selectedCategory && (
+                  <div className="mt-3 inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-lg text-sm font-medium">
+                    Category: {selectedCategory.replace('_', ' ').toUpperCase()}
+                  </div>
+                )}
               </div>
 
               <Input

@@ -90,7 +90,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onGetStarted }) =>
 
           {/* Vendor Signup Button */}
           <button
-            onClick={() => onGetStarted('vendorSignup')}
+            onClick={() => onGetStarted('vendorCategorySelection')}
             className="w-full text-center text-sm text-amber-600 hover:text-amber-700 font-medium py-3 px-4 border-2 border-dashed border-amber-300 rounded-lg hover:border-amber-400 transition-all duration-200"
           >
             🏪 Become a Vendor Partner
