@@ -31,6 +31,7 @@ export default function VendorCategorySelectionScreen({ onNavigate }: VendorCate
   const [categories, setCategories] = useState<VendorCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     loadCategories();
@@ -38,17 +39,32 @@ export default function VendorCategorySelectionScreen({ onNavigate }: VendorCate
 
   async function loadCategories() {
     try {
+      setError('');
       const { data, error } = await supabase
         .from('vendor_categories')
         .select('*')
         .eq('is_active', true)
         .order('display_order');
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error loading categories:', error);
+        setError('Failed to load business categories. Please try again.');
+        throw error;
+      }
+
+      if (!data || data.length === 0) {
+        console.warn('No vendor categories found in database');
+        setError('No business categories available at the moment. Please contact support.');
+      } else {
+        console.log('Loaded vendor categories:', data.length);
+      }
 
       setCategories(data || []);
-    } catch (error) {
-      console.error('Error loading categories:', error);
+    } catch (err) {
+      console.error('Error loading categories:', err);
+      if (!error) {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -93,6 +109,27 @@ export default function VendorCategorySelectionScreen({ onNavigate }: VendorCate
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+                <p className="text-red-800 mb-4">{error}</p>
+                <Button onClick={loadCategories} variant="outline">
+                  Try Again
+                </Button>
+              </div>
+              <p className="text-sm text-gray-600">
+                If the problem persists, please contact our support team.
+              </p>
+            </div>
+          ) : categories.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+                <p className="text-yellow-800 mb-4">No business categories are currently available.</p>
+                <Button onClick={loadCategories} variant="outline">
+                  Refresh
+                </Button>
+              </div>
             </div>
           ) : (
             <>
