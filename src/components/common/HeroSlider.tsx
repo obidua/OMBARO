@@ -18,14 +18,6 @@ interface SlideContent {
 export const HeroSlider: React.FC = () => {
   const slides: SlideContent[] = [
     {
-      image: 'https://images.pexels.com/photos/3997392/pexels-photo-3997392.jpeg?auto=compress&cs=tinysrgb&w=1200',
-      title: 'Luxury Spa & Massage',
-      subtitle: 'Rejuvenate Your Body & Mind',
-      description: 'Experience premium spa treatments and therapeutic massages from certified professionals',
-      cta: 'Book Spa Session',
-      ctaLink: '/app'
-    },
-    {
       image: 'https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=1200',
       title: 'Relaxing Body Massage',
       subtitle: 'Premium Massage Therapy',
@@ -39,6 +31,14 @@ export const HeroSlider: React.FC = () => {
       subtitle: 'Healing Touch Therapy',
       description: 'Professional body massage and spa treatments for complete relaxation and wellness',
       cta: 'Book Now',
+      ctaLink: '/app'
+    },
+    {
+      image: 'https://images.pexels.com/photos/3997392/pexels-photo-3997392.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      title: 'Luxury Spa & Massage',
+      subtitle: 'Rejuvenate Your Body & Mind',
+      description: 'Experience premium spa treatments and therapeutic massages from certified professionals',
+      cta: 'Book Spa Session',
       ctaLink: '/app'
     },
     {
