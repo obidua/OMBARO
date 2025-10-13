@@ -8,6 +8,9 @@ import { ContactPage } from './pages/ContactPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { BecomePartnerPage } from './pages/BecomePartnerPage';
+import { SpaMassagePage } from './pages/SpaMassagePage';
+import { BridalMakeupPage } from './pages/BridalMakeupPage';
+import { BeautySalonPage } from './pages/BeautySalonPage';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import App from './App';
 
@@ -24,6 +27,9 @@ export const AppRouter: React.FC = () => {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/become-a-partner" element={<BecomePartnerPage />} />
+        <Route path="/spa-massage" element={<SpaMassagePage />} />
+        <Route path="/bridal-makeup" element={<BridalMakeupPage />} />
+        <Route path="/beauty-salon" element={<BeautySalonPage />} />
         <Route path="/app/*" element={<App />} />
       </Routes>
     </BrowserRouter>

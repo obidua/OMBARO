@@ -77,7 +77,7 @@ export const BecomePartnerPage: React.FC = () => {
       title: 'Bridal Makeup Artists',
       description: 'Showcase your portfolio, manage bridal bookings, and offer complete wedding packages with ease.',
       features: ['Portfolio gallery', 'Package management', 'Trial bookings', 'Wedding calendar'],
-      image: 'https://images.pexels.com/photos/1070968/pexels-photo-1070968.jpeg?auto=compress&cs=tinysrgb&w=800'
+      image: 'https://images.pexels.com/photos/1585325/pexels-photo-1585325.jpeg?auto=compress&cs=tinysrgb&w=800'
     },
     {
       icon: Building2,

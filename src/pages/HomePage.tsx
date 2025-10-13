@@ -35,49 +35,57 @@ export const HomePage: React.FC = () => {
       title: 'Spa & Massage Therapy',
       description: 'Relaxing spa treatments, deep tissue massage, aromatherapy, and rejuvenation packages',
       image: 'https://images.pexels.com/photos/3997392/pexels-photo-3997392.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '💆‍♀️'
+      icon: '💆‍♀️',
+      link: '/spa-massage'
     },
     {
       title: 'Bridal Makeup & Styling',
       description: 'Complete bridal makeup, hair styling, pre-wedding packages, and special occasion looks',
-      image: 'https://images.pexels.com/photos/1070968/pexels-photo-1070968.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '👰'
+      image: 'https://images.pexels.com/photos/1585325/pexels-photo-1585325.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '👰',
+      link: '/bridal-makeup'
     },
     {
       title: 'Hair Salon Services',
       description: 'Professional haircuts, styling, coloring, keratin treatments, and hair spa',
       image: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '💇‍♀️'
+      icon: '💇‍♀️',
+      link: '/beauty-salon'
     },
     {
       title: 'Skincare & Facials',
       description: 'Advanced facial treatments, skin analysis, anti-aging solutions, and beauty routines',
       image: 'https://images.pexels.com/photos/3997986/pexels-photo-3997986.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '✨'
+      icon: '✨',
+      link: '/beauty-salon'
     },
     {
       title: 'Nail Art & Manicure',
       description: 'Professional manicure, pedicure, nail extensions, and creative nail art designs',
       image: 'https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '💅'
+      icon: '💅',
+      link: '/beauty-salon'
     },
     {
       title: 'Makeup & Cosmetics',
       description: 'Party makeup, professional makeup services, and personalized beauty consultations',
       image: 'https://images.pexels.com/photos/1535244/pexels-photo-1535244.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '💄'
+      icon: '💄',
+      link: '/beauty-salon'
     },
     {
       title: 'Body Treatments',
       description: 'Body scrubs, wraps, waxing services, and complete body care solutions',
       image: 'https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '🌿'
+      icon: '🌿',
+      link: '/spa-massage'
     },
     {
       title: 'Wellness Programs',
       description: 'Holistic wellness, yoga, meditation, and lifestyle improvement programs',
       image: 'https://images.pexels.com/photos/3822621/pexels-photo-3822621.jpeg?auto=compress&cs=tinysrgb&w=800',
-      icon: '🧘‍♀️'
+      icon: '🧘‍♀️',
+      link: '/spa-massage'
     },
   ];
 
@@ -178,8 +186,9 @@ export const HomePage: React.FC = () => {
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {services.map((service, index) => (
-                <div
+                <Link
                   key={index}
+                  to={service.link}
                   className="group cursor-pointer"
                 >
                   <div className="relative rounded-2xl overflow-hidden mb-4 shadow-soft group-hover:shadow-strong transition-all duration-300">
@@ -197,7 +206,7 @@ export const HomePage: React.FC = () => {
                     </div>
                   </div>
                   <p className="text-neutral-600 text-sm leading-relaxed">{service.description}</p>
-                </div>
+                </Link>
               ))}
             </div>
             <div className="text-center mt-12">
