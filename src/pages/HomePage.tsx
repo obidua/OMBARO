@@ -4,6 +4,7 @@ import { MapPin, Clock, Star, Shield, Award, Users, TrendingUp, CheckCircle, Spa
 import { Button } from '../components/ui/Button';
 import { MarketingHeader } from '../components/marketing/MarketingHeader';
 import { MarketingFooter } from '../components/marketing/MarketingFooter';
+import { HeroSlider } from '../components/common/HeroSlider';
 
 export const HomePage: React.FC = () => {
   const features = [
@@ -31,24 +32,52 @@ export const HomePage: React.FC = () => {
 
   const services = [
     {
-      title: 'Spa & Massage',
-      description: 'Relaxing spa treatments and therapeutic massage services',
-      image: 'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=600',
+      title: 'Spa & Massage Therapy',
+      description: 'Relaxing spa treatments, deep tissue massage, aromatherapy, and rejuvenation packages',
+      image: 'https://images.pexels.com/photos/3997392/pexels-photo-3997392.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '💆‍♀️'
     },
     {
-      title: 'Hair & Beauty',
-      description: 'Professional hair styling, coloring, and beauty treatments',
-      image: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=600',
+      title: 'Bridal Makeup & Styling',
+      description: 'Complete bridal makeup, hair styling, pre-wedding packages, and special occasion looks',
+      image: 'https://images.pexels.com/photos/1070968/pexels-photo-1070968.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '👰'
     },
     {
-      title: 'Salon Services',
-      description: 'Complete salon services for your beauty needs',
-      image: 'https://images.pexels.com/photos/3992876/pexels-photo-3992876.jpeg?auto=compress&cs=tinysrgb&w=600',
+      title: 'Hair Salon Services',
+      description: 'Professional haircuts, styling, coloring, keratin treatments, and hair spa',
+      image: 'https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '💇‍♀️'
+    },
+    {
+      title: 'Skincare & Facials',
+      description: 'Advanced facial treatments, skin analysis, anti-aging solutions, and beauty routines',
+      image: 'https://images.pexels.com/photos/3997986/pexels-photo-3997986.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '✨'
+    },
+    {
+      title: 'Nail Art & Manicure',
+      description: 'Professional manicure, pedicure, nail extensions, and creative nail art designs',
+      image: 'https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '💅'
+    },
+    {
+      title: 'Makeup & Cosmetics',
+      description: 'Party makeup, professional makeup services, and personalized beauty consultations',
+      image: 'https://images.pexels.com/photos/1535244/pexels-photo-1535244.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '💄'
+    },
+    {
+      title: 'Body Treatments',
+      description: 'Body scrubs, wraps, waxing services, and complete body care solutions',
+      image: 'https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '🌿'
     },
     {
       title: 'Wellness Programs',
-      description: 'Holistic wellness and lifestyle improvement programs',
-      image: 'https://images.pexels.com/photos/3822621/pexels-photo-3822621.jpeg?auto=compress&cs=tinysrgb&w=600',
+      description: 'Holistic wellness, yoga, meditation, and lifestyle improvement programs',
+      image: 'https://images.pexels.com/photos/3822621/pexels-photo-3822621.jpeg?auto=compress&cs=tinysrgb&w=800',
+      icon: '🧘‍♀️'
     },
   ];
 
@@ -88,82 +117,17 @@ export const HomePage: React.FC = () => {
       <MarketingHeader />
 
       <main className="pt-16">
-        <section className="relative bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-20 md:py-28">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 leading-tight">
-                  Your Beauty & Wellness Journey Starts Here
-                </h1>
-                <p className="text-lg md:text-xl text-neutral-600 mb-8 leading-relaxed">
-                  Discover and book premium spa, salon, and wellness services near you.
-                  Experience luxury and convenience at your fingertips.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/app">
-                    <Button size="lg" className="w-full sm:w-auto">
-                      Get Started
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  </Link>
-                  <Link to="/how-it-works">
-                    <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                      Learn More
-                    </Button>
-                  </Link>
-                </div>
-                <div className="mt-8 flex items-center space-x-6">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-10 h-10 rounded-full border-2 border-white bg-gradient-to-br from-primary-400 to-secondary-400"
-                      />
-                    ))}
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-1 mb-1">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-sm text-neutral-600">Trusted by 50,000+ customers</p>
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                  <img
-                    src="https://images.pexels.com/photos/3997369/pexels-photo-3997369.jpeg?auto=compress&cs=tinysrgb&w=800"
-                    alt="Spa services"
-                    className="w-full h-auto"
-                  />
-                </div>
-                <div className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-lg p-4 hidden md:block">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                      <CheckCircle className="w-6 h-6 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-neutral-900">1000+ Services</p>
-                      <p className="text-sm text-neutral-600">Available Now</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroSlider />
 
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-gradient mb-2">
+                <div key={index} className="text-center group">
+                  <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300">
                     {stat.number}
                   </div>
-                  <div className="text-neutral-600">{stat.label}</div>
+                  <div className="text-neutral-600 font-medium">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -218,18 +182,21 @@ export const HomePage: React.FC = () => {
                   key={index}
                   className="group cursor-pointer"
                 >
-                  <div className="relative rounded-2xl overflow-hidden mb-4 shadow-soft group-hover:shadow-strong transition-shadow">
+                  <div className="relative rounded-2xl overflow-hidden mb-4 shadow-soft group-hover:shadow-strong transition-all duration-300">
                     <img
                       src={service.image}
                       alt={service.title}
-                      className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                    <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-2xl">
+                      {service.icon}
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform group-hover:translate-y-0 transition-transform">
                       <h3 className="text-xl font-semibold mb-1">{service.title}</h3>
                     </div>
                   </div>
-                  <p className="text-neutral-600">{service.description}</p>
+                  <p className="text-neutral-600 text-sm leading-relaxed">{service.description}</p>
                 </div>
               ))}
             </div>
@@ -243,10 +210,15 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-gradient-to-br from-primary-600 to-secondary-600 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-20 bg-gradient-to-br from-rose-600 via-pink-600 to-orange-500 text-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=1200')] bg-cover bg-center opacity-10" />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
+                <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span className="text-white text-sm font-medium">Join Our Network</span>
+                </div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   Are You a Beauty Professional?
                 </h2>
@@ -261,25 +233,27 @@ export const HomePage: React.FC = () => {
                     'Build your professional reputation',
                     'Access to business analytics and insights',
                   ].map((benefit, index) => (
-                    <li key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-white/90 flex-shrink-0" />
+                    <li key={index} className="flex items-center space-x-3 group">
+                      <CheckCircle className="w-5 h-5 text-white/90 flex-shrink-0 group-hover:scale-110 transition-transform" />
                       <span>{benefit}</span>
                     </li>
                   ))}
                 </ul>
                 <Link to="/app">
-                  <Button size="lg" className="bg-white text-primary-600 hover:bg-neutral-100">
+                  <Button size="lg" className="bg-white text-rose-600 hover:bg-neutral-100 shadow-lg hover:shadow-xl transition-shadow">
                     Become a Partner
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
               </div>
               <div className="relative">
-                <img
-                  src="https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Beauty professional"
-                  className="rounded-2xl shadow-2xl"
-                />
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                  <img
+                    src="https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    alt="Beauty professional"
+                    className="rounded-2xl"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -299,19 +273,19 @@ export const HomePage: React.FC = () => {
               {testimonials.map((testimonial, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl p-6 shadow-soft"
+                  className="bg-white rounded-2xl p-6 shadow-soft hover:shadow-strong transition-all duration-300 hover:-translate-y-2"
                 >
                   <div className="flex items-center space-x-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
                     ))}
                   </div>
-                  <p className="text-neutral-600 mb-6">{testimonial.comment}</p>
+                  <p className="text-neutral-600 mb-6 italic leading-relaxed">"{testimonial.comment}"</p>
                   <div className="flex items-center space-x-3">
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-12 h-12 rounded-full object-cover border-2 border-primary-200"
                     />
                     <div>
                       <p className="font-semibold text-neutral-900">{testimonial.name}</p>
@@ -326,25 +300,30 @@ export const HomePage: React.FC = () => {
 
         <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-3xl p-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-                Ready to Get Started?
-              </h2>
-              <p className="text-lg text-neutral-600 mb-8">
-                Join thousands of customers who have transformed their beauty routine with OMBARO
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/app">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Sign Up Now
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    Contact Us
-                  </Button>
-                </Link>
+            <div className="relative bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 rounded-3xl p-12 overflow-hidden shadow-xl">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-rose-200/30 to-pink-200/30 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-200/30 to-amber-200/30 rounded-full blur-3xl" />
+              <div className="relative z-10">
+                <Sparkles className="w-12 h-12 text-rose-600 mx-auto mb-4" />
+                <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+                  Ready to Get Started?
+                </h2>
+                <p className="text-lg text-neutral-600 mb-8">
+                  Join thousands of customers who have transformed their beauty routine with OMBARO
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link to="/app">
+                    <Button size="lg" className="w-full sm:w-auto shadow-lg hover:shadow-xl transition-shadow">
+                      Sign Up Now
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
+                  <Link to="/contact">
+                    <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                      Contact Us
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
