@@ -37,17 +37,14 @@ export const MapViewScreen: React.FC<MapViewScreenProps> = ({
 
   // Helper function to convert MassageService to BookingService
   const mapMassageServiceToBookingService = (massageService: any): BookingService => {
-    const duration = massageService.durationOptions.includes(60) ? 60 : massageService.durationOptions[0];
-    const price = massageService.basePrice60min * (duration / 60);
-    
     return {
-      id: massageService.code,
+      id: massageService.id,
       name: massageService.name,
-      description: `${massageService.style} - ${massageService.primaryBenefits}`,
-      price: Math.round(price),
-      duration: duration,
-      category: 'massage',
-      image: 'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=200',
+      description: massageService.description,
+      price: massageService.price,
+      duration: massageService.duration,
+      category: massageService.category || 'massage',
+      image: massageService.image || 'https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=200',
       rating: 4.8
     };
   };
