@@ -26,6 +26,22 @@ export const HeroSlider: React.FC = () => {
       ctaLink: '/app'
     },
     {
+      image: 'https://images.pexels.com/photos/3865676/pexels-photo-3865676.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      title: 'Relaxing Body Massage',
+      subtitle: 'Premium Massage Therapy',
+      description: 'Deep tissue, Swedish, Thai, and aromatherapy massages by expert therapists',
+      cta: 'Book Massage',
+      ctaLink: '/app'
+    },
+    {
+      image: 'https://images.pexels.com/photos/3757952/pexels-photo-3757952.jpeg?auto=compress&cs=tinysrgb&w=1200',
+      title: 'Therapeutic Body Treatments',
+      subtitle: 'Healing Touch Therapy',
+      description: 'Professional body massage and spa treatments for complete relaxation and wellness',
+      cta: 'Book Now',
+      ctaLink: '/app'
+    },
+    {
       image: 'https://images.pexels.com/photos/3992860/pexels-photo-3992860.jpeg?auto=compress&cs=tinysrgb&w=1200',
       title: 'Bridal Makeup & Styling',
       subtitle: 'Your Dream Wedding Look',
