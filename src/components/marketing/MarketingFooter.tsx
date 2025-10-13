@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Sparkles, Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Briefcase } from 'lucide-react';
 
 export const MarketingFooter: React.FC = () => {
   return (
@@ -92,8 +92,9 @@ export const MarketingFooter: React.FC = () => {
             <h3 className="text-white font-semibold mb-4">For Businesses</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/app" className="hover:text-primary-400 transition-colors">
-                  Become a Partner
+                <Link to="/become-a-partner" className="hover:text-primary-400 transition-colors flex items-center space-x-2 group">
+                  <Briefcase className="w-4 h-4 text-primary-400 group-hover:text-primary-300" />
+                  <span>Partner With Us</span>
                 </Link>
               </li>
               <li>
@@ -102,7 +103,7 @@ export const MarketingFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/app" className="hover:text-primary-400 transition-colors">
+                <Link to="/become-a-partner" className="hover:text-primary-400 transition-colors">
                   Partner Benefits
                 </Link>
               </li>

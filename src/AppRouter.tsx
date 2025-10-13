@@ -7,6 +7,7 @@ import { HowItWorksPage } from './pages/HowItWorksPage';
 import { ContactPage } from './pages/ContactPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
+import { BecomePartnerPage } from './pages/BecomePartnerPage';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import App from './App';
 
@@ -22,6 +23,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/become-a-partner" element={<BecomePartnerPage />} />
         <Route path="/app/*" element={<App />} />
       </Routes>
     </BrowserRouter>
