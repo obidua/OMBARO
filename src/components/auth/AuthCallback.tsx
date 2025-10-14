@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Loader } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useNavigate } from 'react-router-dom';
 
 interface AuthCallbackProps {
   onNavigate?: (screen: string, data?: any) => void;
@@ -9,7 +8,6 @@ interface AuthCallbackProps {
 
 export default function AuthCallback({ onNavigate }: AuthCallbackProps) {
   const [error, setError] = useState<string>('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     handleAuthCallback();
@@ -17,11 +15,11 @@ export default function AuthCallback({ onNavigate }: AuthCallbackProps) {
 
   async function handleAuthCallback() {
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      const { data: { session }, error } = await supabase.auth.getSession();
 
-      if (sessionError) {
-        console.error('Auth callback error:', sessionError);
-        setError(sessionError.message);
+      if (error) {
+        console.error('Auth callback error:', error);
+        setError(error.message);
         return;
       }
 
@@ -37,52 +35,14 @@ export default function AuthCallback({ onNavigate }: AuthCallbackProps) {
 
         console.log('OAuth success:', userData);
 
-        try {
-          const { data: existingProfile, error: profileCheckError } = await supabase
-            .from('user_profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .maybeSingle();
-
-          if (profileCheckError && profileCheckError.code !== 'PGRST116') {
-            throw profileCheckError;
-          }
-
-          if (!existingProfile) {
-            const { error: profileError } = await supabase
-              .from('user_profiles')
-              .insert({
-                id: session.user.id,
-                email: session.user.email,
-                full_name: userData.name,
-                role: 'vendor',
-                signup_method: 'social',
-                social_provider: provider,
-                profile_completed: false
-              });
-
-            if (profileError) {
-              console.error('Error creating user profile:', profileError);
-            }
-          }
-
-          const oauthData = {
+        if (onNavigate) {
+          onNavigate('vendorMobileVerification', {
             signupType: 'quick',
             provider: provider,
-            userData: userData,
-            selectedCategory: sessionStorage.getItem('vendorCategory') || undefined
-          };
-
-          sessionStorage.setItem('oauthData', JSON.stringify(oauthData));
-
-          if (onNavigate) {
-            onNavigate('vendorMobileVerification', oauthData);
-          } else {
-            window.location.href = '/app?screen=vendorMobileVerification&oauth=true';
-          }
-        } catch (dbError: any) {
-          console.error('Database error in auth callback:', dbError);
-          setError('Failed to set up your account. Please try again or contact support.');
+            userData: userData
+          });
+        } else {
+          window.location.href = '/app';
         }
       } else {
         setError('No session found. Please try again.');

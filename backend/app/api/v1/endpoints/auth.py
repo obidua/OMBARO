@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.security import create_access_token, create_refresh_token, get_password_hash, verify_password
 from app.core.redis_client import redis_client
-from app.core.supabase_client import get_supabase_admin
 from app.schemas.auth import OTPRequest, OTPVerify, UserRegister, UserLogin, Token, TokenRefresh
 import random
 from datetime import timedelta
@@ -36,55 +35,38 @@ async def send_otp(request: OTPRequest):
 async def verify_otp(request: OTPVerify, db: AsyncSession = Depends(get_db)):
     """
     Verify OTP and return JWT tokens
-    - Validates OTP with Supabase Auth
-    - Creates or retrieves user profile
+    - Validates OTP from Redis
+    - Creates or retrieves user
     - Returns access and refresh tokens
     """
-    try:
-        supabase = get_supabase_admin()
+    stored_otp = await redis_client.get(f"otp:{request.mobile}")
 
-        auth_response = supabase.auth.verify_otp({
-            'phone': request.mobile,
-            'token': request.otp,
-            'type': 'sms'
-        })
-
-        if not auth_response.user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid or expired OTP"
-            )
-
-        profile_response = supabase.table('user_profiles').select('*').eq('id', auth_response.user.id).maybe_single().execute()
-
-        if profile_response.data:
-            user_profile = profile_response.data
-        else:
-            user_profile = {
-                'id': auth_response.user.id,
-                'phone': request.mobile,
-                'role': 'customer',
-                'status': 'active'
-            }
-            supabase.table('user_profiles').insert(user_profile).execute()
-
-        access_token = create_access_token(
-            data={"sub": user_profile["id"], "role": user_profile.get("role", "customer")}
-        )
-        refresh_token = create_refresh_token(
-            data={"sub": user_profile["id"], "role": user_profile.get("role", "customer")}
-        )
-
-        return Token(
-            access_token=access_token,
-            refresh_token=refresh_token,
-            user=user_profile
-        )
-    except Exception as e:
+    if not stored_otp or stored_otp != request.otp:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Authentication failed: {str(e)}"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired OTP"
         )
+
+    await redis_client.delete(f"otp:{request.mobile}")
+
+    user_data = {
+        "id": f"user_{request.mobile}",
+        "mobile": request.mobile,
+        "role": "customer"
+    }
+
+    access_token = create_access_token(
+        data={"sub": user_data["id"], "role": user_data["role"]}
+    )
+    refresh_token = create_refresh_token(
+        data={"sub": user_data["id"], "role": user_data["role"]}
+    )
+
+    return Token(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        user=user_data
+    )
 
 @router.post("/register", response_model=Token)
 async def register(request: UserRegister, db: AsyncSession = Depends(get_db)):
