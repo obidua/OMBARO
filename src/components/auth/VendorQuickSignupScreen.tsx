@@ -20,31 +20,47 @@ export default function VendorQuickSignupScreen({
     setError('');
 
     try {
+      if (selectedCategory) {
+        sessionStorage.setItem('vendorCategory', selectedCategory);
+      }
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
           scopes: provider === 'google' ? 'email profile' : 'email public_profile',
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          }
+          queryParams:
+            provider === 'google'
+              ? {
+                  access_type: 'offline',
+                  prompt: 'consent',
+                }
+              : undefined
         }
       });
 
       if (error) {
         console.error('OAuth error:', error);
 
-        if (error.message.includes('provider is not enabled')) {
+        if (error.message.includes('provider is not enabled') || error.message.includes('not enabled')) {
           throw new Error(
-            `${provider.charAt(0).toUpperCase() + provider.slice(1)} login is currently being configured. Please try the detailed signup option or contact support.`
+            `${provider.charAt(0).toUpperCase() + provider.slice(1)} login needs to be configured in Supabase. Please follow the setup guide in OAUTH_SETUP_GUIDE.md or use the detailed signup option.`
           );
         }
+
+        if (error.message.includes('redirect')) {
+          throw new Error(
+            `OAuth redirect configuration error. Please check the authorized redirect URIs in your ${provider} console.`
+          );
+        }
+
         throw error;
       }
 
       if (data?.url) {
         window.location.href = data.url;
+      } else {
+        throw new Error('OAuth provider did not return a redirect URL. Please try again.');
       }
     } catch (err: any) {
       console.error('Social signup error:', err);

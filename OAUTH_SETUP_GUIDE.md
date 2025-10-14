@@ -1,16 +1,58 @@
 # OAuth Social Login Setup Guide
 
-This guide will help you configure Google and Facebook OAuth providers for vendor quick signup functionality.
+This guide provides step-by-step instructions to configure Google and Facebook OAuth providers for vendor quick signup functionality in the OMBARO platform.
+
+## Overview
+
+The OMBARO vendor onboarding system supports three authentication methods:
+1. **Google OAuth** - Sign up using Google account
+2. **Facebook OAuth** - Sign up using Facebook account
+3. **Instagram** - Uses Facebook OAuth (Instagram is owned by Meta)
 
 ## Current Issue
 
-The error **"Unsupported provider: provider is not enabled"** occurs because OAuth providers need to be enabled and configured in your Supabase project before they can be used.
+If you see the error **"Provider is not enabled"**, it means OAuth providers need to be configured in your Supabase project.
 
 ## Prerequisites
 
 - Access to Supabase Dashboard: https://vspkiuissuuesjsnnpqr.supabase.co
-- Google Cloud Console account
-- Facebook Developer account
+- Google Cloud Console account (for Google OAuth)
+- Facebook Developer account (for Facebook OAuth)
+- Domain with SSL certificate (for production deployment)
+
+---
+
+## Quick Start Guide (Summary)
+
+If you're already familiar with OAuth setup, here's the TL;DR:
+
+1. **Supabase Configuration:**
+   - Go to Authentication → Providers in Supabase Dashboard
+   - Enable Google provider with Client ID and Client Secret
+   - Enable Facebook provider with App ID and App Secret
+   - Set Site URL to your application URL
+   - Add redirect URLs to the allow list
+
+2. **Google Cloud Console:**
+   - Create OAuth 2.0 Client ID (Web application)
+   - Add `https://vspkiuissuuesjsnnpqr.supabase.co/auth/v1/callback` to Authorized redirect URIs
+   - Add your domain to Authorized JavaScript origins
+   - Copy Client ID and Secret to Supabase
+
+3. **Facebook Developer Console:**
+   - Create a Facebook App
+   - Add Facebook Login product
+   - Add `https://vspkiuissuuesjsnnpqr.supabase.co/auth/v1/callback` to Valid OAuth Redirect URIs
+   - Copy App ID and App Secret to Supabase
+   - Set app to Live mode
+
+4. **Test the Flow:**
+   - Navigate to vendor signup page
+   - Click "Quick Signup"
+   - Test Google and Facebook login buttons
+   - Verify redirect to mobile verification screen
+
+For detailed step-by-step instructions, continue reading below.
 
 ---
 
@@ -204,82 +246,333 @@ After successful OAuth login, check Supabase:
 
 ## Step 6: Troubleshooting
 
-### Common Errors
+### Common Errors and Solutions
 
-**Error: "Provider is not enabled"**
-- Solution: Enable the provider in Supabase Dashboard
-- Verify Client ID and Client Secret are saved
+#### Error: "Provider is not enabled" or "Unsupported provider"
 
-**Error: "Redirect URI mismatch"**
-- Solution: Ensure redirect URIs match exactly in both provider console and Supabase
-- Check for trailing slashes or http vs https
+**Cause:** OAuth provider is not configured in Supabase
 
-**Error: "Invalid client"**
-- Solution: Verify Client ID and Client Secret are correct
-- Check that credentials are from the correct project/app
+**Solution:**
+1. Go to Supabase Dashboard → Authentication → Providers
+2. Find the provider (Google or Facebook)
+3. Toggle it to "Enabled"
+4. Add Client ID and Client Secret
+5. Click "Save"
 
-**Error: "Access denied"**
-- Solution: Ensure OAuth consent screen is published
-- Verify required scopes are approved
+**Verification:**
+```javascript
+// The error appears here in console:
+console.error('OAuth error:', error);
+// Message: "provider is not enabled"
+```
+
+---
+
+#### Error: "Redirect URI mismatch"
+
+**Cause:** The redirect URI in your OAuth provider settings doesn't match Supabase's callback URL
+
+**Solution:**
+
+For Google:
+1. Go to Google Cloud Console → Credentials
+2. Edit your OAuth 2.0 Client ID
+3. Under "Authorized redirect URIs", ensure you have:
+   ```
+   https://vspkiuissuuesjsnnpqr.supabase.co/auth/v1/callback
+   ```
+4. Make sure there's no trailing slash
+5. Use HTTPS, not HTTP (except for localhost)
+
+For Facebook:
+1. Go to Facebook Developer Console → Your App → Facebook Login → Settings
+2. Under "Valid OAuth Redirect URIs", ensure you have:
+   ```
+   https://vspkiuissuuesjsnnpqr.supabase.co/auth/v1/callback
+   ```
+3. Click "Save Changes"
+
+---
+
+#### Error: "Invalid client" or "Invalid client_id"
+
+**Cause:** Client ID or Client Secret is incorrect
+
+**Solution:**
+1. Verify you copied the correct credentials from the provider console
+2. Check for extra spaces or characters
+3. Ensure you're using credentials from the correct project/app
+4. For Facebook, use App ID as Client ID, not some other ID
+
+**How to verify:**
+- Google: Go to Credentials page and check the Client ID
+- Facebook: Go to Settings → Basic and check App ID
+
+---
+
+#### Error: "Access denied" or "consent_required"
+
+**Cause:** OAuth consent screen not properly configured or user cancelled
+
+**Solution:**
+
+For Google:
+1. Go to OAuth consent screen in Google Cloud Console
+2. Ensure app is published (or add test users if in testing mode)
+3. Verify required scopes are added (email, profile)
+4. Check that your email is listed as a test user if app is not published
+
+For Facebook:
+1. Ensure app is in "Live" mode (not Development)
+2. Check that Privacy Policy URL is set
+3. Verify Terms of Service URL is set
+4. Make sure your account is listed as an app admin/developer
+
+---
+
+#### Error: "No session found"
+
+**Cause:** Session was not created properly after OAuth callback
+
+**Solution:**
+1. Check browser console for any errors
+2. Verify `detectSessionInUrl: true` is set in Supabase client config
+3. Clear browser cookies and try again
+4. Check if sessionStorage is being blocked by browser settings
+
+**Verification:**
+```javascript
+// In AuthCallback.tsx
+const { data: { session }, error } = await supabase.auth.getSession();
+console.log('Session:', session); // Should not be null
+```
+
+---
+
+#### Error: OAuth flow completes but mobile verification screen doesn't show
+
+**Cause:** App component is not reading OAuth data from sessionStorage
+
+**Solution:**
+1. Check browser console for errors
+2. Verify sessionStorage contains 'oauthData'
+3. Check URL parameters include `?screen=vendorMobileVerification&oauth=true`
+4. Ensure App.tsx useEffect is running
+
+**Debug steps:**
+```javascript
+// Check in browser console:
+console.log(sessionStorage.getItem('oauthData'));
+console.log(window.location.search);
+```
+
+---
 
 ### Testing in Development
 
 For local testing:
-1. Use `http://localhost:5173` as origin
-2. Update redirect URIs in provider consoles
-3. Test with test accounts first
+
+1. **Update OAuth Provider Settings:**
+   - Add `http://localhost:5173` to authorized origins
+   - Keep the Supabase callback URL (it stays the same)
+   - No need to add localhost to redirect URIs
+
+2. **Test with Personal Accounts:**
+   - Use your own Google/Facebook account for initial testing
+   - Add test accounts in provider console for team testing
+
+3. **Check Browser Console:**
+   - Open Developer Tools (F12)
+   - Check Console tab for errors
+   - Check Network tab for failed requests
+   - Check Application → Session Storage for oauth data
+
+4. **Common Local Issues:**
+   - HTTPS required for OAuth (Supabase handles this)
+   - Cookies must be enabled
+   - Third-party cookies should be allowed
+   - Pop-up blocker might interfere
+
+---
 
 ### Security Best Practices
 
-1. Never commit Client Secrets to version control
-2. Use environment variables for sensitive data
-3. Regularly rotate OAuth credentials
-4. Monitor OAuth usage in provider dashboards
-5. Enable 2FA on provider accounts
-6. Set up alerts for suspicious OAuth activity
+1. **Never commit secrets:**
+   - Client Secrets should only be in Supabase Dashboard
+   - Never in your code or .env files that get committed
+
+2. **Use environment variables:**
+   - Store Supabase URL and anon key in .env
+   - Add .env to .gitignore
+
+3. **Regularly rotate credentials:**
+   - Change OAuth secrets every 90 days
+   - Update in both provider console and Supabase
+
+4. **Monitor OAuth usage:**
+   - Check Google Cloud Console for API usage
+   - Check Facebook Developer Console for app usage
+   - Set up alerts for unusual activity
+
+5. **Enable 2FA:**
+   - Enable two-factor authentication on Google account
+   - Enable two-factor authentication on Facebook account
+   - Protects against credential theft
+
+6. **Restrict scope:**
+   - Only request email and profile scopes
+   - Don't ask for unnecessary permissions
+   - Users trust apps that request minimal data
+
+7. **Production security:**
+   - Use HTTPS for all URLs
+   - Set proper CORS settings
+   - Implement rate limiting
+   - Monitor for suspicious patterns
 
 ---
 
-## Step 7: Code Changes Summary
+## Step 7: Code Implementation Summary
 
-### Fixed Issues:
+The following code changes have been implemented to support OAuth authentication:
 
-1. **Instagram Button Handler**
-   - Changed from incorrect Facebook provider to helpful info message
-   - Users are directed to use Facebook login for Instagram authentication
+### 1. AuthCallback Component (`src/components/auth/AuthCallback.tsx`)
 
-2. **Enhanced Error Handling**
-   - Added specific error message for "provider not enabled" error
-   - Displays alternative signup options when OAuth fails
-   - Shows helpful troubleshooting steps
+**Key Features:**
+- Handles OAuth redirect after provider authentication
+- Creates user profile in `user_profiles` table if it doesn't exist
+- Stores OAuth data in sessionStorage for App component
+- Provides comprehensive error handling and user feedback
+- Redirects to mobile verification screen with OAuth context
 
-3. **OAuth Redirect Configuration**
-   - Updated redirect URL to use `/auth/callback` route
-   - Added proper OAuth query parameters for Google
-   - Created dedicated AuthCallback component
+**Database Operations:**
+- Checks for existing user profile
+- Creates new profile with OAuth metadata (signup_method: 'social', social_provider, profile_completed: false)
+- Sets role as 'vendor' for all OAuth signups
 
-4. **AuthCallback Component**
-   - Handles OAuth redirect after provider authentication
-   - Extracts user data from OAuth session
-   - Redirects to mobile verification screen
-   - Displays loading and error states
+### 2. VendorQuickSignupScreen Component
 
-### Files Modified:
+**Enhancements:**
+- Stores vendor category in sessionStorage before OAuth redirect
+- Improved error messages for different OAuth failure scenarios
+- Proper scope configuration for Google and Facebook
+- Conditional query parameters for different providers
 
-- `src/components/auth/VendorQuickSignupScreen.tsx` - Fixed OAuth handlers
-- `src/components/auth/AuthCallback.tsx` - New callback handler
-- `src/AppRouter.tsx` - Added callback route
+### 3. App Component Integration
+
+**OAuth Flow Handler:**
+- Checks URL parameters for OAuth callback indicator
+- Retrieves OAuth data from sessionStorage
+- Sets current screen to mobile verification
+- Cleans up sessionStorage and URL after processing
+
+### 4. OAuth Flow Diagram
+
+```
+User clicks "Continue with Google/Facebook"
+    ↓
+Store vendor category in sessionStorage
+    ↓
+Call supabase.auth.signInWithOAuth()
+    ↓
+Redirect to Provider Login Page
+    ↓
+User authorizes application
+    ↓
+Provider redirects to /auth/callback
+    ↓
+AuthCallback component activates
+    ↓
+Get session from Supabase
+    ↓
+Create/update user_profiles table
+    ↓
+Store OAuth data in sessionStorage
+    ↓
+Redirect to /app?screen=vendorMobileVerification&oauth=true
+    ↓
+App component reads OAuth data
+    ↓
+Navigate to Mobile Verification Screen
+    ↓
+User enters mobile number and verifies OTP
+    ↓
+Update user profile with mobile number
+    ↓
+Create quick_signup_profiles record
+    ↓
+Show success screen
+```
+
+### 5. Database Schema Used
+
+**Tables:**
+- `user_profiles` - Main user data with OAuth metadata
+- `social_auth_providers` - OAuth provider linkage (optional)
+- `otp_verifications` - Mobile verification codes
+- `quick_signup_profiles` - Incomplete vendor registrations
+- `vendor_categories` - Available business categories
 
 ---
 
-## Next Steps
+## Step 8: Testing Your OAuth Setup
 
-1. **Configure OAuth Providers** in Supabase Dashboard
-2. **Set up Google Cloud Console** credentials
-3. **Set up Facebook Developer** app
-4. **Test OAuth flows** in development
-5. **Update production URLs** before deployment
-6. **Monitor OAuth usage** and errors
+### Testing Checklist
+
+- [ ] Google OAuth provider enabled in Supabase
+- [ ] Facebook OAuth provider enabled in Supabase
+- [ ] Redirect URIs configured in Google Cloud Console
+- [ ] Redirect URIs configured in Facebook Developer Console
+- [ ] Site URL set in Supabase Authentication settings
+- [ ] Test Google login flow from start to finish
+- [ ] Test Facebook login flow from start to finish
+- [ ] Verify user_profiles record created with correct data
+- [ ] Verify mobile verification works after OAuth
+- [ ] Test error scenarios (cancelled login, invalid credentials)
+- [ ] Verify session persists across page refreshes
+
+### How to Test
+
+1. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+
+2. **Navigate to Vendor Signup**
+   - Go to http://localhost:5173/become-a-partner
+   - Select a vendor category (e.g., "Spa & Massage")
+   - Click "Continue to Signup"
+   - Click "Quick Signup"
+
+3. **Test Google OAuth**
+   - Click "Continue with Google"
+   - If error appears, follow the error message guidance
+   - If successful, you should be redirected to Google login
+   - After authorization, you should land on mobile verification screen
+
+4. **Test Facebook OAuth**
+   - Click "Continue with Facebook"
+   - Follow same verification steps as Google
+
+5. **Verify Database Records**
+   - Open Supabase Dashboard
+   - Go to Authentication → Users
+   - Verify new user appears with correct email
+   - Check user_profiles table for the new record
+   - Verify signup_method = 'social' and social_provider is set
+
+---
+
+## Step 9: Next Steps After Configuration
+
+1. **Complete OAuth Setup** in Supabase Dashboard
+2. **Configure Provider Credentials** (Google, Facebook)
+3. **Test in Development** environment
+4. **Update Production URLs** before deploying
+5. **Monitor OAuth Usage** through provider dashboards
+6. **Set Up Error Monitoring** for OAuth failures
+7. **Configure Email Templates** for OAuth users (optional)
+8. **Review Privacy Policy** to include OAuth disclosures
 
 ---
 

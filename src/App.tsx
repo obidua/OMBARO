@@ -73,6 +73,27 @@ function App() {
   const { authState, setCurrentStep, setSelectedEntity, loginUser, selectRole, logout, sendOTP, verifyOTP, completeProfile } = useAuth();
   const [searchQuery, setSearchQuery] = React.useState('');
 
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isOAuthCallback = urlParams.get('oauth') === 'true';
+    const targetScreen = urlParams.get('screen');
+
+    if (isOAuthCallback && targetScreen) {
+      const oauthDataStr = sessionStorage.getItem('oauthData');
+      if (oauthDataStr) {
+        try {
+          const oauthData = JSON.parse(oauthDataStr);
+          setSelectedEntity(oauthData);
+          setCurrentStep(targetScreen as any);
+          sessionStorage.removeItem('oauthData');
+          window.history.replaceState({}, document.title, '/app');
+        } catch (e) {
+          console.error('Failed to parse OAuth data:', e);
+        }
+      }
+    }
+  }, []);
+
   const handleSearch = () => {
     console.log('Search query:', searchQuery);
     // Navigate to search results or filter current view
