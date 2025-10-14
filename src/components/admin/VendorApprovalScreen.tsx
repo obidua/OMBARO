@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Filter, CheckCircle, XCircle, Clock, AlertCircle, Eye, FileText, Phone, Mail, MapPin, Building, Calendar, Users } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { VendorApprovalService, VendorApplication } from '../../services/vendor-approval.service';
 
 interface VendorApprovalScreenProps {
   onNavigate: (screen: string) => void;
@@ -38,81 +39,40 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
   const [actionType, setActionType] = useState<'approve' | 'reject' | 'info_required' | null>(null);
   const [actionNote, setActionNote] = useState('');
   const [loading, setLoading] = useState(false);
+  const [applications, setApplications] = useState<VendorApplication[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Mock data - In real implementation, fetch from Supabase
-  const applications: VendorApplication[] = [
-    {
-      id: '1',
-      businessName: 'Serenity Spa & Wellness',
-      businessType: 'spa',
-      contactPerson: 'Rajesh Kumar',
-      contactMobile: '9876543210',
-      contactEmail: 'rajesh@serenityspa.com',
-      address: {
-        addressLine1: '123 MG Road',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        pincode: '560001'
-      },
-      gstNumber: '29ABCDE1234F1Z5',
-      panNumber: 'ABCDE1234F',
-      yearsInBusiness: 5,
-      numberOfStaff: 15,
-      description: 'Premium spa offering Swedish, Thai, and Ayurvedic treatments',
-      status: 'pending',
-      appliedDate: '2025-01-02',
-      applicantName: 'Rajesh Kumar',
-      applicantEmail: 'rajesh@serenityspa.com'
-    },
-    {
-      id: '2',
-      businessName: 'Glamour Beauty Salon',
-      businessType: 'salon',
-      contactPerson: 'Priya Sharma',
-      contactMobile: '9876543211',
-      contactEmail: 'priya@glamoursalon.com',
-      address: {
-        addressLine1: '45 Brigade Road',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        pincode: '560025'
-      },
-      yearsInBusiness: 3,
-      numberOfStaff: 8,
-      description: 'Modern salon specializing in hair and beauty treatments',
-      status: 'under_review',
-      appliedDate: '2025-01-01',
-      applicantName: 'Priya Sharma',
-      applicantEmail: 'priya@glamoursalon.com'
-    },
-    {
-      id: '3',
-      businessName: 'Wellness Home Services',
-      businessType: 'home_service',
-      contactPerson: 'Amit Patel',
-      contactMobile: '9876543212',
-      contactEmail: 'amit@wellnesshome.com',
-      address: {
-        addressLine1: '789 Koramangala',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        pincode: '560034'
-      },
-      yearsInBusiness: 2,
-      numberOfStaff: 20,
-      description: 'Professional home spa and massage services',
-      status: 'approved',
-      appliedDate: '2024-12-28',
-      applicantName: 'Amit Patel',
-      applicantEmail: 'amit@wellnesshome.com'
+  // Fetch applications from database
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
+  async function fetchApplications() {
+    setFetchLoading(true);
+    setFetchError(null);
+    try {
+      const result = await VendorApprovalService.getAllApplications();
+      if (result.success && result.data) {
+        setApplications(result.data);
+        console.log('Fetched applications:', result.data);
+      } else {
+        setFetchError(result.error || 'Failed to fetch applications');
+        console.error('Error fetching applications:', result.error);
+      }
+    } catch (error) {
+      console.error('Exception fetching applications:', error);
+      setFetchError('An unexpected error occurred');
+    } finally {
+      setFetchLoading(false);
     }
-  ];
+  }
 
   const filteredApplications = applications.filter(app => {
     const matchesSearch =
-      app.businessName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.contactPerson.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.contactEmail.toLowerCase().includes(searchQuery.toLowerCase());
+      app.business_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.contact_person.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.contact_email.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
 
@@ -160,15 +120,41 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
 
     setLoading(true);
     try {
-      // Simulate API call - In real implementation, update Supabase
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      let result;
+      // Note: We'll need employee ID - for now using admin as placeholder
+      const employeeId = 'admin-id-placeholder';
 
-      alert(`Application ${actionType === 'approve' ? 'approved' : actionType === 'reject' ? 'rejected' : 'marked for additional info'}!`);
+      if (actionType === 'approve') {
+        result = await VendorApprovalService.approveApplication(
+          selectedApplication.id,
+          employeeId,
+          actionNote
+        );
+      } else if (actionType === 'reject') {
+        result = await VendorApprovalService.rejectApplication(
+          selectedApplication.id,
+          employeeId,
+          actionNote || 'No reason provided'
+        );
+      } else if (actionType === 'info_required') {
+        result = await VendorApprovalService.requestAdditionalInfo(
+          selectedApplication.id,
+          employeeId,
+          actionNote || 'Additional information required'
+        );
+      }
 
-      setShowModal(false);
-      setActionType(null);
-      setActionNote('');
-      setSelectedApplication(null);
+      if (result?.success) {
+        alert(`Application ${actionType === 'approve' ? 'approved' : actionType === 'reject' ? 'rejected' : 'marked for additional info'}!`);
+        // Refresh applications list
+        await fetchApplications();
+        setShowModal(false);
+        setActionType(null);
+        setActionNote('');
+        setSelectedApplication(null);
+      } else {
+        alert(`Failed: ${result?.error || 'Unknown error'}`);
+      }
     } catch (error) {
       console.error('Error processing action:', error);
       alert('Failed to process action. Please try again.');
@@ -197,6 +183,35 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Loading State */}
+        {fetchLoading && (
+          <div className="bg-white rounded-lg shadow p-8 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading applications...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {fetchError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+            <div className="flex items-center gap-3">
+              <AlertCircle className="w-6 h-6 text-red-600" />
+              <div>
+                <h3 className="font-semibold text-red-900">Error Loading Applications</h3>
+                <p className="text-sm text-red-700 mt-1">{fetchError}</p>
+                <button
+                  onClick={fetchApplications}
+                  className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!fetchLoading && !fetchError && (
+        <>
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow p-4">
@@ -291,22 +306,22 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                   <tr key={app.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-medium text-gray-900">{app.businessName}</p>
-                        <p className="text-sm text-gray-500 capitalize">{app.businessType.replace('_', ' ')}</p>
+                        <p className="font-medium text-gray-900">{app.business_name}</p>
+                        <p className="text-sm text-gray-500 capitalize">{app.business_type.replace('_', ' ')}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-sm text-gray-900">{app.contactPerson}</p>
-                        <p className="text-sm text-gray-500">{app.contactMobile}</p>
+                        <p className="text-sm text-gray-900">{app.contact_person}</p>
+                        <p className="text-sm text-gray-500">{app.contact_mobile}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-gray-900">{app.address.city}</p>
-                      <p className="text-sm text-gray-500">{app.address.state}</p>
+                      <p className="text-sm text-gray-900">{app.city}</p>
+                      <p className="text-sm text-gray-500">{app.state}</p>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {new Date(app.appliedDate).toLocaleDateString()}
+                      {new Date(app.applied_date).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
                       {getStatusBadge(app.status)}
@@ -334,6 +349,8 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
             </div>
           )}
         </div>
+        </>
+        )}
       </div>
 
       {/* Details Modal */}
@@ -366,33 +383,41 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                 <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
                   <div>
                     <p className="text-sm text-gray-600">Business Name</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.businessName}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.business_name}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Business Type</p>
                     <p className="font-medium text-gray-900 capitalize">
-                      {selectedApplication.businessType.replace('_', ' ')}
+                      {selectedApplication.business_type.replace('_', ' ')}
                     </p>
                   </div>
-                  {selectedApplication.gstNumber && (
+                  <div>
+                    <p className="text-sm text-gray-600">Application Number</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.application_number}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Partner Type</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.partner_type}</p>
+                  </div>
+                  {selectedApplication.gst_number && (
                     <div>
                       <p className="text-sm text-gray-600">GST Number</p>
-                      <p className="font-medium text-gray-900">{selectedApplication.gstNumber}</p>
+                      <p className="font-medium text-gray-900">{selectedApplication.gst_number}</p>
                     </div>
                   )}
-                  {selectedApplication.panNumber && (
+                  {selectedApplication.pan_number && (
                     <div>
                       <p className="text-sm text-gray-600">PAN Number</p>
-                      <p className="font-medium text-gray-900">{selectedApplication.panNumber}</p>
+                      <p className="font-medium text-gray-900">{selectedApplication.pan_number}</p>
                     </div>
                   )}
                   <div>
                     <p className="text-sm text-gray-600">Years in Business</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.yearsInBusiness || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.years_in_business || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Number of Staff</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.numberOfStaff || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.number_of_staff || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -406,15 +431,15 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                 <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
                   <div>
                     <p className="text-sm text-gray-600">Contact Person</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.contactPerson}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.contact_person}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Mobile</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.contactMobile}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.contact_mobile}</p>
                   </div>
                   <div className="col-span-2">
                     <p className="text-sm text-gray-600">Email</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.contactEmail}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.contact_email}</p>
                   </div>
                 </div>
               </div>
@@ -427,9 +452,10 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                 </h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-gray-900">
-                    {selectedApplication.address.addressLine1}<br />
-                    {selectedApplication.address.city}, {selectedApplication.address.state}<br />
-                    PIN: {selectedApplication.address.pincode}
+                    {selectedApplication.address_line1}<br />
+                    {selectedApplication.address_line2 && <>{selectedApplication.address_line2}<br /></>}
+                    {selectedApplication.city}, {selectedApplication.state}<br />
+                    PIN: {selectedApplication.pincode}
                   </p>
                 </div>
               </div>

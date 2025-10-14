@@ -6,12 +6,14 @@ export interface User {
   gender?: 'male' | 'female' | 'other';
   dateOfBirth?: string;
   isVerified?: boolean;
+  role?: UserRole;
 }
 
 export type UserRole =
   | 'customer'
   | 'employee'
   | 'vendor'
+  | 'vendor_applicant'
   | 'admin'
   | 'accounts_department'
   | 'marketing_department'

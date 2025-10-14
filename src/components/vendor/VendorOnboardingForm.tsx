@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building, Phone, Mail, MapPin, FileText, CreditCard, CheckCircle } from 'lucide-react';
+import { Building, Phone, Mail, MapPin, FileText, CreditCard, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { supabase } from '../../lib/supabase';
@@ -18,6 +18,8 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
     contactPerson: '',
     contactMobile: '',
     contactEmail: '',
+    password: '',
+    confirmPassword: '',
     addressLine1: '',
     addressLine2: '',
     city: '',
@@ -32,6 +34,11 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
     franchisePaymentReference: ''
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong' | null>(null);
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+
   const partnerTypes = [
     { value: 'FRANCHISE', label: 'Franchise Partner', desc: 'Full franchise model - ₹5L fee, 15% commission' },
     { value: 'ASSOCIATION', label: 'Association Partner', desc: 'Partner with existing business - 20% commission' },
@@ -39,15 +46,105 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
     { value: 'INDEPENDENT', label: 'Independent Vendor', desc: 'Individual service provider - 30% commission' }
   ];
 
+  function validatePassword(password: string): { isValid: boolean; errors: string[]; strength: 'weak' | 'medium' | 'strong' } {
+    const errors: string[] = [];
+    let strength: 'weak' | 'medium' | 'strong' = 'weak';
+
+    if (password.length < 8) {
+      errors.push('Password must be at least 8 characters long');
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push('Password must contain at least one uppercase letter');
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push('Password must contain at least one lowercase letter');
+    }
+    if (!/[0-9]/.test(password)) {
+      errors.push('Password must contain at least one number');
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push('Password must contain at least one special character');
+    }
+
+    const isValid = errors.length === 0;
+
+    if (isValid) {
+      if (password.length >= 12 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        strength = 'strong';
+      } else if (password.length >= 8) {
+        strength = 'medium';
+      }
+    }
+
+    return { isValid, errors, strength };
+  }
+
+  function handlePasswordChange(password: string) {
+    setFormData({ ...formData, password });
+    const validation = validatePassword(password);
+    setPasswordErrors(validation.errors);
+    setPasswordStrength(validation.strength);
+  }
+
   async function handleSubmit() {
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    // Validate password strength
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      alert('Please fix password errors before submitting:\n' + passwordValidation.errors.join('\n'));
+      return;
+    }
+
     setLoading(true);
     try {
-      const appNumber = 'APP' + Date.now().toString().slice(-6);
+      // Step 1: Create user in Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        phone: formData.contactMobile,
+        password: formData.password,
+        options: {
+          data: {
+            name: formData.contactPerson,
+            email: formData.contactEmail,
+            role: 'vendor_applicant'
+          }
+        }
+      });
+
+      if (authError) throw authError;
+
+      const userId = authData.user?.id;
+      if (!userId) throw new Error('Failed to create user account');
+
+      // Step 2: Create user profile
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert({
+          id: userId,
+          name: formData.contactPerson,
+          email: formData.contactEmail,
+          mobile: formData.contactMobile,
+          role: 'vendor_applicant',
+          status: 'active'
+        });
+
+      if (profileError) {
+        console.error('Error creating profile:', profileError);
+        // Continue even if profile creation fails - can be fixed later
+      }
+
+      // Step 3: Submit vendor application
+      const appNumber = 'APP' + Date.now().toString().slice(-8);
 
       const { data, error } = await supabase
         .from('vendor_applications')
         .insert({
           application_number: appNumber,
+          user_id: userId,
           partner_type: formData.partnerType,
           business_name: formData.businessName,
           business_type: formData.businessType,
@@ -66,18 +163,20 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
           description: formData.description,
           franchise_fee_paid: formData.franchiseFeePaid,
           franchise_payment_reference: formData.franchisePaymentReference,
-          status: 'pending'
+          is_self_registered: true,
+          status: 'pending',
+          current_approval_stage: 1
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      alert(`Application submitted successfully! Your application number is: ${appNumber}`);
+      alert(`Application submitted successfully!\n\nYour application number is: ${appNumber}\n\nYou can now login with your mobile number and password to track your application status.`);
       onSuccess?.();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting application:', error);
-      alert('Failed to submit application. Please try again.');
+      alert('Failed to submit application: ' + (error.message || 'Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -181,6 +280,91 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
               onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
               required
             />
+
+            <div className="col-span-2 bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <h3 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                <Lock className="w-5 h-5" />
+                Set Your Login Password
+              </h3>
+              <p className="text-sm text-blue-700 mb-4">
+                You'll use your mobile number and this password to login and track your application status.
+              </p>
+
+              <div className="space-y-4">
+                <div className="relative">
+                  <Input
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={(e) => handlePasswordChange(e.target.value)}
+                    required
+                    placeholder="Enter a strong password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-9 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+
+                {formData.password && (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full transition-all ${
+                            passwordStrength === 'strong' ? 'w-full bg-green-500' :
+                            passwordStrength === 'medium' ? 'w-2/3 bg-yellow-500' :
+                            'w-1/3 bg-red-500'
+                          }`}
+                        />
+                      </div>
+                      <span className={`text-xs font-medium ${
+                        passwordStrength === 'strong' ? 'text-green-600' :
+                        passwordStrength === 'medium' ? 'text-yellow-600' :
+                        'text-red-600'
+                      }`}>
+                        {passwordStrength === 'strong' ? 'Strong' :
+                         passwordStrength === 'medium' ? 'Medium' :
+                         'Weak'}
+                      </span>
+                    </div>
+
+                    {passwordErrors.length > 0 && (
+                      <div className="text-xs text-red-600 space-y-1">
+                        {passwordErrors.map((error, index) => (
+                          <p key={index}>• {error}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="relative">
+                  <Input
+                    label="Confirm Password"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={formData.confirmPassword}
+                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    required
+                    placeholder="Re-enter your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-9 text-gray-400 hover:text-gray-600"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+
+                {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                  <p className="text-xs text-red-600">Passwords do not match</p>
+                )}
+              </div>
+            </div>
 
             <Input
               label="Address Line 1"
@@ -312,12 +496,13 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
             </div>
 
             <div className="bg-blue-50 p-4 rounded-xl">
-              <h3 className="font-semibold text-blue-900 mb-2">Next Steps</h3>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• Field Officer will review your application</li>
-                <li>• Manager approval required</li>
-                <li>• Director final approval</li>
-                <li>• Admin verification and onboarding</li>
+              <h3 className="font-semibold text-blue-900 mb-2">What Happens Next?</h3>
+              <ul className="text-sm text-blue-800 space-y-2">
+                <li>• You can login with your mobile number ({formData.contactMobile}) and password to track application status</li>
+                <li>• Field Officer will review your application within 24-48 hours</li>
+                <li>• Application will go through Manager and Director approval</li>
+                <li>• Admin will do final verification</li>
+                <li>• Once approved, you'll get full vendor portal access to add services and manage bookings</li>
               </ul>
             </div>
 
@@ -325,7 +510,11 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
               <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
                 Back
               </Button>
-              <Button onClick={handleSubmit} disabled={loading} className="flex-1">
+              <Button
+                onClick={handleSubmit}
+                disabled={loading || !formData.password || formData.password !== formData.confirmPassword || passwordErrors.length > 0}
+                className="flex-1"
+              >
                 {loading ? 'Submitting...' : 'Submit Application'}
               </Button>
             </div>

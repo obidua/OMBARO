@@ -51,6 +51,7 @@ export const useAuth = () => {
             setCurrentStep('employeeDashboard');
             break;
           case 'vendor':
+          case 'vendor_applicant':
             setCurrentStep('vendorDashboard');
             break;
           case 'admin':

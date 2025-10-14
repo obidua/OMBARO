@@ -277,7 +277,10 @@ export class VendorApprovalService {
 
       // If final approval, create vendor account
       if (nextStatus === 'approved') {
-        await this.createVendorAccount(application);
+        const vendorResult = await this.createVendorAccount(application);
+        if (!vendorResult.success) {
+          return { success: false, error: 'Application approved but vendor account creation failed: ' + vendorResult.error };
+        }
       }
 
       return { success: true };
@@ -429,7 +432,7 @@ export class VendorApprovalService {
   /**
    * Create vendor account after final approval
    */
-  private static async createVendorAccount(application: VendorApplication): Promise<void> {
+  private static async createVendorAccount(application: VendorApplication): Promise<{ success: boolean; error?: string }> {
     try {
       // Get commission rate based on partner type
       const { data: partnerType } = await supabase
@@ -439,6 +442,18 @@ export class VendorApprovalService {
         .single();
 
       const commissionRate = partnerType?.commission_rate || 20.0;
+
+      // Check if vendor already exists (avoid duplicates)
+      const { data: existingVendor } = await supabase
+        .from('vendors')
+        .select('id')
+        .eq('application_id', application.id)
+        .maybeSingle();
+
+      if (existingVendor) {
+        console.log('Vendor account already exists for this application');
+        return { success: true };
+      }
 
       // Create vendor record
       const { error: vendorError } = await supabase
@@ -463,13 +478,13 @@ export class VendorApprovalService {
           pan_number: application.pan_number,
           is_active: true,
           verification_status: 'verified',
-          onboarding_completed: true,
+          onboarding_completed: false, // Set to false initially - vendor needs to complete profile
           commission_rate: commissionRate
         });
 
       if (vendorError) {
         console.error('Error creating vendor account:', vendorError);
-        throw vendorError;
+        return { success: false, error: vendorError.message };
       }
 
       // Update user role to vendor
@@ -481,11 +496,15 @@ export class VendorApprovalService {
 
         if (roleError) {
           console.error('Error updating user role:', roleError);
+          return { success: false, error: 'Vendor created but role update failed: ' + roleError.message };
         }
       }
-    } catch (error) {
+
+      console.log('Vendor account created successfully');
+      return { success: true };
+    } catch (error: any) {
       console.error('Error in createVendorAccount:', error);
-      throw error;
+      return { success: false, error: error.message };
     }
   }
 

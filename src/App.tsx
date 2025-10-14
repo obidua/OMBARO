@@ -66,6 +66,7 @@ import VendorQuickSignupSuccessScreen from './components/auth/VendorQuickSignupS
 import VendorSignupScreen from './components/auth/VendorSignupScreen';
 import VendorSignupSuccessScreen from './components/auth/VendorSignupSuccessScreen';
 import VendorApprovalScreen from './components/admin/VendorApprovalScreen';
+import { VendorApplicantPortal } from './components/vendor/VendorApplicantPortal';
 import { Button } from './components/ui/Button';
 import { UserRole } from './types/auth';
 
@@ -472,6 +473,15 @@ function App() {
         );
       
       case 'vendorDashboard':
+        // Check if user is vendor_applicant (pre-approval) or vendor (approved)
+        if (authState.user?.role === 'vendor_applicant') {
+          return (
+            <VendorApplicantPortal
+              onLogout={logout}
+              user={authState.user}
+            />
+          );
+        }
         return (
           <VendorDashboardScreen
             onLogout={logout}
