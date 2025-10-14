@@ -33,6 +33,24 @@ export interface VendorApplication {
   rejection_reason?: string;
   created_at: string;
   updated_at: string;
+  // Computed fields for easier access
+  application_number?: string;
+  partner_type?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  address_line1?: string;
+  address_line2?: string;
+  gst_number?: string;
+  pan_number?: string;
+  years_in_business?: number;
+  number_of_staff?: number;
+  description?: string;
+  current_approval_stage?: number;
+  applied_date?: string;
+  latitude?: number;
+  longitude?: number;
+  status?: string;
 }
 
 export interface ApprovalHistoryRecord {
@@ -117,7 +135,27 @@ export class VendorApprovalService {
         return { success: false, error: error.message };
       }
 
-      return { success: true, data: data as VendorApplication[] };
+      // Map JSONB fields to flat structure
+      const mappedData = data?.map(app => ({
+        ...app,
+        application_number: app.application_data?.application_number || 'N/A',
+        partner_type: app.application_data?.partner_type || 'N/A',
+        city: app.business_address?.city || 'N/A',
+        state: app.business_address?.state || 'N/A',
+        pincode: app.business_address?.pincode || 'N/A',
+        address_line1: app.business_address?.line1 || 'N/A',
+        address_line2: app.business_address?.line2 || '',
+        gst_number: app.application_data?.gst_number,
+        pan_number: app.application_data?.pan_number,
+        years_in_business: app.application_data?.years_in_business,
+        number_of_staff: app.application_data?.number_of_staff,
+        description: app.application_data?.description,
+        current_approval_stage: 1,
+        applied_date: app.created_at,
+        status: app.application_status
+      })) || [];
+
+      return { success: true, data: mappedData as VendorApplication[] };
     } catch (error: any) {
       console.error('Error in getApplicationsByStatus:', error);
       return { success: false, error: error.message };
@@ -139,7 +177,27 @@ export class VendorApprovalService {
         return { success: false, error: error.message };
       }
 
-      return { success: true, data: data as VendorApplication[] };
+      // Map JSONB fields to flat structure for easier access
+      const mappedData = data?.map(app => ({
+        ...app,
+        application_number: app.application_data?.application_number || 'N/A',
+        partner_type: app.application_data?.partner_type || 'N/A',
+        city: app.business_address?.city || 'N/A',
+        state: app.business_address?.state || 'N/A',
+        pincode: app.business_address?.pincode || 'N/A',
+        address_line1: app.business_address?.line1 || 'N/A',
+        address_line2: app.business_address?.line2 || '',
+        gst_number: app.application_data?.gst_number,
+        pan_number: app.application_data?.pan_number,
+        years_in_business: app.application_data?.years_in_business,
+        number_of_staff: app.application_data?.number_of_staff,
+        description: app.application_data?.description,
+        current_approval_stage: 1,
+        applied_date: app.created_at,
+        status: app.application_status
+      })) || [];
+
+      return { success: true, data: mappedData as VendorApplication[] };
     } catch (error: any) {
       console.error('Error in getAllApplications:', error);
       return { success: false, error: error.message };
@@ -168,7 +226,27 @@ export class VendorApprovalService {
         return { success: false, error: error.message };
       }
 
-      return { success: true, data: data as VendorApplication[] };
+      // Map JSONB fields to flat structure
+      const mappedData = data?.map(app => ({
+        ...app,
+        application_number: app.application_data?.application_number || 'N/A',
+        partner_type: app.application_data?.partner_type || 'N/A',
+        city: app.business_address?.city || 'N/A',
+        state: app.business_address?.state || 'N/A',
+        pincode: app.business_address?.pincode || 'N/A',
+        address_line1: app.business_address?.line1 || 'N/A',
+        address_line2: app.business_address?.line2 || '',
+        gst_number: app.application_data?.gst_number,
+        pan_number: app.application_data?.pan_number,
+        years_in_business: app.application_data?.years_in_business,
+        number_of_staff: app.application_data?.number_of_staff,
+        description: app.application_data?.description,
+        current_approval_stage: 1,
+        applied_date: app.created_at,
+        status: app.application_status
+      })) || [];
+
+      return { success: true, data: mappedData as VendorApplication[] };
     } catch (error: any) {
       console.error('Error in getMyApplications:', error);
       return { success: false, error: error.message };
@@ -230,6 +308,104 @@ export class VendorApprovalService {
       return { success: true };
     } catch (error: any) {
       console.error('Error in rejectApplication:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Get applications for specific hierarchy level
+   */
+  static async getApplicationsForLevel(hierarchyLevel: number): Promise<{ success: boolean; data?: VendorApplication[]; error?: string }> {
+    try {
+      // For now, return all pending/under_review applications
+      // In production, this would filter based on approval stage
+      const { data, error } = await supabase
+        .from('vendor_applications')
+        .select('*')
+        .in('application_status', ['pending', 'under_review'])
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching applications for level:', error);
+        return { success: false, error: error.message };
+      }
+
+      // Map JSONB fields to flat structure
+      const mappedData = data?.map(app => ({
+        ...app,
+        application_number: app.application_data?.application_number || 'N/A',
+        partner_type: app.application_data?.partner_type || 'N/A',
+        city: app.business_address?.city || 'N/A',
+        state: app.business_address?.state || 'N/A',
+        pincode: app.business_address?.pincode || 'N/A',
+        address_line1: app.business_address?.line1 || 'N/A',
+        address_line2: app.business_address?.line2 || '',
+        gst_number: app.application_data?.gst_number,
+        pan_number: app.application_data?.pan_number,
+        years_in_business: app.application_data?.years_in_business,
+        number_of_staff: app.application_data?.number_of_staff,
+        description: app.application_data?.description,
+        current_approval_stage: 1,
+        applied_date: app.created_at,
+        status: app.application_status
+      })) || [];
+
+      return { success: true, data: mappedData as VendorApplication[] };
+    } catch (error: any) {
+      console.error('Error in getApplicationsForLevel:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Get approval history for an application
+   */
+  static async getApprovalHistory(applicationId: string): Promise<{ success: boolean; data?: ApprovalHistoryRecord[]; error?: string }> {
+    try {
+      const { data, error } = await supabase
+        .from('vendor_approval_history')
+        .select('*')
+        .eq('application_id', applicationId)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching approval history:', error);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true, data: data as ApprovalHistoryRecord[] };
+    } catch (error: any) {
+      console.error('Error in getApprovalHistory:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Request additional information
+   */
+  static async requestAdditionalInfo(
+    applicationId: string,
+    userId: string,
+    note: string
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { error: updateError } = await supabase
+        .from('vendor_applications')
+        .update({
+          application_status: 'additional_info_required',
+          reviewed_by: userId,
+          reviewed_at: new Date().toISOString(),
+          rejection_reason: note
+        })
+        .eq('id', applicationId);
+
+      if (updateError) {
+        return { success: false, error: updateError.message };
+      }
+
+      return { success: true };
+    } catch (error: any) {
+      console.error('Error in requestAdditionalInfo:', error);
       return { success: false, error: error.message };
     }
   }

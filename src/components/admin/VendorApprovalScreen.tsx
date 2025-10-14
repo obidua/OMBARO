@@ -290,8 +290,8 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-gray-900">{app.business_address?.city || 'N/A'}</p>
-                      <p className="text-sm text-gray-500">{app.business_address?.state || 'N/A'}</p>
+                      <p className="text-sm text-gray-900">{app.city || app.business_address?.city || 'N/A'}</p>
+                      <p className="text-sm text-gray-500">{app.state || app.business_address?.state || 'N/A'}</p>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {new Date(app.created_at).toLocaleDateString()}
@@ -366,31 +366,31 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Application Number</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.application_number || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.application_number || selectedApplication.application_data?.application_number || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Partner Type</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.partner_type || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.partner_type || selectedApplication.application_data?.partner_type || 'N/A'}</p>
                   </div>
-                  {selectedApplication.application_data?.gst_number && (
+                  {(selectedApplication.gst_number || selectedApplication.application_data?.gst_number) && (
                     <div>
                       <p className="text-sm text-gray-600">GST Number</p>
-                      <p className="font-medium text-gray-900">{selectedApplication.application_data.gst_number}</p>
+                      <p className="font-medium text-gray-900">{selectedApplication.gst_number || selectedApplication.application_data?.gst_number}</p>
                     </div>
                   )}
-                  {selectedApplication.application_data?.pan_number && (
+                  {(selectedApplication.pan_number || selectedApplication.application_data?.pan_number) && (
                     <div>
                       <p className="text-sm text-gray-600">PAN Number</p>
-                      <p className="font-medium text-gray-900">{selectedApplication.application_data.pan_number}</p>
+                      <p className="font-medium text-gray-900">{selectedApplication.pan_number || selectedApplication.application_data?.pan_number}</p>
                     </div>
                   )}
                   <div>
                     <p className="text-sm text-gray-600">Years in Business</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.years_in_business || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.years_in_business || selectedApplication.application_data?.years_in_business || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Number of Staff</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.number_of_staff || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.number_of_staff || selectedApplication.application_data?.number_of_staff || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -425,20 +425,20 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                 </h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-gray-900">
-                    {selectedApplication.business_address?.line1}<br />
-                    {selectedApplication.business_address?.line2 && <>{selectedApplication.business_address.line2}<br /></>}
-                    {selectedApplication.business_address?.city}, {selectedApplication.business_address?.state}<br />
-                    PIN: {selectedApplication.business_address?.pincode}
+                    {selectedApplication.address_line1 || selectedApplication.business_address?.line1}<br />
+                    {(selectedApplication.address_line2 || selectedApplication.business_address?.line2) && <>{selectedApplication.address_line2 || selectedApplication.business_address?.line2}<br /></>}
+                    {selectedApplication.city || selectedApplication.business_address?.city}, {selectedApplication.state || selectedApplication.business_address?.state}<br />
+                    PIN: {selectedApplication.pincode || selectedApplication.business_address?.pincode}
                   </p>
                 </div>
               </div>
 
               {/* Description */}
-              {selectedApplication.application_data?.description && (
+              {(selectedApplication.description || selectedApplication.application_data?.description) && (
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Description</h3>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-900">{selectedApplication.application_data.description}</p>
+                    <p className="text-gray-900">{selectedApplication.description || selectedApplication.application_data?.description}</p>
                   </div>
                 </div>
               )}
