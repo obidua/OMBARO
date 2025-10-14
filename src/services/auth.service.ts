@@ -20,12 +20,25 @@ export class AuthService {
 
       console.log('Login attempt:', { username, userType });
 
-      const { data: userProfile, error: profileError } = await supabase
+      // Try to find user by mobile first
+      let { data: userProfile, error: profileError } = await supabase
         .from('user_profiles')
         .select('*')
-        .or(`mobile.eq.${username},email.eq.${username}`)
+        .eq('mobile', username)
         .eq('role', userType)
         .maybeSingle();
+
+      // If not found by mobile, try by email
+      if (!userProfile && !profileError) {
+        const result = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('email', username)
+          .eq('role', userType)
+          .maybeSingle();
+        userProfile = result.data;
+        profileError = result.error;
+      }
 
       console.log('User profile query result:', { userProfile, profileError });
 
