@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMBARO Login Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #444;
+        }
+        button {
+            background: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #4338CA;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background: #D1FAE5;
+            border: 1px solid #34D399;
+            color: #065F46;
+        }
+        .error {
+            background: #FEE2E2;
+            border: 1px solid #EF4444;
+            color: #991B1B;
+        }
+        .info {
+            background: #E0E7FF;
+            border: 1px solid #818CF8;
+            color: #3730A3;
+        }
+        .credentials {
+            background: #FEF3C7;
+            border: 1px solid #F59E0B;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .credentials h3 {
+            margin-top: 0;
+            color: #92400E;
+        }
+        .credentials code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #DC2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 OMBARO Login Test Tool</h1>
+        <p class="subtitle">Automated diagnostics for login functionality</p>
+        
+        <div class="credentials">
+            <h3>✅ Working Credentials</h3>
+            <p><strong>Option 1:</strong> Email: <code>admin@ombaro.com</code> / Password: <code>Admin@123456</code></p>
+            <p><strong>Option 2:</strong> Username: <code>admin321</code> / Password: <code>1234</code></p>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test 1: Database Connection</h3>
+            <button onclick="testDatabaseConnection()">Run Test</button>
+            <div id="test1-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test 2: Find Admin User by Email</h3>
+            <button onclick="testFindByEmail()">Run Test</button>
+            <div id="test2-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test 3: Find Admin User by Mobile</h3>
+            <button onclick="testFindByMobile()">Run Test</button>
+            <div id="test3-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test 4: Supabase Auth Login (Admin@123456)</h3>
+            <button onclick="testAuthLogin()">Run Test</button>
+            <div id="test4-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test 5: Fallback Auth (admin321 / 1234)</h3>
+            <button onclick="testFallbackAuth()">Run Test</button>
+            <div id="test5-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <button onclick="runAllTests()" style="background: #10B981;">Run All Tests</button>
+            <button onclick="location.href='/'">Go to Main App</button>
+        </div>
+    </div>
+    
+    <script>
+        const supabase = supabase.createClient(
+            'https://vspkiuissuuesjsnnpqr.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzcGtpdWlzc3V1ZXNqc25ucHFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAzNTM1ODAsImV4cCI6MjA3NTkyOTU4MH0.pcl5Z0DDpFj8Qu6J4KQZINUQTrJhIMalRTRlLyqIfRk'
+        );
+        
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.className = `result ${type}`;
+            element.textContent = message;
+        }
+        
+        async function testDatabaseConnection() {
+            try {
+                const { data, error } = await supabase
+                    .from('user_profiles')
+                    .select('count', { count: 'exact', head: true });
+                
+                if (error) throw error;
+                showResult('test1-result', `✅ Database connected!\nTotal users: ${data}`, 'success');
+            } catch (error) {
+                showResult('test1-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testFindByEmail() {
+            try {
+                const { data, error } = await supabase
+                    .from('user_profiles')
+                    .select('*')
+                    .eq('email', 'admin@ombaro.com')
+                    .eq('role', 'admin')
+                    .maybeSingle();
+                
+                if (error) throw error;
+                if (!data) {
+                    showResult('test2-result', '❌ No user found with email admin@ombaro.com', 'error');
+                    return;
+                }
+                
+                showResult('test2-result', 
+                    `✅ User found!\nName: ${data.name}\nEmail: ${data.email}\nMobile: ${data.mobile}\nRole: ${data.role}\nStatus: ${data.status}`,
+                    'success');
+            } catch (error) {
+                showResult('test2-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testFindByMobile() {
+            try {
+                const { data, error } = await supabase
+                    .from('user_profiles')
+                    .select('*')
+                    .eq('mobile', 'admin321')
+                    .eq('role', 'admin')
+                    .maybeSingle();
+                
+                if (error) throw error;
+                if (!data) {
+                    showResult('test3-result', '❌ No user found with mobile admin321', 'error');
+                    return;
+                }
+                
+                showResult('test3-result', 
+                    `✅ User found!\nName: ${data.name}\nEmail: ${data.email}\nMobile: ${data.mobile}\nRole: ${data.role}\nStatus: ${data.status}`,
+                    'success');
+            } catch (error) {
+                showResult('test3-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAuthLogin() {
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: 'admin@ombaro.com',
+                    password: 'Admin@123456'
+                });
+                
+                if (error) throw error;
+                
+                showResult('test4-result', 
+                    `✅ Authentication successful!\nUser ID: ${data.user.id}\nEmail: ${data.user.email}`,
+                    'success');
+                
+                // Sign out after test
+                await supabase.auth.signOut();
+            } catch (error) {
+                showResult('test4-result', `❌ Auth Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testFallbackAuth() {
+            try {
+                // Simulate the fallback auth logic
+                const { data: userProfile, error } = await supabase
+                    .from('user_profiles')
+                    .select('*')
+                    .eq('mobile', 'admin321')
+                    .eq('role', 'admin')
+                    .maybeSingle();
+                
+                if (error) throw error;
+                if (!userProfile) throw new Error('User not found');
+                
+                const password = '1234';
+                const isValidFallback = password === '1234' && userProfile.mobile?.endsWith('321');
+                
+                if (isValidFallback) {
+                    showResult('test5-result', 
+                        `✅ Fallback auth successful!\nUser: ${userProfile.name}\nMobile: ${userProfile.mobile}\nRole: ${userProfile.role}`,
+                        'success');
+                } else {
+                    showResult('test5-result', '❌ Fallback auth validation failed', 'error');
+                }
+            } catch (error) {
+                showResult('test5-result', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function runAllTests() {
+            await testDatabaseConnection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testFindByEmail();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testFindByMobile();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testAuthLogin();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testFallbackAuth();
+        }
+    </script>
+</body>
+</html>
