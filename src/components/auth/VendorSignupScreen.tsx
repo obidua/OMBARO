@@ -134,14 +134,14 @@ export default function VendorSignupScreen({
     try {
       console.log('Starting vendor application submission...');
 
-      // Step 1: Create user account with Supabase Auth
+      // Step 1: Create user account with Supabase Auth using email
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        phone: `+91${formData.mobile}`,
+        email: formData.email,
         password: formData.password,
         options: {
           data: {
             name: formData.name,
-            email: formData.email,
+            mobile: formData.mobile,
             role: 'vendor_applicant'
           }
         }
@@ -149,8 +149,8 @@ export default function VendorSignupScreen({
 
       if (authError) {
         console.error('Auth error:', authError);
-        if (authError.message.includes('already registered')) {
-          alert('This mobile number is already registered. Please try logging in instead.');
+        if (authError.message.includes('already registered') || authError.message.includes('already been registered')) {
+          alert('This email is already registered. Please try logging in instead.');
         } else {
           alert('Failed to create account: ' + authError.message);
         }
