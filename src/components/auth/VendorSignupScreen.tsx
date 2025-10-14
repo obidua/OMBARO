@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Store, Mail, Phone, User, MapPin, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { supabase } from '../../lib/supabase';
 
 interface VendorSignupScreenProps {
   onNavigate: (screen: string, data?: any) => void;
@@ -131,17 +132,117 @@ export default function VendorSignupScreen({
   async function handleSubmit() {
     setLoading(true);
     try {
-      // Simulate API call - In real implementation, integrate with Supabase
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('Starting vendor application submission...');
 
-      // Navigate to success screen
+      // Step 1: Create user account with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        phone: `+91${formData.mobile}`,
+        password: formData.password,
+        options: {
+          data: {
+            name: formData.name,
+            email: formData.email,
+            role: 'vendor_applicant'
+          }
+        }
+      });
+
+      if (authError) {
+        console.error('Auth error:', authError);
+        if (authError.message.includes('already registered')) {
+          alert('This mobile number is already registered. Please try logging in instead.');
+        } else {
+          alert('Failed to create account: ' + authError.message);
+        }
+        return;
+      }
+
+      const userId = authData.user?.id;
+      if (!userId) {
+        alert('Failed to create user account. Please try again.');
+        return;
+      }
+
+      console.log('User created with ID:', userId);
+
+      // Step 2: Create user profile
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert({
+          id: userId,
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          role: 'vendor_applicant',
+          status: 'active'
+        });
+
+      if (profileError) {
+        console.error('Profile creation error:', profileError);
+        // Continue even if profile creation fails - can be fixed later
+      } else {
+        console.log('User profile created successfully');
+      }
+
+      // Step 3: Generate application number
+      const appNumber = 'APP' + Date.now().toString().slice(-8);
+      console.log('Generated application number:', appNumber);
+
+      // Step 4: Submit vendor application with proper JSONB structure
+      const { data: applicationData, error: applicationError } = await supabase
+        .from('vendor_applications')
+        .insert({
+          user_id: userId,
+          application_number: appNumber,
+          partner_type: 'INDEPENDENT',
+          business_name: formData.businessName,
+          business_type: formData.businessType,
+          contact_person: formData.contactPerson,
+          contact_mobile: formData.contactMobile,
+          contact_email: formData.contactEmail,
+          business_address: {
+            line1: formData.addressLine1,
+            line2: formData.addressLine2 || null,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode
+          },
+          application_data: {
+            application_number: appNumber,
+            partner_type: 'INDEPENDENT',
+            gst_number: formData.gstNumber || null,
+            pan_number: formData.panNumber || null,
+            years_in_business: formData.yearsInBusiness ? parseInt(formData.yearsInBusiness) : null,
+            number_of_staff: formData.numberOfStaff ? parseInt(formData.numberOfStaff) : null,
+            description: formData.description || null,
+            website: formData.website || null,
+            is_self_registered: true
+          },
+          status: 'pending',
+          current_approval_stage: 1,
+          is_self_registered: true
+        })
+        .select()
+        .single();
+
+      if (applicationError) {
+        console.error('Application submission error:', applicationError);
+        alert('Failed to submit application: ' + applicationError.message + '. Please contact support with your mobile number: ' + formData.mobile);
+        return;
+      }
+
+      console.log('Application submitted successfully:', applicationData);
+
+      // Navigate to success screen with application details
       onNavigate('vendorSignupSuccess', {
         businessName: formData.businessName,
-        email: formData.contactEmail
+        email: formData.contactEmail,
+        applicationNumber: appNumber,
+        mobile: formData.mobile
       });
-    } catch (error) {
-      console.error('Error submitting application:', error);
-      alert('Failed to submit application. Please try again.');
+    } catch (error: any) {
+      console.error('Unexpected error submitting application:', error);
+      alert('An unexpected error occurred: ' + (error?.message || 'Please try again.'));
     } finally {
       setLoading(false);
     }

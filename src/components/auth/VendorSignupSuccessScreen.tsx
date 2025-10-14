@@ -7,6 +7,8 @@ interface VendorSignupSuccessScreenProps {
   data?: {
     businessName: string;
     email: string;
+    applicationNumber?: string;
+    mobile?: string;
   };
 }
 
@@ -94,11 +96,22 @@ export default function VendorSignupSuccessScreen({ onNavigate, data }: VendorSi
           </div>
 
           {/* Additional Info */}
-          <div className="space-y-3 mb-8 text-sm text-gray-600">
-            <p>
-              <strong>Application Reference:</strong> APP-{Date.now().toString().slice(-8)}
-            </p>
-            <p>
+          <div className="space-y-3 mb-8">
+            {data?.applicationNumber && (
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <p className="text-sm text-gray-600 mb-1">Application Reference Number</p>
+                <p className="text-2xl font-bold text-gray-900">{data.applicationNumber}</p>
+                <p className="text-xs text-gray-500 mt-1">Save this number for tracking your application</p>
+              </div>
+            )}
+            {data?.mobile && (
+              <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Login Credentials:</strong> Use your mobile number ({data.mobile}) and password to login and track your application status.
+                </p>
+              </div>
+            )}
+            <p className="text-sm text-gray-600">
               If you have any questions, contact us at{' '}
               <a href="mailto:vendor-support@ombaro.com" className="text-amber-600 hover:underline">
                 vendor-support@ombaro.com
