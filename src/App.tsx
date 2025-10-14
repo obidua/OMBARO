@@ -67,6 +67,7 @@ import VendorSignupScreen from './components/auth/VendorSignupScreen';
 import VendorSignupSuccessScreen from './components/auth/VendorSignupSuccessScreen';
 import VendorApprovalScreen from './components/admin/VendorApprovalScreen';
 import { VendorApplicantPortal } from './components/vendor/VendorApplicantPortal';
+import { VendorApplicationTracking } from './components/vendor/VendorApplicationTracking';
 import { Button } from './components/ui/Button';
 import { UserRole } from './types/auth';
 
@@ -925,6 +926,13 @@ function App() {
         return (
           <VendorApprovalScreen
             onNavigate={setCurrentStep}
+          />
+        );
+
+      case 'vendorApplicationStatus':
+        return (
+          <VendorApplicationTracking
+            onBack={() => setCurrentStep('welcome')}
           />
         );
 
