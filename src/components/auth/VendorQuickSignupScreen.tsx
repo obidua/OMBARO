@@ -23,19 +23,28 @@ export default function VendorQuickSignupScreen({
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}`,
-          scopes: provider === 'google' ? 'email profile' : 'email public_profile'
+          redirectTo: `${window.location.origin}/auth/callback`,
+          scopes: provider === 'google' ? 'email profile' : 'email public_profile',
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('OAuth error:', error);
 
-      if (data) {
-        onNavigate('vendorMobileVerification', {
-          selectedCategory,
-          signupType: 'quick',
-          provider
-        });
+        if (error.message.includes('provider is not enabled')) {
+          throw new Error(
+            `${provider.charAt(0).toUpperCase() + provider.slice(1)} login is currently being configured. Please try the detailed signup option or contact support.`
+          );
+        }
+        throw error;
+      }
+
+      if (data?.url) {
+        window.location.href = data.url;
       }
     } catch (err: any) {
       console.error('Social signup error:', err);
@@ -43,6 +52,11 @@ export default function VendorQuickSignupScreen({
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleInstagramSignup() {
+    setError('');
+    setError('Instagram login uses Facebook authentication. Please use the "Continue with Facebook" button above.');
   }
 
   return (
@@ -78,7 +92,18 @@ export default function VendorQuickSignupScreen({
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-800">{error}</p>
+              <p className="text-sm text-red-800 font-medium mb-2">Unable to sign up</p>
+              <p className="text-sm text-red-700">{error}</p>
+              {error.includes('provider is not enabled') && (
+                <div className="mt-3 pt-3 border-t border-red-300">
+                  <p className="text-xs text-red-600 mb-2">Alternative options:</p>
+                  <ul className="text-xs text-red-600 space-y-1">
+                    <li>• Use the detailed signup option below</li>
+                    <li>• Contact support for assistance</li>
+                    <li>• Try again later when social login is available</li>
+                  </ul>
+                </div>
+              )}
             </div>
           )}
 
@@ -120,21 +145,15 @@ export default function VendorQuickSignupScreen({
             </Button>
 
             <Button
-              onClick={() => handleSocialSignup('facebook')}
+              onClick={handleInstagramSignup}
               disabled={loading}
               variant="outline"
               fullWidth
               size="lg"
               className="border-2 hover:bg-pink-50 hover:border-pink-300"
             >
-              {loading ? (
-                <Loader className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Instagram className="w-5 h-5 text-pink-600" />
-                  <span className="flex-1 text-center font-semibold">Continue with Instagram</span>
-                </>
-              )}
+              <Instagram className="w-5 h-5 text-pink-600" />
+              <span className="flex-1 text-center font-semibold">Continue with Instagram</span>
             </Button>
           </div>
 

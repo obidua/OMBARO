@@ -12,6 +12,7 @@ import { SpaMassagePage } from './pages/SpaMassagePage';
 import { BridalMakeupPage } from './pages/BridalMakeupPage';
 import { BeautySalonPage } from './pages/BeautySalonPage';
 import { ScrollToTop } from './components/common/ScrollToTop';
+import AuthCallback from './components/auth/AuthCallback';
 import App from './App';
 
 export const AppRouter: React.FC = () => {
@@ -30,6 +31,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/spa-massage" element={<SpaMassagePage />} />
         <Route path="/bridal-makeup" element={<BridalMakeupPage />} />
         <Route path="/beauty-salon" element={<BeautySalonPage />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/app/*" element={<App />} />
       </Routes>
     </BrowserRouter>
