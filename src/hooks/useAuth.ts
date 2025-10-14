@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthState, User, UserRole } from '../types/auth';
+import { supabase } from '../lib/supabase';
 
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>({
@@ -8,6 +9,42 @@ export const useAuth = () => {
     isLoading: false,
     error: null,
   });
+
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          const { data: profile } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .maybeSingle();
+
+          if (profile) {
+            setUser({
+              id: session.user.id,
+              mobile: session.user.phone,
+              email: session.user.email,
+              isVerified: true,
+              ...profile
+            });
+          }
+        } else if (event === 'SIGNED_OUT') {
+          setAuthState({
+            currentStep: 'welcome',
+            user: {},
+            userType: undefined,
+            isLoading: false,
+            error: null,
+          });
+        }
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   const setCurrentStep = (step: AuthState['currentStep']) => {
     setAuthState(prev => ({ ...prev, currentStep: step, error: null }));
@@ -35,40 +72,51 @@ export const useAuth = () => {
   const loginUser = async (mobile: string, password: string, userType: UserRole) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Check password (static implementation)
-      if (password === '1234') {
-        setUser({ mobile, isVerified: true });
-        setAuthState(prev => ({ ...prev, userType }));
-        
-        // Navigate to appropriate dashboard
-        switch (userType) {
-          case 'employee':
-            setCurrentStep('employeeDashboard');
-            break;
-          case 'vendor':
-            setCurrentStep('vendorDashboard');
-            break;
-          case 'admin':
-            setCurrentStep('adminDashboard');
-            break;
-          case 'super_admin':
-            setCurrentStep('adminDashboard'); // Super admin uses enhanced admin dashboard
-            break;
-          default:
-            // All other departmental roles go to department dashboard
-            setCurrentStep('departmentDashboard');
-            break;
+      const { data, error } = await supabase.auth.signInWithPassword({
+        phone: mobile,
+        password: password,
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .maybeSingle();
+
+        if (profile) {
+          setUser({
+            id: data.user.id,
+            mobile: data.user.phone,
+            email: data.user.email,
+            isVerified: true,
+            ...profile
+          });
+          setAuthState(prev => ({ ...prev, userType: profile.role || userType }));
+
+          switch (profile.role || userType) {
+            case 'employee':
+              setCurrentStep('employeeDashboard');
+              break;
+            case 'vendor':
+              setCurrentStep('vendorDashboard');
+              break;
+            case 'admin':
+            case 'super_admin':
+              setCurrentStep('adminDashboard');
+              break;
+            default:
+              setCurrentStep('departmentDashboard');
+              break;
+          }
         }
-      } else {
-        setError('Invalid password. Please try again.');
       }
-    } catch (error) {
-      setError('Login failed. Please try again.');
+    } catch (error: any) {
+      setError(error.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -97,31 +145,37 @@ export const useAuth = () => {
     }
   };
 
-  const logout = () => {
-    setAuthState({
-      currentStep: 'welcome',
-      user: {},
-      userType: undefined,
-      isLoading: false,
-      error: null,
-    });
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setAuthState({
+        currentStep: 'welcome',
+        user: {},
+        userType: undefined,
+        isLoading: false,
+        error: null,
+      });
+    } catch (error: any) {
+      setError(error.message || 'Logout failed');
+    }
   };
 
   const sendOTP = async (mobile: string) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // In real app, call your OTP API here
-      console.log('Sending OTP to:', mobile);
-      
+      const { data, error } = await supabase.auth.signInWithOtp({
+        phone: mobile,
+      });
+
+      if (error) throw error;
+
+      console.log('OTP sent to:', mobile);
       setUser({ mobile });
       setCurrentStep('otp');
-    } catch (error) {
-      setError('Failed to send OTP. Please try again.');
+    } catch (error: any) {
+      setError(error.message || 'Failed to send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -130,20 +184,22 @@ export const useAuth = () => {
   const verifyOTP = async (otp: string) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In real app, verify OTP with your API
-      if (otp === '1234') { // Mock verification
+      const { data, error } = await supabase.auth.verifyOtp({
+        phone: authState.user.mobile || '',
+        token: otp,
+        type: 'sms',
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
         setUser({ isVerified: true });
         setCurrentStep('home');
-      } else {
-        setError('Invalid OTP. Please try again.');
       }
-    } catch (error) {
-      setError('Failed to verify OTP. Please try again.');
+    } catch (error: any) {
+      setError(error.message || 'Invalid OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -152,18 +208,31 @@ export const useAuth = () => {
   const completeProfile = async (profileData: Partial<User>) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Simulate API call to save profile
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // In real app, call your profile API here
-      console.log('Saving profile:', profileData);
-      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No authenticated user');
+
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .upsert({
+          id: user.id,
+          full_name: profileData.name,
+          role: profileData.role || 'customer',
+          phone: user.phone,
+          email: user.email,
+          ...profileData
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      console.log('Profile saved:', data);
       setUser(profileData);
       setCurrentStep('complete');
-    } catch (error) {
-      setError('Failed to save profile. Please try again.');
+    } catch (error: any) {
+      setError(error.message || 'Failed to save profile. Please try again.');
     } finally {
       setLoading(false);
     }
