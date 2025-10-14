@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AuthState, User, UserRole } from '../types/auth';
+import { AuthService } from '../services/auth.service';
 
 export const useAuth = () => {
   const [authState, setAuthState] = useState<AuthState>({
@@ -37,15 +38,23 @@ export const useAuth = () => {
     setError(null);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Check password (static implementation)
-      if (password === '1234') {
-        setUser({ mobile, isVerified: true });
+      const result = await AuthService.login({
+        username: mobile,
+        password: password,
+        userType: userType,
+      });
+
+      if (result.success && result.user) {
+        setUser({
+          id: result.user.id,
+          name: result.user.name,
+          email: result.user.email,
+          mobile: result.user.mobile,
+          role: result.user.role,
+          isVerified: true
+        });
         setAuthState(prev => ({ ...prev, userType }));
         
-        // Navigate to appropriate dashboard
         switch (userType) {
           case 'employee':
             setCurrentStep('employeeDashboard');
@@ -58,18 +67,17 @@ export const useAuth = () => {
             setCurrentStep('adminDashboard');
             break;
           case 'super_admin':
-            setCurrentStep('adminDashboard'); // Super admin uses enhanced admin dashboard
+            setCurrentStep('adminDashboard');
             break;
           default:
-            // All other departmental roles go to department dashboard
             setCurrentStep('departmentDashboard');
             break;
         }
       } else {
-        setError('Invalid password. Please try again.');
+        setError(result.error || 'Login failed. Please try again.');
       }
-    } catch (error) {
-      setError('Login failed. Please try again.');
+    } catch (error: any) {
+      setError(error.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -80,12 +88,10 @@ export const useAuth = () => {
     setError(null);
     
     try {
-      // Simulate role selection
       await new Promise(resolve => setTimeout(resolve, 500));
       
       setAuthState(prev => ({ ...prev, userType: role }));
       
-      // Navigate based on role
       if (role === 'super_admin') {
         setCurrentStep('adminDashboard');
       } else {
@@ -98,7 +104,13 @@ export const useAuth = () => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await AuthService.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    
     setAuthState({
       currentStep: 'welcome',
       user: {},
@@ -113,10 +125,8 @@ export const useAuth = () => {
     setError(null);
     
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // In real app, call your OTP API here
       console.log('Sending OTP to:', mobile);
       
       setUser({ mobile });
@@ -133,11 +143,9 @@ export const useAuth = () => {
     setError(null);
     
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // In real app, verify OTP with your API
-      if (otp === '1234') { // Mock verification
+      if (otp === '1234') {
         setUser({ isVerified: true });
         setCurrentStep('home');
       } else {
@@ -155,10 +163,8 @@ export const useAuth = () => {
     setError(null);
     
     try {
-      // Simulate API call to save profile
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // In real app, call your profile API here
       console.log('Saving profile:', profileData);
       
       setUser(profileData);

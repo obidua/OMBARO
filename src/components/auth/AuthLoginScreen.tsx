@@ -157,12 +157,12 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
             </Button>
           </div>
 
-          {/* Demo Credentials */}
+          {/* Login Info */}
           <div className="mt-8 p-4 bg-blue-50 rounded-2xl border border-blue-200">
-            <h3 className="font-semibold text-blue-900 mb-2">Demo Credentials</h3>
+            <h3 className="font-semibold text-blue-900 mb-2">Login Information</h3>
             <p className="text-sm text-blue-700">
-              <strong>Mobile:</strong> Any 10-digit number<br />
-              <strong>Password:</strong> 1234
+              Use your registered mobile number or username to login.<br />
+              For system users: username format is <strong>{userType.toLowerCase()}321</strong>
             </p>
           </div>
         </div>
