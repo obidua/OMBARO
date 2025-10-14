@@ -193,8 +193,6 @@ export default function VendorSignupScreen({
         .from('vendor_applications')
         .insert({
           user_id: userId,
-          application_number: appNumber,
-          partner_type: 'INDEPENDENT',
           business_name: formData.businessName,
           business_type: formData.businessType,
           contact_person: formData.contactPerson,
@@ -218,9 +216,7 @@ export default function VendorSignupScreen({
             website: formData.website || null,
             is_self_registered: true
           },
-          status: 'pending',
-          current_approval_stage: 1,
-          is_self_registered: true
+          application_status: 'pending'
         })
         .select()
         .single();
