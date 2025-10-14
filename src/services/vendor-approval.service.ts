@@ -2,34 +2,35 @@ import { supabase } from '../lib/supabase';
 
 export interface VendorApplication {
   id: string;
-  application_number: string;
-  user_id?: string;
-  partner_type: string;
+  user_id: string;
   business_name: string;
   business_type: string;
   contact_person: string;
   contact_mobile: string;
   contact_email: string;
-  address_line1: string;
-  address_line2?: string;
-  city: string;
-  state: string;
-  pincode: string;
-  latitude?: number;
-  longitude?: number;
-  gst_number?: string;
-  pan_number?: string;
-  years_in_business?: number;
-  number_of_staff?: number;
-  description?: string;
-  franchise_fee_paid: boolean;
-  franchise_payment_reference?: string;
-  franchise_agreement_signed: boolean;
-  status: 'pending' | 'fo_review' | 'manager_review' | 'director_review' | 'admin_review' | 'approved' | 'rejected' | 'on_hold' | 'additional_info_required';
-  current_approval_stage: number;
-  applied_date: string;
+  business_address: {
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
+  application_data?: {
+    application_number?: string;
+    partner_type?: string;
+    gst_number?: string;
+    pan_number?: string;
+    years_in_business?: number;
+    number_of_staff?: number;
+    description?: string;
+    franchise_fee_paid?: boolean;
+    franchise_payment_reference?: string;
+    is_self_registered?: boolean;
+  };
+  application_status: string;
   reviewed_by?: string;
-  review_notes?: string;
+  reviewed_at?: string;
+  rejection_reason?: string;
   created_at: string;
   updated_at: string;
 }
@@ -73,19 +74,12 @@ export class VendorApprovalService {
         return { success: false, error: 'User not authenticated' };
       }
 
-      // Generate application number
-      const appNumber = 'APP' + Date.now().toString().slice(-8);
-
       const { data, error } = await supabase
         .from('vendor_applications')
         .insert({
-          application_number: appNumber,
           user_id: user.id,
           ...applicationData,
-          status: 'pending',
-          current_approval_stage: 1,
-          franchise_fee_paid: applicationData.franchise_fee_paid || false,
-          franchise_agreement_signed: false
+          application_status: 'pending'
         })
         .select()
         .single();
@@ -103,35 +97,20 @@ export class VendorApprovalService {
   }
 
   /**
-   * Get applications for a specific approval level
+   * Get applications by status
    */
-  static async getApplicationsForLevel(hierarchyLevel: number): Promise<{ success: boolean; data?: VendorApplication[]; error?: string }> {
+  static async getApplicationsByStatus(status?: string): Promise<{ success: boolean; data?: VendorApplication[]; error?: string }> {
     try {
-      let statusFilter: string[] = [];
-
-      switch (hierarchyLevel) {
-        case 1: // Field Officer
-          statusFilter = ['pending', 'fo_review'];
-          break;
-        case 2: // Manager
-          statusFilter = ['manager_review'];
-          break;
-        case 3: // Director
-          statusFilter = ['director_review'];
-          break;
-        case 4: // Admin/VP
-        case 5:
-          statusFilter = ['admin_review', 'pending', 'fo_review', 'manager_review', 'director_review'];
-          break;
-        default:
-          return { success: false, error: 'Invalid hierarchy level' };
-      }
-
-      const { data, error } = await supabase
+      let query = supabase
         .from('vendor_applications')
         .select('*')
-        .in('status', statusFilter)
         .order('created_at', { ascending: false });
+
+      if (status && status !== 'all') {
+        query = query.eq('application_status', status);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('Error fetching applications:', error);
@@ -140,7 +119,7 @@ export class VendorApprovalService {
 
       return { success: true, data: data as VendorApplication[] };
     } catch (error: any) {
-      console.error('Error in getApplicationsForLevel:', error);
+      console.error('Error in getApplicationsByStatus:', error);
       return { success: false, error: error.message };
     }
   }
@@ -197,90 +176,25 @@ export class VendorApprovalService {
   }
 
   /**
-   * Approve application and forward to next level
+   * Approve application
    */
   static async approveApplication(
     applicationId: string,
-    employeeId: string,
-    comments?: string,
-    documentsVerified?: Record<string, boolean>
+    userId: string,
+    comments?: string
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      // Get current application
-      const { data: application, error: fetchError } = await supabase
-        .from('vendor_applications')
-        .select('*')
-        .eq('id', applicationId)
-        .single();
-
-      if (fetchError || !application) {
-        return { success: false, error: 'Application not found' };
-      }
-
-      const currentStage = application.current_approval_stage;
-      let nextStatus: string;
-      let nextStage: number;
-
-      // Determine next stage based on current stage
-      switch (currentStage) {
-        case 1: // FO → Manager
-          nextStatus = 'manager_review';
-          nextStage = 2;
-          break;
-        case 2: // Manager → Director
-          nextStatus = 'director_review';
-          nextStage = 3;
-          break;
-        case 3: // Director → Admin
-          nextStatus = 'admin_review';
-          nextStage = 4;
-          break;
-        case 4: // Admin → Approved (create vendor)
-          nextStatus = 'approved';
-          nextStage = 5;
-          break;
-        default:
-          return { success: false, error: 'Invalid approval stage' };
-      }
-
-      // Update application status
       const { error: updateError } = await supabase
         .from('vendor_applications')
         .update({
-          status: nextStatus,
-          current_approval_stage: nextStage,
-          reviewed_by: employeeId,
-          review_notes: comments,
-          updated_at: new Date().toISOString()
+          application_status: 'approved',
+          reviewed_by: userId,
+          reviewed_at: new Date().toISOString()
         })
         .eq('id', applicationId);
 
       if (updateError) {
         return { success: false, error: updateError.message };
-      }
-
-      // Record approval in history
-      const { error: historyError } = await supabase
-        .from('vendor_approval_history')
-        .insert({
-          application_id: applicationId,
-          approved_by: employeeId,
-          approval_stage: currentStage,
-          action: 'approved',
-          comments: comments,
-          documents_verified: documentsVerified || {}
-        });
-
-      if (historyError) {
-        console.error('Error recording approval history:', historyError);
-      }
-
-      // If final approval, create vendor account
-      if (nextStatus === 'approved') {
-        const vendorResult = await this.createVendorAccount(application);
-        if (!vendorResult.success) {
-          return { success: false, error: 'Application approved but vendor account creation failed: ' + vendorResult.error };
-        }
       }
 
       return { success: true };
@@ -295,49 +209,22 @@ export class VendorApprovalService {
    */
   static async rejectApplication(
     applicationId: string,
-    employeeId: string,
+    userId: string,
     reason: string
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      // Get current application
-      const { data: application, error: fetchError } = await supabase
-        .from('vendor_applications')
-        .select('*')
-        .eq('id', applicationId)
-        .single();
-
-      if (fetchError || !application) {
-        return { success: false, error: 'Application not found' };
-      }
-
-      // Update application status
       const { error: updateError } = await supabase
         .from('vendor_applications')
         .update({
-          status: 'rejected',
-          reviewed_by: employeeId,
-          review_notes: reason,
-          updated_at: new Date().toISOString()
+          application_status: 'rejected',
+          reviewed_by: userId,
+          reviewed_at: new Date().toISOString(),
+          rejection_reason: reason
         })
         .eq('id', applicationId);
 
       if (updateError) {
         return { success: false, error: updateError.message };
-      }
-
-      // Record rejection in history
-      const { error: historyError } = await supabase
-        .from('vendor_approval_history')
-        .insert({
-          application_id: applicationId,
-          approved_by: employeeId,
-          approval_stage: application.current_approval_stage,
-          action: 'rejected',
-          comments: reason
-        });
-
-      if (historyError) {
-        console.error('Error recording rejection history:', historyError);
       }
 
       return { success: true };
@@ -347,186 +234,4 @@ export class VendorApprovalService {
     }
   }
 
-  /**
-   * Request additional information
-   */
-  static async requestAdditionalInfo(
-    applicationId: string,
-    employeeId: string,
-    infoRequired: string
-  ): Promise<{ success: boolean; error?: string }> {
-    try {
-      // Get current application
-      const { data: application, error: fetchError } = await supabase
-        .from('vendor_applications')
-        .select('*')
-        .eq('id', applicationId)
-        .single();
-
-      if (fetchError || !application) {
-        return { success: false, error: 'Application not found' };
-      }
-
-      // Update application status
-      const { error: updateError } = await supabase
-        .from('vendor_applications')
-        .update({
-          status: 'additional_info_required',
-          reviewed_by: employeeId,
-          review_notes: infoRequired,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', applicationId);
-
-      if (updateError) {
-        return { success: false, error: updateError.message };
-      }
-
-      // Record in history
-      const { error: historyError } = await supabase
-        .from('vendor_approval_history')
-        .insert({
-          application_id: applicationId,
-          approved_by: employeeId,
-          approval_stage: application.current_approval_stage,
-          action: 'info_requested',
-          comments: infoRequired
-        });
-
-      if (historyError) {
-        console.error('Error recording info request history:', historyError);
-      }
-
-      return { success: true };
-    } catch (error: any) {
-      console.error('Error in requestAdditionalInfo:', error);
-      return { success: false, error: error.message };
-    }
-  }
-
-  /**
-   * Get approval history for an application
-   */
-  static async getApprovalHistory(applicationId: string): Promise<{ success: boolean; data?: ApprovalHistoryRecord[]; error?: string }> {
-    try {
-      const { data, error } = await supabase
-        .from('vendor_approval_history')
-        .select(`
-          *,
-          approver:employees!vendor_approval_history_approved_by_fkey(name, designation, department)
-        `)
-        .eq('application_id', applicationId)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        return { success: false, error: error.message };
-      }
-
-      return { success: true, data: data as ApprovalHistoryRecord[] };
-    } catch (error: any) {
-      console.error('Error in getApprovalHistory:', error);
-      return { success: false, error: error.message };
-    }
-  }
-
-  /**
-   * Create vendor account after final approval
-   */
-  private static async createVendorAccount(application: VendorApplication): Promise<{ success: boolean; error?: string }> {
-    try {
-      // Get commission rate based on partner type
-      const { data: partnerType } = await supabase
-        .from('partner_types')
-        .select('commission_rate')
-        .eq('type_code', application.partner_type)
-        .single();
-
-      const commissionRate = partnerType?.commission_rate || 20.0;
-
-      // Check if vendor already exists (avoid duplicates)
-      const { data: existingVendor } = await supabase
-        .from('vendors')
-        .select('id')
-        .eq('application_id', application.id)
-        .maybeSingle();
-
-      if (existingVendor) {
-        console.log('Vendor account already exists for this application');
-        return { success: true };
-      }
-
-      // Create vendor record
-      const { error: vendorError } = await supabase
-        .from('vendors')
-        .insert({
-          user_id: application.user_id,
-          application_id: application.id,
-          partner_type: application.partner_type,
-          business_name: application.business_name,
-          business_type: application.business_type,
-          contact_person: application.contact_person,
-          contact_mobile: application.contact_mobile,
-          contact_email: application.contact_email,
-          address_line1: application.address_line1,
-          address_line2: application.address_line2,
-          city: application.city,
-          state: application.state,
-          pincode: application.pincode,
-          latitude: application.latitude,
-          longitude: application.longitude,
-          gst_number: application.gst_number,
-          pan_number: application.pan_number,
-          is_active: true,
-          verification_status: 'verified',
-          onboarding_completed: false, // Set to false initially - vendor needs to complete profile
-          commission_rate: commissionRate
-        });
-
-      if (vendorError) {
-        console.error('Error creating vendor account:', vendorError);
-        return { success: false, error: vendorError.message };
-      }
-
-      // Update user role to vendor
-      if (application.user_id) {
-        const { error: roleError } = await supabase
-          .from('user_profiles')
-          .update({ role: 'vendor' })
-          .eq('id', application.user_id);
-
-        if (roleError) {
-          console.error('Error updating user role:', roleError);
-          return { success: false, error: 'Vendor created but role update failed: ' + roleError.message };
-        }
-      }
-
-      console.log('Vendor account created successfully');
-      return { success: true };
-    } catch (error: any) {
-      console.error('Error in createVendorAccount:', error);
-      return { success: false, error: error.message };
-    }
-  }
-
-  /**
-   * Get employee details by user ID
-   */
-  static async getEmployeeByUserId(userId: string): Promise<{ success: boolean; data?: Employee; error?: string }> {
-    try {
-      const { data, error } = await supabase
-        .from('employees')
-        .select('*')
-        .eq('user_id', userId)
-        .single();
-
-      if (error) {
-        return { success: false, error: error.message };
-      }
-
-      return { success: true, data: data as Employee };
-    } catch (error: any) {
-      console.error('Error in getEmployeeByUserId:', error);
-      return { success: false, error: error.message };
-    }
-  }
 }

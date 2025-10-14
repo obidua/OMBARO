@@ -143,29 +143,32 @@ export const VendorOnboardingForm: React.FC<VendorOnboardingFormProps> = ({ onSu
       const { data, error } = await supabase
         .from('vendor_applications')
         .insert({
-          application_number: appNumber,
           user_id: userId,
-          partner_type: formData.partnerType,
           business_name: formData.businessName,
           business_type: formData.businessType,
           contact_person: formData.contactPerson,
           contact_mobile: formData.contactMobile,
           contact_email: formData.contactEmail,
-          address_line1: formData.addressLine1,
-          address_line2: formData.addressLine2,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode,
-          gst_number: formData.gstNumber,
-          pan_number: formData.panNumber,
-          years_in_business: parseInt(formData.yearsInBusiness) || null,
-          number_of_staff: parseInt(formData.numberOfStaff) || null,
-          description: formData.description,
-          franchise_fee_paid: formData.franchiseFeePaid,
-          franchise_payment_reference: formData.franchisePaymentReference,
-          is_self_registered: true,
-          status: 'pending',
-          current_approval_stage: 1
+          business_address: {
+            line1: formData.addressLine1,
+            line2: formData.addressLine2,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode
+          },
+          application_data: {
+            application_number: appNumber,
+            partner_type: formData.partnerType,
+            gst_number: formData.gstNumber,
+            pan_number: formData.panNumber,
+            years_in_business: parseInt(formData.yearsInBusiness) || null,
+            number_of_staff: parseInt(formData.numberOfStaff) || null,
+            description: formData.description,
+            franchise_fee_paid: formData.franchiseFeePaid,
+            franchise_payment_reference: formData.franchisePaymentReference,
+            is_self_registered: true
+          },
+          application_status: 'pending'
         })
         .select()
         .single();

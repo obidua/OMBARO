@@ -2,33 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Filter, CheckCircle, XCircle, Clock, AlertCircle, Eye, FileText, Phone, Mail, MapPin, Building, Calendar, Users } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { VendorApprovalService, VendorApplication } from '../../services/vendor-approval.service';
+import { supabase } from '../../lib/supabase';
 
 interface VendorApprovalScreenProps {
   onNavigate: (screen: string) => void;
-}
-
-interface VendorApplication {
-  id: string;
-  businessName: string;
-  businessType: string;
-  contactPerson: string;
-  contactMobile: string;
-  contactEmail: string;
-  address: {
-    addressLine1: string;
-    city: string;
-    state: string;
-    pincode: string;
-  };
-  gstNumber?: string;
-  panNumber?: string;
-  yearsInBusiness?: number;
-  numberOfStaff?: number;
-  description?: string;
-  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'additional_info_required';
-  appliedDate: string;
-  applicantName: string;
-  applicantEmail: string;
 }
 
 export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScreenProps) {
@@ -74,16 +51,16 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
       app.contact_person.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.contact_email.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
+    const matchesStatus = statusFilter === 'all' || app.application_status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
 
   const stats = {
-    pending: applications.filter(a => a.status === 'pending').length,
-    underReview: applications.filter(a => a.status === 'under_review').length,
-    approved: applications.filter(a => a.status === 'approved').length,
-    rejected: applications.filter(a => a.status === 'rejected').length
+    pending: applications.filter(a => a.application_status === 'pending').length,
+    underReview: applications.filter(a => a.application_status === 'under_review').length,
+    approved: applications.filter(a => a.application_status === 'approved').length,
+    rejected: applications.filter(a => a.application_status === 'rejected').length
   };
 
   function getStatusBadge(status: string) {
@@ -120,33 +97,29 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
 
     setLoading(true);
     try {
-      let result;
-      // Note: We'll need employee ID - for now using admin as placeholder
-      const employeeId = 'admin-id-placeholder';
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert('Not authenticated');
+        return;
+      }
 
+      let result;
       if (actionType === 'approve') {
         result = await VendorApprovalService.approveApplication(
           selectedApplication.id,
-          employeeId,
+          user.id,
           actionNote
         );
       } else if (actionType === 'reject') {
         result = await VendorApprovalService.rejectApplication(
           selectedApplication.id,
-          employeeId,
+          user.id,
           actionNote || 'No reason provided'
-        );
-      } else if (actionType === 'info_required') {
-        result = await VendorApprovalService.requestAdditionalInfo(
-          selectedApplication.id,
-          employeeId,
-          actionNote || 'Additional information required'
         );
       }
 
       if (result?.success) {
-        alert(`Application ${actionType === 'approve' ? 'approved' : actionType === 'reject' ? 'rejected' : 'marked for additional info'}!`);
-        // Refresh applications list
+        alert(`Application ${actionType === 'approve' ? 'approved' : 'rejected'}!`);
         await fetchApplications();
         setShowModal(false);
         setActionType(null);
@@ -317,14 +290,14 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-gray-900">{app.city}</p>
-                      <p className="text-sm text-gray-500">{app.state}</p>
+                      <p className="text-sm text-gray-900">{app.business_address?.city || 'N/A'}</p>
+                      <p className="text-sm text-gray-500">{app.business_address?.state || 'N/A'}</p>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
-                      {new Date(app.applied_date).toLocaleDateString()}
+                      {new Date(app.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4">
-                      {getStatusBadge(app.status)}
+                      {getStatusBadge(app.application_status)}
                     </td>
                     <td className="px-6 py-4">
                       <Button
@@ -393,31 +366,31 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Application Number</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.application_number}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.application_number || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Partner Type</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.partner_type}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.partner_type || 'N/A'}</p>
                   </div>
-                  {selectedApplication.gst_number && (
+                  {selectedApplication.application_data?.gst_number && (
                     <div>
                       <p className="text-sm text-gray-600">GST Number</p>
-                      <p className="font-medium text-gray-900">{selectedApplication.gst_number}</p>
+                      <p className="font-medium text-gray-900">{selectedApplication.application_data.gst_number}</p>
                     </div>
                   )}
-                  {selectedApplication.pan_number && (
+                  {selectedApplication.application_data?.pan_number && (
                     <div>
                       <p className="text-sm text-gray-600">PAN Number</p>
-                      <p className="font-medium text-gray-900">{selectedApplication.pan_number}</p>
+                      <p className="font-medium text-gray-900">{selectedApplication.application_data.pan_number}</p>
                     </div>
                   )}
                   <div>
                     <p className="text-sm text-gray-600">Years in Business</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.years_in_business || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.years_in_business || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Number of Staff</p>
-                    <p className="font-medium text-gray-900">{selectedApplication.number_of_staff || 'N/A'}</p>
+                    <p className="font-medium text-gray-900">{selectedApplication.application_data?.number_of_staff || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -452,20 +425,20 @@ export default function VendorApprovalScreen({ onNavigate }: VendorApprovalScree
                 </h3>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-gray-900">
-                    {selectedApplication.address_line1}<br />
-                    {selectedApplication.address_line2 && <>{selectedApplication.address_line2}<br /></>}
-                    {selectedApplication.city}, {selectedApplication.state}<br />
-                    PIN: {selectedApplication.pincode}
+                    {selectedApplication.business_address?.line1}<br />
+                    {selectedApplication.business_address?.line2 && <>{selectedApplication.business_address.line2}<br /></>}
+                    {selectedApplication.business_address?.city}, {selectedApplication.business_address?.state}<br />
+                    PIN: {selectedApplication.business_address?.pincode}
                   </p>
                 </div>
               </div>
 
               {/* Description */}
-              {selectedApplication.description && (
+              {selectedApplication.application_data?.description && (
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Description</h3>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-900">{selectedApplication.description}</p>
+                    <p className="text-gray-900">{selectedApplication.application_data.description}</p>
                   </div>
                 </div>
               )}
