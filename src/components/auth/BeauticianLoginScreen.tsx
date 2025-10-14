@@ -58,9 +58,9 @@ export const BeauticianLoginScreen: React.FC<BeauticianLoginScreenProps> = ({
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
               <div className="space-y-4">
                 <Input
-                  label="Email Address"
-                  type="email"
-                  placeholder="Enter your email"
+                  label="Username or Email"
+                  type="text"
+                  placeholder="Enter username (e.g., beautician321) or email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   icon={<User className="w-5 h-5 text-gray-400" />}
@@ -118,10 +118,10 @@ export const BeauticianLoginScreen: React.FC<BeauticianLoginScreenProps> = ({
           </div>
 
           <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
-            <h3 className="text-sm font-semibold text-blue-900 mb-2">Demo Credentials</h3>
+            <h3 className="text-sm font-semibold text-blue-900 mb-2">Login Information</h3>
             <div className="space-y-1 text-xs text-blue-800">
-              <p><strong>Email:</strong> priya.sharma@example.com</p>
-              <p><strong>Password:</strong> beautician123</p>
+              <p>Use your registered username or email address.</p>
+              <p className="mt-2"><strong>System user format:</strong> beautician321 / Password: 1234</p>
             </div>
             <p className="text-xs text-blue-700 mt-2 italic">
               * Note: Beautician accounts are created by vendors

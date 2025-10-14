@@ -28,17 +28,15 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
 
   const validateForm = () => {
     const errors = { mobile: '', password: '' };
-    
+
     if (!mobile.trim()) {
-      errors.mobile = 'Mobile number is required';
-    } else if (mobile.length !== 10) {
-      errors.mobile = 'Please enter a valid 10-digit mobile number';
+      errors.mobile = 'Username or mobile number is required';
     }
-    
+
     if (!password.trim()) {
       errors.password = 'Password is required';
     }
-    
+
     setFormErrors(errors);
     return Object.values(errors).every(error => !error);
   };
@@ -107,13 +105,12 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
           {/* Login Form */}
           <div className="space-y-6">
             <Input
-              label="Mobile Number"
-              type="tel"
-              placeholder="Enter 10-digit mobile number"
+              label="Username or Mobile"
+              type="text"
+              placeholder="Enter username (e.g., admin321) or mobile number"
               value={mobile}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                setMobile(value);
+                setMobile(e.target.value);
                 if (formErrors.mobile) {
                   setFormErrors(prev => ({ ...prev, mobile: '' }));
                 }
@@ -121,7 +118,6 @@ export const AuthLoginScreen: React.FC<AuthLoginScreenProps> = ({
               onKeyPress={handleKeyPress}
               error={formErrors.mobile}
               icon={<User className="w-5 h-5 text-gray-400" />}
-              maxLength={10}
             />
 
             <Input
